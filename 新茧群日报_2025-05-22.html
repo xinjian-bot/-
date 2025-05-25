@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>新茧日报 - 2025-05-22</title>
+    <style>
+        /* 严格定义的CSS样式，确保风格一致性 */
+        :root {
+            --bg-primary: #0f0e17;
+            --bg-secondary: #1a1925;
+            --bg-tertiary: #252336;
+            --text-primary: #fffffe;
+            --text-secondary: #a7a9be;
+            --accent-primary: #ff8906;
+            --accent-secondary: #f25f4c;
+            --accent-tertiary: #e53170;
+            --accent-blue: #3da9fc;
+            --accent-purple: #7209b7;
+            --accent-cyan: #00b4d8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro Display', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 16px;
+            width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background-color: var(--bg-secondary);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: 10px;
+        }
+
+        .date {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .meta-info span {
+            background-color: var(--bg-tertiary);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        section {
+            background-color: var(--bg-secondary);
+            margin-bottom: 30px;
+            padding: 25px;
+        }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-blue);
+        }
+
+        h3 {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--accent-primary);
+            margin: 15px 0 10px 0;
+        }
+
+        h4 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-secondary);
+            margin: 12px 0 8px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* 卡片容器样式 */
+        .topics-container, .tutorials-container, .messages-container,
+        .dialogues-container, .qa-container, .participants-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        /* 卡片样式 */
+        .topic-card, .tutorial-card, .message-card,
+        .dialogue-card, .qa-card, .participant-item, .night-owl-item {
+            background-color: var(--bg-tertiary);
+            padding: 20px;
+        }
+
+        /* 话题卡片 */
+        .topic-category {
+            display: inline-block;
+            background-color: var(--accent-blue);
+            color: var(--text-primary);
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .topic-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .keyword {
+            background-color: rgba(61, 169, 252, 0.2);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        .topic-mentions {
+            color: var(--accent-cyan);
+            font-weight: 600;
+        }
+
+        /* 教程卡片 */
+        .tutorial-type {
+            display: inline-block;
+            background-color: var(--accent-secondary);
+            color: var(--text-primary);
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .tutorial-meta {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .tutorial-category {
+            margin-top: 10px;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        /* 消息卡片 */
+        .message-meta {
+            margin-bottom: 10px;
+        }
+
+        .message-meta span {
+            margin-right: 15px;
+            font-size: 14px;
+        }
+
+        .message-type {
+            background-color: var(--accent-tertiary);
+            color: var(--text-primary);
+            padding: 3px 10px;
+            border-radius: 15px;
+        }
+
+        .priority {
+            padding: 3px 10px;
+            border-radius: 15px;
+        }
+
+        .priority-high {
+            background-color: var(--accent-secondary);
+        }
+
+        .priority-medium {
+            background-color: var(--accent-primary);
+        }
+
+        .priority-low {
+            background-color: var(--accent-blue);
+        }
+
+        /* 对话卡片 */
+        .dialogue-type {
+            display: inline-block;
+            background-color: var(--accent-purple);
+            color: var(--text-primary);
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .dialogue-content {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .dialogue-highlight {
+            font-style: italic;
+            color: var(--accent-primary);
+            margin: 10px 0;
+            font-weight: 600;
+        }
+
+        /* 问答卡片 */
+        .question {
+            margin-bottom: 15px;
+        }
+
+        .question-meta, .answer-meta {
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .question-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background-color: rgba(114, 9, 183, 0.2);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        .answer {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .accepted-badge {
+            background-color: var(--accent-primary);
+            color: var(--text-primary);
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+        }
+
+        /* 热度图 */
+        .heatmap-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .heat-topic {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .heat-bar {
+            height: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 5px 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .heat-fill {
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        /* 话唠榜 */
+        .participant-rank {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-right: 15px;
+            float: left;
+        }
+
+        .participant-name {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .participant-count {
+            color: var(--accent-cyan);
+            margin-bottom: 10px;
+        }
+
+        .participant-characteristics, .participant-words {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .characteristic {
+            background-color: rgba(242, 95, 76, 0.2);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        .word {
+            background-color: rgba(229, 49, 112, 0.2);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        /* 熬夜冠军 */
+        .night-owl-item {
+            background: linear-gradient(135deg, #0f0e17 0%, #192064 100%);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .owl-crown {
+            font-size: 40px;
+            margin-right: 20px;
+        }
+
+        .owl-name {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .owl-title {
+            color: var(--accent-primary);
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .owl-time, .owl-messages {
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .owl-note {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* 词云 - 云朵样式 */
+        .cloud-container {
+            position: relative;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        .cloud-wordcloud {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            margin: 0 auto;
+            background-color: var(--bg-tertiary);
+            border-radius: 50%;
+            box-shadow:
+                40px 40px 0 -5px var(--bg-tertiary),
+                80px 10px 0 -10px var(--bg-tertiary),
+                110px 35px 0 -5px var(--bg-tertiary),
+                -40px 50px 0 -8px var(--bg-tertiary),
+                -70px 20px 0 -10px var(--bg-tertiary);
+            overflow: visible;
+        }
+
+        .cloud-word {
+            position: absolute;
+            transform-origin: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .cloud-word:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+
+        .cloud-legend {
+            margin-top: 60px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        /* 底部 */
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 50px;
+            background-color: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        .disclaimer {
+            margin-top: 15px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>新茧日报</h1>
+        <p class="date">2025-05-22</p>
+        <div class="meta-info">
+            <span>总消息数：5000+</span>
+            <span>活跃用户：约 50 人</span>
+            <span>时间范围：2025-05-22 01:11:00 -2025-05-23 01:40:00</span>
+        </div>
+    </header>
+
+    <!-- 1. 今日讨论热点 -->
+    <section class="hot-topics">
+        <h2>今日讨论热点</h2>
+        <div class="topics-container">
+            <div class="topic-card">
+                <h3>职场女性备孕与生育权益的困境与对策</h3>
+                <div class="topic-category">职场人生 / 性别议题</div>
+                <p class="topic-summary">围绕一位外包女员工因备孕遭遇职场困境的案例展开激烈讨论。核心问题包括：是否应向公司坦白备孕计划、如何平衡个人生育需求与公司利益、以及在现有环境下如何维护自身权益。群友们从不同角度给出了策略建议，如向上管理、利用自身不可替代性谈判、甚至“掀桌”等。昍也引导大家思考规则、真诚与斗争的智慧，其中柔山馍王关于“资本天生逐利”和“麻痹敌人”的阶级矛盾分析获得高度认同。最终题主补充后续，其领导通过一些办法使其无需换公司也未降薪，事件得到圆满解决。</p>
+                <div class="topic-keywords">
+                    <span class="keyword">职场女性</span>
+                    <span class="keyword">生育权益</span>
+                    <span class="keyword">外包制度</span>
+                    <span class="keyword">向上管理</span>
+                    <span class="keyword">斗争策略</span>
+                    <span class="keyword">资本</span>
+                    <span class="keyword">阶级矛盾</span>
+                </div>
+                <div class="topic-mentions">提及次数：约 150+ 次</div>
+            </div>
+            <div class="topic-card">
+                <h3>历史人物与事件的深度解读</h3>
+                <div class="topic-category">历史思辨</div>
+                <p class="topic-summary">群友围绕特定历史人物（如“青”、“教员”）及事件进行探讨，昍指出“青非X人帮”的观点，并赞扬教员的远见。讨论延伸至历史的复杂性、人民史观、历史视角（如50个生卒年相连的人物串联历史）及对历史人物的评价方法。高大壮提出先有“元认知”再“正反都看”的读书方法论。</p>
+                <div class="topic-keywords">
+                    <span class="keyword">青</span>
+                    <span class="keyword">教员</span>
+                    <span class="keyword">历史评价</span>
+                    <span class="keyword">人民史观</span>
+                    <span class="keyword">读书方法</span>
+                </div>
+                <div class="topic-mentions">提及次数：约 40+ 次</div>
+            </div>
+            <div class="topic-card">
+                <h3>如何正确提问以促进高效沟通</h3>
+                <div class="topic-category">思维方法 / 群聊规范</div>
+                <p class="topic-summary">昍（通过521Messi的语音整理）详细阐述了提问的技巧和心态，强调问题的具体性、真诚性，避免过度抽象和自欺欺人，旨在提升群内沟通效率和个人成长。核心观点包括：问题应与现实生活相关，描述需详尽（记叙文而非议论文），避免不必要的抽象总结，并要对自己真诚。此分享被多位群友标记为重要（#uu语音怎么提问整理）。</p>
+                <div class="topic-keywords">
+                    <span class="keyword">学会提问</span>
+                    <span class="keyword">高效沟通</span>
+                    <span class="keyword">问题具体化</span>
+                    <span class="keyword">真诚</span>
+                    <span class="keyword">思维方式</span>
+                </div>
+                <div class="topic-mentions">提及次数：约 20+ 次</div>
+            </div>
+            <div class="topic-card">
+                <h3>暗杀首领的有效性及中东局势讨论</h3>
+                <div class="topic-category">国际政治 / 军事策略</div>
+                <p class="topic-summary">群友讨论了暗杀领导人策略的有效性，昍认为此法对大国无效且愚蠢，对小族则可能引火烧身，强调中共不搞暗杀的阳谋智慧。结合中东局势，讨论了哈马斯寻求停战的原因、胡赛武装的表现及伊朗总统逝世的影响，分析了各方战略和地区力量对比。</p>
+                <div class="topic-keywords">
+                    <span class="keyword">暗杀策略</span>
+                    <span class="keyword">中东局势</span>
+                    <span class="keyword">巴以冲突</span>
+                    <span class="keyword">哈马斯</span>
+                    <span class="keyword">伊朗</span>
+                    <span class="keyword">胡赛武装</span>
+                </div>
+                <div class="topic-mentions">提及次数：约 50+ 次</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. 实用信息与资源分享 -->
+    <section class="tutorials">
+        <h2>实用信息与资源分享</h2>
+        <div class="tutorials-container">
+            <div class="tutorial-card">
+                <div class="tutorial-type">RESOURCE</div>
+                <h3>昍推荐阅读：杰克·伦敦《黄祸》</h3>
+                <div class="tutorial-meta">
+                    <span class="shared-by">分享者：昍</span>
+                    <span class="share-time">时间：02:26</span>
+                </div>
+                <p class="tutorial-summary">昍推荐了杰克·伦敦的反华著作《黄祸》（#读书），认为作者早期便看出了华夏的潜力并主张“屠灭华夏”，借此反思历史与民族认知。</p>
+                <div class="key-points">
+                    <h4>要点：</h4>
+                    <ul>
+                        <li>杰克·伦敦对华夏潜力的早期认知。</li>
+                        <li>该书体现的极端反华思想。</li>
+                        <li>从历史视角反思民族自信与警惕。</li>
+                    </ul>
+                </div>
+                <div class="tutorial-link">
+                    <a href="#" class="link valid">查看原文: 书籍推荐</a>
+                </div>
+                <div class="tutorial-category">分类：历史研究, 文学作品</div>
+            </div>
+            <div class="tutorial-card">
+                <div class="tutorial-type">RESOURCE</div>
+                <h3>kiki汇总：电子书及影视资源搜索平台</h3>
+                <div class="tutorial-meta">
+                    <span class="shared-by">分享者：kiki (汇总了昍, MIR🍈等人的分享)</span>
+                    <span class="share-time">时间：09:44</span>
+                </div>
+                <p class="tutorial-summary">kiki整理并分享了群友（包括昍、MIR🍈、水煮鱼不翻身等）推荐的多个电子书和影视资源搜索平台，如Zlib、读秀书库、国家数字图书馆、aipan.me等，并提及了科学上网和利用线上图书馆的技巧（#分享）。</p>
+                <div class="key-points">
+                    <h4>要点：</h4>
+                    <ul>
+                        <li>Zlib及镜像站 (如 https://zh.101sun.online/)。</li>
+                        <li>读秀书库及线上图书馆（如湖北图书馆、浙江图书馆）。</li>
+                        <li>国家哲学社会科学文献中心（有app）。</li>
+                        <li>网盘搜索工具 (如 https://www.aipan.me/)。</li>
+                        <li>PDF搜索技巧 (书名+pdf)。</li>
+                    </ul>
+                </div>
+                <div class="tutorial-link">
+                    <a href="#" class="link valid">查看原文: 资源汇总</a>
+                </div>
+                <div class="tutorial-category">分类：数字资源, 信息获取</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. 重要消息汇总 -->
+    <section class="important-messages">
+        <h2>重要消息汇总</h2>
+        <div class="messages-container">
+            <div class="message-card">
+                <div class="message-meta">
+                    <span class="time">16:49</span>
+                    <span class="sender">昍</span>
+                    <span class="message-type">EVENT</span>
+                    <span class="priority priority-high">优先级：高</span>
+                </div>
+                <p class="message-content">昍预告当晚20:30将组织群内讨论（#每日小会），议题为近期“作业”中一个关于职场、育儿及女性相关的现实问题，并多次提醒群友参与。</p>
+                <div class="message-full-content">
+                    <p>“今晚8点半，开始「讨论问题」，大家有时间的到时可以来参与。问题就是最近的「作业」里面的一个，是职场相关的，也与育儿和女性有点关系。感兴趣的提前周知一下~”</p>
+                </div>
+            </div>
+            <div class="message-card">
+                <div class="message-meta">
+                    <span class="time">20:17</span>
+                    <span class="sender">昍</span>
+                    <span class="message-type">OTHER</span>
+                    <span class="priority priority-medium">优先级：中</span>
+                </div>
+                <p class="message-content">针对群友关于“黄文作者被处理”事件的困惑，昍明确指出不应同情罪犯，强调法律的严肃性和个人选择的责任，提醒大家不要被片面信息带节奏。核心观点：“穷人多了，那我穷我能不能杀你全家。当你共情罪犯的时候，你还是同志吗。”</p>
+                <div class="message-full-content">
+                    <p>“这不是个问题。穷人多了，那我穷我能不能杀你全家。当你共情罪犯的时候，你还是同志吗。不算是共情，有点类似于小时候村里很穷人家的孩子偷东西，街坊四邻唏嘘叹息的感觉。你的唏嘘，对那些同样贫穷但不偷东西的孩子，公平吗？乡愿，德之贼也。偷的不是你罢了。假如你的孩子，你千教万教，最后你发现他在看这个人写的黄书，你再来唏嘘呻吟。”</p>
+                </div>
+            </div>
+             <div class="message-card">
+                <div class="message-meta">
+                    <span class="time">22:18</span>
+                    <span class="sender">昍 (引用柔山馍王)</span>
+                    <span class="message-type">OTHER</span>
+                    <span class="priority priority-high">优先级：高</span>
+                </div>
+                <p class="message-content">昍高度评价了柔山馍王对职场女性生育困境问题的分析，称其为“政委”级别，并强调其“消除性别思维”和“明确阶级矛盾”的观点非常重要。柔山馍王指出：“不是社会针对女性，也不是女性必须说谎，而是资本天生就要赚钱，会无差别的抛弃所有不能正常提供劳动力的人。”以及“这时候还叫说谎吗?应该叫麻痹敌人吧。也许我们和具体的人无冤无仇，甚至私交不错，但是我们和他们背后的利益是天然的死敌，这就是阶级矛盾”。</p>
+                <div class="message-full-content">
+                    <p>昍引用柔山馍王：「不是社会针对女性，也不是女性必须说谎，而是资本天生就要赚钱，会无差别的抛弃所有不能正常提供劳动力的人。」——消除性别思维。「这时候还叫说谎吗?应该叫麻痹敌人吧。也许我们和具体的人无冤无仇，甚至私交不错，但是我们和他们背后的利益是天然的死敌，这就是阶级矛盾」——明确阶级矛盾。牛逼啊。今天你是政委。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. 有趣对话或金句 -->
+    <section class="interesting-dialogues">
+        <h2>有趣对话或金句</h2>
+        <div class="dialogues-container">
+            <div class="dialogue-card">
+                <div class="dialogue-type">QUOTE</div>
+                <div class="dialogue-content">
+                     <div class="message">
+                        <div class="message-meta">
+                            <span class="speaker">昍</span>
+                            <span class="time">02:25</span>
+                        </div>
+                        <p class="message-content">“教员真是神人，连这些他都预见到了……离谱，就离谱。教员真是离谱……啧，华夏真是出圣人。太恐怖了，幸亏我是华人，要不然我真是害怕死了。”</p>
+                    </div>
+                </div>
+                <div class="dialogue-highlight">昍对教员预见性及华夏文明出圣人的高度赞叹与感慨。</div>
+                <div class="dialogue-topic">相关话题：历史人物评价 (教员)</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-type">DIALOGUE</div>
+                <div class="dialogue-content">
+                    <div class="message">
+                        <div class="message-meta">
+                            <span class="speaker">阿戒戒戒戒戒戒</span>
+                            <span class="time">09:07</span>
+                        </div>
+                        <p class="message-content">说到这个，我有些想跟大家请教下，以色列这种暗杀领导人的阴湿打法，如今看来是不是蛮有效的？</p>
+                    </div>
+                    <div class="message">
+                        <div class="message-meta">
+                            <span class="speaker">昍</span>
+                            <span class="time">13:46</span>
+                        </div>
+                        <p class="message-content">看对付谁了，如果这样对付华夏，很快就被华夏反扑灭族了……但如果只是对付一个几百万人口的小族，那这手法只会被周围的克苏鲁们看在眼里，将来有冲突的时候尽早灭族。反正长期看，官方明目张胆的暗杀都是沙皮操作……</p>
+                    </div>
+                </div>
+                <div class="dialogue-highlight">昍分析了暗杀策略的有效性，指出其对大国无效且愚蠢，对小族则可能引火烧身，是“沙皮操作”。</div>
+                <div class="dialogue-topic">相关话题：政治与军事策略，暗杀有效性</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-type">QUOTE</div>
+                <div class="dialogue-content">
+                     <div class="message">
+                        <div class="message-meta">
+                            <span class="speaker">桃乐丝</span>
+                            <span class="time">11:21</span>
+                        </div>
+                        <p class="message-content">“还是螺蛳粉好吃，同样是又臭又酸，梁文道就算了”</p>
+                    </div>
+                </div>
+                <div class="dialogue-highlight">桃乐丝以螺蛳粉类比，风趣地表达了对某学者（梁文道）及其作品的不以为然。昍表示：“这句台词我抄走了……”。</div>
+                <div class="dialogue-topic">相关话题：文人评价 / 幽默吐槽</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. 问题与解答 -->
+    <section class="questions-answers">
+        <h2>问题与解答</h2>
+        <div class="qa-container">
+            <div class="qa-card">
+                <div class="question">
+                    <div class="question-meta">
+                        <span class="asker">某群友 (由昍代发)</span>
+                        <span class="time">20:46</span>
+                    </div>
+                    <p class="question-content">一位在外包公司工作多年的女员工，在面临更换外包合同时，因备孕需求（32岁），向新外包公司C坦诚后被拒绝入职。后虽经原用人单位A的领导协调得以保留职位，但被C公司降薪30%。此事引发其对职场女性生育权益、诚信与现实困境的深刻思考：是否必须隐瞒甚至造假（如P体检报告）才能维护自身正当权益？尤其是在看到其他同事通过P图隐瞒并顺利怀孕后，内心更感委屈和困惑。</p>
+                    <div class="question-tags">
+                        <span class="tag">职场困境</span>
+                        <span class="tag">生育权益</span>
+                        <span class="tag">外包制度</span>
+                        <span class="tag">诚信与规则</span>
+                    </div>
+                </div>
+                <div class="answers">
+                    <div class="answer">
+                        <div class="answer-meta">
+                            <span class="responder">柔山馍王</span>
+                            <span class="time">22:12</span>
+                            <span class="accepted-badge">最佳回答</span>
+                        </div>
+                        <p class="answer-content">核心问题并非性别针对，而是资本逐利的本质，它会无差别的抛弃所有不能正常提供劳动力的人。在此情境下，所谓的“说谎”应被视为在阶级矛盾中“麻痹敌人”的策略。我们和他们（资本家）背后的利益是天然的死敌，这就是阶级矛盾。</p>
+                    </div>
+                    <div class="answer">
+                        <div class="answer-meta">
+                            <span class="responder">高大壮</span>
+                            <span class="time">21:17 / 22:03</span>
+                        </div>
+                        <p class="answer-content">建议当事人在已向领导坦诚并留下“憨憨傻傻”印象后，继续利用此人设，向直属领导“哭诉”委屈，以情动人。目的不是立即改变降薪结果，而是为后续怀孕和产假阶段争取领导的同情与保护，强调“我让领导为难了，但我真的也是好心，被降薪了好委屈”以及“领导您真好，还记着我这个老员工”。</p>
+                    </div>
+                    <div class="answer">
+                        <div class="answer-meta">
+                            <span class="responder">🦏（思维跳脱版）</span>
+                            <span class="time">21:03 / 21:19</span>
+                        </div>
+                        <p class="answer-content">认为题主与资本家共情才会暴露备孕计划。建议不要P体检报告，因为备孕不等于立即怀孕。若降薪不多可接受，以此为教训，未来职场斗争路还长。或者，可以考虑利用此事在小红书等平台制造话题，将困境转化为个人品牌建设的机遇。</p>
+                    </div>
+                    <div class="answer">
+                        <div class="answer-meta">
+                            <span class="responder">昍 (总结及后续)</span>
+                            <span class="time">22:01</span>
+                        </div>
+                        <p class="answer-content">昍补充了题主的后续：题主因觉得委屈，本打算入职C公司后即提离职。但其原单位A的领导通过一些办法，使题主无需更换到C公司，也无需做入职体检，且未降薪。昍评论此事为“傻人有傻福”，也指出领导可能看重其“老实”。同时强调，此事也反映了题主最初在认知（对外包公司性质）和策略（应先和自己领导沟通）上的不足。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. 群内数据可视化 -->
+    <section class="analytics">
+        <h2>群内数据可视化</h2>
+
+        <h3>话题热度</h3>
+        <div class="heatmap-container">
+            <div class="heat-item">
+                <div class="heat-topic">职场女性生育权益讨论</div>
+                <div class="heat-percentage">45%</div>
+                <div class="heat-bar">
+                    <div class="heat-fill" style="width: 45%; background-color: #3da9fc;"></div>
+                </div>
+                <div class="heat-count">约 150+ 条消息</div>
+            </div>
+            <div class="heat-item">
+                <div class="heat-topic">历史人物与事件解读</div>
+                <div class="heat-percentage">20%</div>
+                <div class="heat-bar">
+                    <div class="heat-fill" style="width: 20%; background-color: #f25f4c;"></div>
+                </div>
+                <div class="heat-count">约 40+ 条消息</div>
+            </div>
+            <div class="heat-item">
+                <div class="heat-topic">暗杀首领有效性及中东局势</div>
+                <div class="heat-percentage">15%</div>
+                <div class="heat-bar">
+                    <div class="heat-fill" style="width: 15%; background-color: #7209b7;"></div>
+                </div>
+                <div class="heat-count">约 50+ 条消息</div>
+            </div>
+            <div class="heat-item">
+                <div class="heat-topic">如何正确提问</div>
+                <div class="heat-percentage">10%</div>
+                <div class="heat-bar">
+                    <div class="heat-fill" style="width: 10%; background-color: #e53170;"></div>
+                </div>
+                <div class="heat-count">约 20+ 条消息</div>
+            </div>
+            <div class="heat-item">
+                <div class="heat-topic">微信使用技巧与吐槽</div>
+                <div class="heat-percentage">10%</div>
+                <div class="heat-bar">
+                    <div class="heat-fill" style="width: 10%; background-color: #00b4d8;"></div>
+                </div>
+                <div class="heat-count">约 30+ 条消息</div>
+            </div>
+        </div>
+
+        <h3>话唠榜</h3>
+        <div class="participants-container">
+            <div class="participant-item">
+                <div class="participant-rank">1</div>
+                <div class="participant-info">
+                    <div class="participant-name">昍 (含521Messi代发语音)</div>
+                    <div class="participant-count">约 70+ 条消息</div>
+                    <div class="participant-characteristics">
+                        <span class="characteristic">深度思考</span>
+                        <span class="characteristic">引导讨论</span>
+                        <span class="characteristic">知识渊博</span>
+                        <span class="characteristic">群内核心</span>
+                    </div>
+                    <div class="participant-words">
+                        <span class="word">问题</span>
+                        <span class="word">同志</span>
+                        <span class="word">讨论</span>
+                        <span class="word">资本</span>
+                        <span class="word">历史</span>
+                    </div>
+                </div>
+            </div>
+            <div class="participant-item">
+                <div class="participant-rank">2</div>
+                <div class="participant-info">
+                    <div class="participant-name">啊怿子 -</div>
+                    <div class="participant-count">约 60+ 条消息</div>
+                    <div class="participant-characteristics">
+                        <span class="characteristic">积极提问</span>
+                        <span class="characteristic">史料分享</span>
+                        <span class="characteristic">勤于思考</span>
+                        <span class="characteristic">深夜活跃</span>
+                    </div>
+                    <div class="participant-words">
+                        <span class="word">历史</span>
+                        <span class="word">感觉</span>
+                        <span class="word">是的</span>
+                        <span class="word">问题</span>
+                        <span class="word">分享</span>
+                    </div>
+                </div>
+            </div>
+            <div class="participant-item">
+                <div class="participant-rank">3</div>
+                <div class="participant-info">
+                    <div class="participant-name">高大壮</div>
+                    <div class="participant-count">约 50+ 条消息</div>
+                    <div class="participant-characteristics">
+                        <span class="characteristic">经验分享</span>
+                        <span class="characteristic">育儿奶爸</span>
+                        <span class="characteristic">积极互动</span>
+                        <span class="characteristic">标签达人</span>
+                    </div>
+                    <div class="participant-words">
+                        <span class="word">孩子</span>
+                        <span class="word">领导</span>
+                        <span class="word">经验</span>
+                        <span class="word">感觉</span>
+                        <span class="word">哭</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3>熬夜冠军</h3>
+        <div class="night-owls-container">
+            <div class="night-owl-item">
+                <div class="owl-crown" title="熬夜冠军">👑</div>
+                <div class="owl-info">
+                    <div class="owl-name">紫盈 (Purple_Lana)</div>
+                    <div class="owl-title">午夜兰花指</div>
+                    <div class="owl-time">最晚活跃时间：01:39 (05-23)</div>
+                    <div class="owl-messages">深夜消息数：约 5 条</div>
+                    <div class="owl-last-message">"晚安～～"</div>
+                    <div class="owl-note">注：熬夜时段定义为23:00-06:00，已考虑不同时区</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. 词云 -->
+    <section class="word-cloud">
+        <h2>热门词云</h2>
+        <div class="cloud-container">
+            <div class="cloud-wordcloud" id="word-cloud">
+                <span class="cloud-word" style="left: 280px; top: 100px; font-size: 42px; color: #ff8906; transform: rotate(-10deg); font-weight: bold;">问题</span>
+                <span class="cloud-word" style="left: 150px; top: 150px; font-size: 38px; color: #00b4d8; transform: rotate(5deg); font-weight: bold;">昍</span>
+                <span class="cloud-word" style="left: 400px; top: 160px; font-size: 35px; color: #f25f4c; transform: rotate(-5deg);">讨论</span>
+                <span class="cloud-word" style="left: 220px; top: 210px; font-size: 32px; color: #e53170; transform: rotate(10deg);">领导</span>
+                <span class="cloud-word" style="left: 380px; top: 70px; font-size: 30px; color: #3da9fc; transform: rotate(-12deg);">公司</span>
+                <span class="cloud-word" style="left: 100px; top: 90px; font-size: 28px; color: #7209b7; transform: rotate(8deg);">资本</span>
+                <span class="cloud-word" style="left: 450px; top: 230px; font-size: 26px; color: #4cc9f0; transform: rotate(3deg);">孩子</span>
+                <span class="cloud-word" style="left: 300px; top: 190px; font-size: 24px; color: #ff8906; transform: rotate(-8deg);">经验</span>
+                <span class="cloud-word" style="left: 180px; top: 50px; font-size: 22px; color: #f25f4c; transform: rotate(15deg);">教员</span>
+                <span class="cloud-word" style="left: 480px; top: 120px; font-size: 20px; color: #00b4d8; transform: rotate(-3deg);">历史</span>
+                <span class="cloud-word" style="left: 250px; top: 280px; font-size: 18px; color: #e53170; transform: rotate(0deg);">同志</span>
+                 <span class="cloud-word" style="left: 350px; top: 250px; font-size: 23px; color: #7209b7; transform: rotate(12deg);">感觉</span>
+            </div>
+
+            <div class="cloud-legend">
+                <div class="legend-item">
+                    <span class="legend-color" style="background-color: #ff8906;"></span>
+                    <span class="legend-label">核心议题</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background-color: #00b4d8;"></span>
+                    <span class="legend-label">人物与身份</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background-color: #f25f4c;"></span>
+                    <span class="legend-label">互动与行为</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. 页面底部 -->
+    <footer>
+        <p>数据来源：新茧聊天记录</p>
+        <p>生成时间：<span class="generation-time">2025-05-23 01:50:00</span></p>
+        <p>统计周期：2025-05-22 01:11 -2025-05-23 01:40</p>
+        <p class="disclaimer">免责声明：本报告内容基于群聊公开讨论，如有不当内容或侵权问题请联系管理员处理。</p>
+    </footer>
+</body>
+</html>

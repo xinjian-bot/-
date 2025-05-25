@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>新茧日报 - 2025-05-19</title>
+    <style>
+        /* 严格定义的CSS样式，确保风格一致性 */
+        :root {
+            --bg-primary: #0f0e17;
+            --bg-secondary: #1a1925;
+            --bg-tertiary: #252336;
+            --text-primary: #fffffe;
+            --text-secondary: #a7a9be;
+            --accent-primary: #ff8906;
+            --accent-secondary: #f25f4c;
+            --accent-tertiary: #e53170;
+            --accent-blue: #3da9fc;
+            --accent-purple: #7209b7;
+            --accent-cyan: #00b4d8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'SF Pro Display', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 16px;
+            width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background-color: var(--bg-secondary);
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: 10px;
+        }
+        
+        .date {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+        
+        .meta-info {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .meta-info span {
+            background-color: var(--bg-tertiary);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        section {
+            background-color: var(--bg-secondary);
+            margin-bottom: 30px;
+            padding: 25px;
+        }
+        
+        h2 {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-blue);
+        }
+        
+        h3 {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--accent-primary);
+            margin: 15px 0 10px 0;
+        }
+        
+        h4 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-secondary);
+            margin: 12px 0 8px 0;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 5px;
+        }
+        
+        a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        /* 卡片容器样式 */
+        .topics-container, .tutorials-container, .messages-container, 
+        .dialogues-container, .qa-container, .participants-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        /* 卡片样式 */
+        .topic-card, .tutorial-card, .message-card, 
+        .dialogue-card, .qa-card, .participant-item, .night-owl-item {
+            background-color: var(--bg-tertiary);
+            padding: 20px;
+        }
+        
+        /* 话题卡片 */
+        .topic-category {
+            display: inline-block;
+            background-color: var(--accent-blue);
+            color: var(--text-primary);
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .topic-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        
+        .keyword {
+            background-color: rgba(61, 169, 252, 0.2);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+        
+        .topic-mentions {
+            color: var(--accent-cyan);
+            font-weight: 600;
+        }
+        
+        /* 教程卡片 */
+        .tutorial-type {
+            display: inline-block;
+            background-color: var(--accent-secondary);
+            color: var(--text-primary);
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .tutorial-meta {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .tutorial-category {
+            margin-top: 10px;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+        
+        /* 消息卡片 */
+        .message-meta {
+            margin-bottom: 10px;
+        }
+        
+        .message-meta span {
+            margin-right: 15px;
+            font-size: 14px;
+        }
+        
+        .message-type {
+            background-color: var(--accent-tertiary);
+            color: var(--text-primary);
+            padding: 3px 10px;
+            border-radius: 15px;
+        }
+        
+        .priority {
+            padding: 3px 10px;
+            border-radius: 15px;
+        }
+        
+        .priority-high {
+            background-color: var(--accent-secondary);
+        }
+        
+        .priority-medium {
+            background-color: var(--accent-primary);
+        }
+        
+        .priority-low {
+            background-color: var(--accent-blue);
+        }
+        
+        /* 对话卡片 */
+        .dialogue-type {
+            display: inline-block;
+            background-color: var(--accent-purple);
+            color: var(--text-primary);
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .dialogue-content {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .dialogue-highlight {
+            font-style: italic;
+            color: var(--accent-primary);
+            margin: 10px 0;
+            font-weight: 600;
+        }
+        
+        /* 问答卡片 */
+        .question {
+            margin-bottom: 15px;
+        }
+        
+        .question-meta, .answer-meta {
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .question-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .tag {
+            background-color: rgba(114, 9, 183, 0.2);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+        
+        .answer {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            margin-top: 10px;
+        }
+        
+        .accepted-badge {
+            background-color: var(--accent-primary);
+            color: var(--text-primary);
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+        }
+        
+        /* 热度图 */
+        .heatmap-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .heat-topic {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .heat-bar {
+            height: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 5px 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .heat-fill {
+            height: 100%;
+            border-radius: 10px;
+        }
+        
+        /* 话唠榜 */
+        .participant-rank {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-right: 15px;
+            float: left;
+        }
+        
+        .participant-name {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .participant-count {
+            color: var(--accent-cyan);
+            margin-bottom: 10px;
+        }
+        
+        .participant-characteristics, .participant-words {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .characteristic {
+            background-color: rgba(242, 95, 76, 0.2);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+        
+        .word {
+            background-color: rgba(229, 49, 112, 0.2);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+        
+        /* 熬夜冠军 */
+        .night-owl-item {
+            background: linear-gradient(135deg, #0f0e17 0%, #192064 100%);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .owl-crown {
+            font-size: 40px;
+            margin-right: 20px;
+        }
+        
+        .owl-name {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .owl-title {
+            color: var(--accent-primary);
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+        
+        .owl-time, .owl-messages {
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+        
+        .owl-note {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        /* 词云 - 云朵样式 */
+        .cloud-container {
+            position: relative;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+        
+        .cloud-wordcloud {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            margin: 0 auto;
+            background-color: var(--bg-tertiary);
+            border-radius: 50%;
+            box-shadow: 
+                40px 40px 0 -5px var(--bg-tertiary),
+                80px 10px 0 -10px var(--bg-tertiary),
+                110px 35px 0 -5px var(--bg-tertiary),
+                -40px 50px 0 -8px var(--bg-tertiary),
+                -70px 20px 0 -10px var(--bg-tertiary);
+            overflow: visible;
+        }
+        
+        .cloud-word {
+            position: absolute;
+            transform-origin: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .cloud-word:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+        
+        .cloud-legend {
+            margin-top: 60px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+        
+        /* 底部 */
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 50px;
+            background-color: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        footer p {
+            margin: 5px 0;
+        }
+        
+        .disclaimer {
+            margin-top: 15px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>新茧日报</h1>
+        <p class="date">2025-05-19</p>
+        <div class="meta-info">
+            <span>总消息数：6000+</span>
+            <span>活跃用户：59</span>
+            <span>时间范围：2025-05-19 01:00:36 - 2025-05-20 01:45:56 (跨日)</span>
+        </div>
+    </header>
+
+    <!-- 1. 今日讨论热点 -->
+    <section class="hot-topics">
+        <h2>今日讨论热点</h2>
+        <div class="topics-container">
+            <div class="topic-card">
+                <h3>育儿、校园霸凌与家庭教育</h3>
+                <div class="topic-category">生活与教育</div>
+                <p class="topic-summary">群友们就育儿经验、子女“叛逆期”的理解、校园霸凌的成因及应对策略展开了深入讨论。多位成员分享了个人或孩子遭遇霸凌的经历，强调家庭支持和正确引导的重要性。昍(wxid_7gbv46ge8epd12) 认为所谓的“叛逆期”是青少年自我意识发展和生理变化的必然阶段，他生动地将其比喻为“吃屎期”，指出青少年此时可能将“我说了算”置于理性判断之上。大家普遍认为，父母应给予孩子足够的尊重和情感支持，帮助孩子建立自信，理解其行为背后的原因，而非简单粗暴地压制或归咎于“叛逆”。</p>
+                <div class="topic-keywords">
+                    <span class="keyword">育儿</span>
+                    <span class="keyword">校园霸凌</span>
+                    <span class="keyword">叛逆期</span>
+                    <span class="keyword">家庭教育</span>
+                    <span class="keyword">父爱母爱</span>
+                    <span class="keyword">子女沟通</span>
+                </div>
+                <div class="topic-mentions">提及次数：约185+</div>
+            </div>
+            <div class="topic-card">
+                <h3>明星艺人立场与公众形象</h3>
+                <div class="topic-category">娱乐与时事</div>
+                <p class="topic-summary">围绕陈奕迅的健康状况，群内讨论延伸至周杰伦、王力宏、罗大佑、林夕等艺人的政治立场、个人行为及其作品。大家交流了对这些艺人公众形象和私生活的看法，以及“塌房”现象。昍(wxid_7gbv46ge8epd12) 特别指出，在评价历史人物或公众人物时，需警惕那些利用赞扬或批评来影射当代政治的春秋笔法，并以对李广、汉武帝的评价为例，分析了背后可能存在的当代政治隐喻和阶级立场。</p>
+                <div class="topic-keywords">
+                    <span class="keyword">陈奕迅</span>
+                    <span class="keyword">周杰伦</span>
+                    <span class="keyword">王力宏</span>
+                    <span class="keyword">林夕</span>
+                    <span class="keyword">政治立场</span>
+                    <span class="keyword">公众形象</span>
+                    <span class="keyword">历史影射</span>
+                </div>
+                <div class="topic-mentions">提及次数：约160+</div>
+            </div>
+            <div class="topic-card">
+                <h3>消费观念、奢侈品与国货自信</h3>
+                <div class="topic-category">经济与生活</div>
+                <p class="topic-summary">从奢侈品高仿问题出发，群友们探讨了消费主义、品牌价值、国货自信等议题。昍(wxid_7gbv46ge8epd12) 提出“与其宣传国货，不如嘲讽洋货”的策略，认为通过对比能更清晰地认识到国货的优势和某些洋货的虚高定价。多位群友分享了购买高价商品后的反思，以及对国产品牌日益增长的支持态度。紫盈(Purple_Lana)分享了奢侈品代工成本与零售价的巨大差异，引发了对品牌溢价的讨论。</p>
+                <div class="topic-keywords">
+                    <span class="keyword">奢侈品</span>
+                    <span class="keyword">高仿</span>
+                    <span class="keyword">国货</span>
+                    <span class="keyword">消费主义</span>
+                    <span class="keyword">品牌溢价</span>
+                    <span class="keyword">性价比</span>
+                </div>
+                <div class="topic-mentions">提及次数：约95+</div>
+            </div>
+            <div class="topic-card">
+                <h3>新冠后遗症、防疫观念与家庭沟通</h3>
+                <div class="topic-category">健康与社会</div>
+                <p class="topic-summary">多位群友分享了新冠感染后出现的耳鸣、皮肤瘙痒等后遗症困扰，并交流了可能的应对方法和药物（如甲钴胺、抗组胺药）。讨论中再次涉及防疫观念，特别是与家人在防疫认知上的差异和由此产生的沟通困难。昍(wxid_7gbv46ge8epd12) 强调“免于生病才是最大的自由”，并建议在家庭防疫观念冲突时，个体应首先做好自我防护，必要时采取“熔断”策略以保护自己。</p>
+                <div class="topic-keywords">
+                    <span class="keyword">新冠后遗症</span>
+                    <span class="keyword">防疫</span>
+                    <span class="keyword">耳鸣</span>
+                    <span class="keyword">皮肤瘙痒</span>
+                    <span class="keyword">家庭沟通</span>
+                    <span class="keyword">健康观念</span>
+                    <span class="keyword">氯雷他定</span>
+                </div>
+                <div class="topic-mentions">提及次数：约85+</div>
+            </div>
+             <div class="topic-card">
+                <h3>学生运动的意义与历史解读</h3>
+                <div class="topic-category">历史与社会</div>
+                <p class="topic-summary">在讨论历史事件时，群友对五四等学生运动的重要性提出疑问。昍(wxid_7gbv46ge8epd12) 从多个角度进行了解读：1. 有纲领的青年群体本身具有威慑力；2. 学生运动往往能带动更广泛的社会力量（如工人阶级）；3. 学生（尤其是旧时代）的家庭背景和社会联系使其行动更受关注；4. 旧社会“学生”身份（如生员）本身具有一定的社会地位和影响力。他还提醒，解读历史叙事时需注意其背后可能存在的当代政治影射。</p>
+                <div class="topic-keywords">
+                    <span class="keyword">五四运动</span>
+                    <span class="keyword">学生运动</span>
+                    <span class="keyword">历史解读</span>
+                    <span class="keyword">社会影响力</span>
+                    <span class="keyword">群众路线</span>
+                    <span class="keyword">历史唯物主义</span>
+                </div>
+                <div class="topic-mentions">提及次数：约60+</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. 实用信息与资源分享 -->
+    <section class="tutorials">
+        <h2>实用信息与资源分享</h2>
+        <div class="tutorials-container">
+            <div class="tutorial-card">
+                <div class="tutorial-type">RESOURCE</div>
+                <h3>党史系列电子书分享</h3>
+                <div class="tutorial-meta">
+                    <span class="shared-by">分享者：黄云(yw1084255a)</span>
+                    <span class="share-time">05-19 05:31:33 - 05:35:36</span>
+                </div>
+                <p class="tutorial-summary">黄云同志分享了《中国共产党历史》第一、二卷及第三卷上册的电子书资源（epub和pdf格式），并建议结合《中国共产党简史》阅读，以构建清晰且枝繁叶茂的党史知识体系。</p>
+                <div class="key-points">
+                    <h4>要点：</h4>
+                    <ul>
+                        <li>分享了《中国共产党历史》三卷电子书。</li>
+                        <li>建议将《简史》作为大纲，《历史》作为详细补充。</li>
+                        <li>《历史》丛书提供索引，便于深入研究。</li>
+                    </ul>
+                </div>
+                <div class="tutorial-link">
+                    <a href="#" class="link valid">文件已在群内分享</a>
+                </div>
+                <div class="tutorial-category">分类：历史文献, 学习资源</div>
+            </div>
+            <div class="tutorial-card">
+                <div class="tutorial-type">TUTORIAL</div>
+                <h3>如何从碎片化信息中夺回注意力并重拾阅读</h3>
+                <div class="tutorial-meta">
+                    <span class="shared-by">分享者：抱猫砂盆的学习委员(wxid_j30o5fq69rny12)</span>
+                    <span class="share-time">05-19 20:43:36</span>
+                </div>
+                <p class="tutorial-summary">抱猫砂盆的学习委员分享了个人经验：意识到表达能力退化后，从听网文开始，逐步恢复专注力，再过渡到阅读与生活相关的工具书，最终能够阅读《毛选》等经典。强调了循序渐进和坚持的重要性。啊怿子 -(wxid_kivlz33phzqz21) 用鲁迅风格对此进行了文学性改写，增加了趣味性。</p>
+                <div class="key-points">
+                    <h4>要点：</h4>
+                    <ul>
+                        <li>从听感兴趣的网文开始，强迫自己听完。</li>
+                        <li>注意力恢复后，阅读与自身相关的工具书。</li>
+                        <li>最终挑战经典著作，如《毛选》，并发现其指导意义。</li>
+                        <li>核心是“坚持”和找到适合自己的方法。</li>
+                    </ul>
+                </div>
+                <div class="tutorial-category">分类：学习方法, 个人成长</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. 重要消息汇总 -->
+    <section class="important-messages">
+        <h2>重要消息汇总</h2>
+        <div class="messages-container">
+             <div class="message-card">
+                <div class="message-meta">
+                    <span class="time">05-19 13:43:31 - 05-19 22:00:59</span>
+                    <span class="sender">群友</span>
+                    <span class="message-type">EVENT</span>
+                    <span class="priority priority-high">优先级：高</span>
+                </div>
+                <p class="message-content">武汉发生枪击案，造成1死2伤，嫌疑人已被抓获。群友对此事件表示关注和震惊，并讨论了枪支管制、社会安全等问题。昍(wxid_7gbv46ge8epd12) 提醒大家注意安全，认为大下行时代和新冠纪元可能导致一些人行为极端化。</p>
+                <div class="message-full-content">
+                    <p>多位群友转发和讨论了武汉枪击案的相关信息，包括警情通报和现场图片/视频。大家对国内发生此类恶性事件感到意外，并就枪支来源（制式、手搓、走私）、作案动机（寻仇、激情）等进行了猜测。昍(wxid_7gbv46ge8epd12) 在05-19 13:43:31的发言中，结合社会背景分析了此类事件发生的可能性，并提醒大家注意个人安全。</p>
+                </div>
+            </div>
+            <div class="message-card">
+                <div class="message-meta">
+                    <span class="time">05-20 01:05:25</span>
+                    <span class="sender">昍(wxid_7gbv46ge8epd12)</span>
+                    <span class="message-type">NOTICE</span>
+                    <span class="priority priority-medium">优先级：中</span>
+                </div>
+                <p class="message-content">昍(wxid_7gbv46ge8epd12)表示，在被禁言解除后，真的不打算再玩微博了。</p>
+                <div class="message-full-content">
+                    <p>在回应好好学习天天向上小学生(cider1991)关于微博账号安全的关心时，昍(wxid_7gbv46ge8epd12)明确表示：“无所谓，我是真的不打算玩微博了。”</p>
+                </div>
+            </div>
+            <div class="message-card">
+                <div class="message-meta">
+                    <span class="time">05-20 00:02:47</span>
+                    <span class="sender">昍(wxid_7gbv46ge8epd12)</span>
+                    <span class="message-type">OTHER</span>
+                    <span class="priority priority-low">优先级：低</span>
+                </div>
+                <p class="message-content">关于陈奕迅演唱会风波，昍(wxid_7gbv46ge8epd12)分析了双方的立场：陈奕迅可能觉得歌迷要求他说国语是不尊重他，而歌迷则认为花钱了就应被满足。他表示自己早已和非大陆明星从心态上切割，对此类事件无感。</p>
+                <div class="message-full-content">
+                    <p>昍(wxid_7gbv46ge8epd12)：“他是觉得那些喊话「说国语」的歌迷没有尊重他，所以他有点不爽。有人觉得「我都花钱来看你了，怎么是不尊重你」。但人家可能反过来觉得「你不要觉得你给我钱了你就是我爹」。总之就是他随便说什么话，无所谓，那他也就不要在乎别人因此不喜欢他。我自己反正是一早就和所有非大陆的明星从心态上完全切割了，所以毫无感觉，哈哈哈。”</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. 有趣对话或金句 -->
+    <section class="interesting-dialogues">
+        <h2>有趣对话或金句</h2>
+        <div class="dialogues-container">
+            <div class="dialogue-card">
+                <div class="dialogue-type">[QUOTE]</div>
+                <div class="dialogue-content">
+                     <div class="message">
+                        <div class="message-meta">
+                            <span class="speaker">昍(wxid_7gbv46ge8epd12)</span>
+                            <span class="time">05-19 23:37:39</span>
+                        </div>
+                        <p class="message-content">叛逆期是客观存在的，只是名字可以商量。比如，正常人不会因为父母说「屎不能吃」就去吃屎，但青少年会。青少年会把「我说了算」看得比「吃屎是傻逼」还重要。或者说他们认为「听话比吃屎还难受」。这就是叛逆期的本质...不妨从生理角度，我们就管青少年的这个时期叫「吃屎期」。</p>
+                    </div>
+                </div>
+                <div class="dialogue-highlight">昍用“吃屎期”生动比喻青少年叛逆期，强调其核心是争夺自主权而非理性判断。</div>
+                <div class="dialogue-topic">育儿与青少年心理</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-type">[QUOTE]</div>
+                <div class="dialogue-content">
+                    <div class="message">
+                        <div class="message-meta">
+                            <span class="speaker">昍(wxid_7gbv46ge8epd12)</span>
+                            <span class="time">05-19 23:51:29</span>
+                        </div>
+                        <p class="message-content">五四运动学生上街为何重要？1.有纲领的年轻人本身可怕；2.工人加入扩大声势；3.学生（多为士族子弟）家庭背景的社会联动；4.旧社会“学生”身份（如生员）的潜在社会地位。</p>
+                    </div>
+                </div>
+                <div class="dialogue-highlight">昍从组织性、社会联动、家庭背景和身份地位四个层面分析了五四等学生运动的重要性。</div>
+                <div class="dialogue-topic">历史分析，社会运动</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-type">[QUOTE]</div>
+                <div class="dialogue-content">
+                    <div class="message">
+                        <div class="message-meta">
+                            <span class="speaker">昍(wxid_7gbv46ge8epd12)</span>
+                            <span class="time">05-20 00:19:57</span>
+                        </div>
+                        <p class="message-content">很多历史博主夸李广，是为了骂汉武帝。而骂汉武帝，其实是为了骂班长。而且李广是军事贵族...他之所以「失意」，一是运气，二是党争...所以很多人夸李广，是别有用心的。</p>
+                    </div>
+                </div>
+                <div class="dialogue-highlight">昍揭示了一些历史叙事背后可能存在的“借古讽今”的政治意图。</div>
+                <div class="dialogue-topic">历史解读，舆论分析</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. 问题与解答 -->
+    <section class="questions-answers">
+        <h2>问题与解答</h2>
+        <div class="qa-container">
+            <div class="qa-card">
+                <div class="question">
+                    <div class="question-meta">
+                        <span class="asker">紫盈(Purple_Lana)</span>
+                        <span class="time">05-19 23:43:32</span>
+                    </div>
+                    <p class="question-content">＃提问 叛逆期有性别之分吗？会男生比女生更叛逆吗？</p>
+                    <div class="question-tags">
+                        <span class="tag">青少年心理</span>
+                        <span class="tag">性别差异</span>
+                        <span class="tag">叛逆期</span>
+                    </div>
+                </div>
+                <div class="answers">
+                    <div class="answer">
+                        <div class="answer-meta">
+                            <span class="responder">昍(wxid_7gbv46ge8epd12)</span>
+                            <span class="time">05-20 00:48:05</span>
+                            <span class="accepted-badge">最佳回答</span> 
+                        </div>
+                        <p class="answer-content">可以说有，也可以说没有。我换个例子，「执拗期」，一般出现在人类幼崽5岁左右，当时刚刚有了自我意识，却又不完整...背后的生理机制是，娃的大脑开始发育了，但还是个半残水平。同理，青少年也这样。与性别无关。但——男女的青春期时间不同，所以有区别。可实际上，没区别。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="qa-card">
+                <div class="question">
+                    <div class="question-meta">
+                        <span class="asker">极品小学生(meiye19970912)</span>
+                        <span class="time">05-19 19:36:21</span>
+                    </div>
+                    <p class="question-content">大家怎么看待工作中不得不说谎的情况？（背景：学校按比例答辩，老师私下定名单，但被告知要对学生说是抽签决定，提问者对此感到难受）</p>
+                    <div class="question-tags">
+                        <span class="tag">职场伦理</span>
+                        <span class="tag">善意的谎言</span>
+                        <span class="tag">工作技巧</span>
+                    </div>
+                </div>
+                <div class="answers">
+                    <div class="answer">
+                        <div class="answer-meta">
+                            <span class="responder">昍(wxid_7gbv46ge8epd12)</span>
+                            <span class="time">05-19 23:48:54</span>
+                            <span class="accepted-badge">最佳回答</span> 
+                        </div>
+                        <p class="answer-content">这确实是抽签决定的，老天抽了签，今天中的是你。</p>
+                    </div>
+                    <div class="answer">
+                        <div class="answer-meta">
+                            <span class="responder">飞扬大学生(wxid_98zq6tqr8w5n21)</span>
+                            <span class="time">05-20 01:11:21</span>
+                        </div>
+                        <p class="answer-content">手段为目的服务。不喜欢撒谎，可撒可不撒的时候，不撒就完了。但是该撒的谎不撒，那就不叫那什么...（大学生困了）</p>
+                    </div>
+                     <div class="answer">
+                        <div class="answer-meta">
+                            <span class="responder">砂糖橘🍊(wxid_r8082f3vbe1622)</span>
+                            <span class="time">05-19 19:37:15</span>
+                        </div>
+                        <p class="answer-content">这是职场的技巧，心理压力不要那么大。一切都以最终的工作方面顺利开展为最终目标。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. 群内数据可视化 -->
+    <section class="analytics">
+        <h2>群内数据可视化</h2>
+        
+        <h3>话题热度</h3>
+        <div class="heatmap-container">
+            <div class="heat-item">
+                <div class="heat-topic">育儿、校园霸凌与家庭教育</div>
+                <div class="heat-percentage">25%</div>
+                <div class="heat-bar">
+                    <div class="heat-fill" style="width: 25%; background-color: #3da9fc;"></div>
+                </div>
+                <div class="heat-count">185+条消息</div>
+            </div>
+            <div class="heat-item">
+                <div class="heat-topic">明星艺人立场与公众形象</div>
+                <div class="heat-percentage">22%</div>
+                <div class="heat-bar">
+                    <div class="heat-fill" style="width: 22%; background-color: #f25f4c;"></div>
+                </div>
+                <div class="heat-count">160+条消息</div>
+            </div>
+            <div class="heat-item">
+                <div class="heat-topic">消费观念、奢侈品与国货</div>
+                <div class="heat-percentage">13%</div>
+                <div class="heat-bar">
+                    <div class="heat-fill" style="width: 13%; background-color: #7209b7;"></div>
+                </div>
+                <div class="heat-count">95+条消息</div>
+            </div>
+            <div class="heat-item">
+                <div class="heat-topic">新冠后遗症、防疫与家庭沟通</div>
+                <div class="heat-percentage">11%</div>
+                <div class="heat-bar">
+                    <div class="heat-fill" style="width: 11%; background-color: #e53170;"></div>
+                </div>
+                <div class="heat-count">85+条消息</div>
+            </div>
+            <div class="heat-item">
+                <div class="heat-topic">历史解读与学生运动</div>
+                <div class="heat-percentage">8%</div>
+                <div class="heat-bar">
+                    <div class="heat-fill" style="width: 8%; background-color: #00b4d8;"></div>
+                </div>
+                <div class="heat-count">60+条消息</div>
+            </div>
+        </div>
+        
+        <h3>话唠榜</h3>
+        <div class="participants-container">
+            <div class="participant-item">
+                <div class="participant-rank">1</div>
+                <div class="participant-info">
+                    <div class="participant-name">啊怿子 -(wxid_kivlz33phzqz21) / 怿安君(wxid_xplu3wwbs7d122)</div>
+                    <div class="participant-count">155条消息</div>
+                    <div class="participant-characteristics">
+                        <span class="characteristic">高频互动</span>
+                        <span class="characteristic">AI作图</span>
+                        <span class="characteristic">方言模仿</span>
+                        <span class="characteristic">育儿讨论</span>
+                    </div>
+                    <div class="participant-words">
+                        <span class="word">语音</span>
+                        <span class="word">哈哈</span>
+                        <span class="word">动画表情</span>
+                        <span class="word">是的</span>
+                    </div>
+                </div>
+            </div>
+            <div class="participant-item">
+                <div class="participant-rank">2</div>
+                <div class="participant-info">
+                    <div class="participant-name">砂糖橘🍊(wxid_r8082f3vbe1622)</div>
+                    <div class="participant-count">145条消息</div>
+                    <div class="participant-characteristics">
+                        <span class="characteristic">积极响应</span>
+                        <span class="characteristic">表情包输出</span>
+                        <span class="characteristic">教育话题</span>
+                        <span class="characteristic">山东方言</span>
+                    </div>
+                    <div class="participant-words">
+                        <span class="word">哈哈</span>
+                        <span class="word">是的</span>
+                        <span class="word">动画表情</span>
+                        <span class="word">语音</span>
+                    </div>
+                </div>
+            </div>
+            <div class="participant-item">
+                <div class="participant-rank">3</div>
+                <div class="participant-info">
+                    <div class="participant-name">抱猫砂盆的学习委员(wxid_j30o5fq69rny12)</div>
+                    <div class="participant-count">130条消息</div>
+                    <div class="participant-characteristics">
+                        <span class="characteristic">深度分享</span>
+                        <span class="characteristic">读书笔记</span>
+                        <span class="characteristic">校园霸凌反思</span>
+                        <span class="characteristic">话题总结</span>
+                    </div>
+                    <div class="participant-words">
+                        <span class="word">哈哈</span>
+                        <span class="word">是的</span>
+                        <span class="word">动画表情</span>
+                        <span class="word">我</span>
+                    </div>
+                </div>
+            </div>
+            <div class="participant-item">
+                <div class="participant-rank">4</div>
+                <div class="participant-info">
+                    <div class="participant-name">昍(wxid_7gbv46ge8epd12)</div>
+                    <div class="participant-count">106条消息</div>
+                    <div class="participant-characteristics">
+                        <span class="characteristic">核心观点输出</span>
+                        <span class="characteristic">深夜活跃</span>
+                        <span class="characteristic">历史与社会分析</span>
+                        <span class="characteristic">群聊总结</span>
+                    </div>
+                    <div class="participant-words">
+                        <span class="word">哈哈哈</span>
+                        <span class="word">是的</span>
+                        <span class="word">没有</span>
+                        <span class="word">这个</span>
+                    </div>
+                </div>
+            </div>
+             <div class="participant-item">
+                <div class="participant-rank">5</div>
+                <div class="participant-info">
+                    <div class="participant-name">飞扬大学生(wxid_98zq6tqr8w5n21)</div>
+                    <div class="participant-count">84条消息</div>
+                    <div class="participant-characteristics">
+                        <span class="characteristic">音乐分享</span>
+                        <span class="characteristic">梗王</span>
+                        <span class="characteristic">深夜活跃</span>
+                        <span class="characteristic">生活日常</span>
+                    </div>
+                    <div class="participant-words">
+                        <span class="word">哈哈</span>
+                        <span class="word">是的</span>
+                        <span class="word">图片</span>
+                        <span class="word">我</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <h3>熬夜冠军</h3>
+        <div class="night-owls-container">
+            <div class="night-owl-item">
+                <div class="owl-crown" title="熬夜冠军">👑</div>
+                <div class="owl-info">
+                    <div class="owl-name">黄云(yw1084255a)</div>
+                    <div class="owl-title">深夜的知识播种者</div>
+                    <div class="owl-time">最晚活跃时间：05-19 05:35:36</div>
+                    <div class="owl-messages">深夜消息数：7</div>
+                    <div class="owl-last-message">目前出版的三卷都在上面了。好像所有电子书 app 都还没上架这套书。市面上要么找电子书下载，要么得去买实体书</div>
+                    <div class="owl-note">注：熬夜时段定义为23:00-06:00，已考虑不同时区</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="word-cloud">
+        <h2>热门词云</h2>
+        <div class="cloud-container">
+            <div class="cloud-wordcloud" id="word-cloud">
+                <span class="cloud-word" style="left: 280px; top: 110px; font-size: 40px; color: #00b4d8; transform: rotate(-10deg); font-weight: bold;">孩子</span>
+                <span class="cloud-word" style="left: 150px; top: 160px; font-size: 35px; color: #4cc9f0; transform: rotate(8deg); font-weight: bold;">老师</span>
+                <span class="cloud-word" style="left: 420px; top: 170px; font-size: 30px; color: #f25f4c; transform: rotate(-3deg);">父母</span>
+                <span class="cloud-word" style="left: 230px; top: 230px; font-size: 28px; color: #ff8906; transform: rotate(12deg);">学校</span>
+                <span class="cloud-word" style="left: 380px; top: 80px; font-size: 26px; color: #e53170; transform: rotate(-8deg);">霸凌</span>
+                <span class="cloud-word" style="left: 190px; top: 70px; font-size: 27px; color: #7209b7; transform: rotate(15deg);">喜欢</span>
+                <span class="cloud-word" style="left: 460px; top: 110px; font-size: 22px; color: #3da9fc; transform: rotate(-5deg);">问题</span>
+                <span class="cloud-word" style="left: 270px; top: 40px; font-size: 32px; color: #f25f4c; transform: rotate(3deg);">疫情</span>
+                <span class="cloud-word" style="left: 130px; top: 260px; font-size: 25px; color: #00b4d8; transform: rotate(-15deg);">讨论</span>
+                <span class="cloud-word" style="left: 430px; top: 260px; font-size: 26px; color: #ff8906; transform: rotate(5deg);">工作</span>
+                <span class="cloud-word" style="left: 310px; top: 280px; font-size: 29px; color: #4361ee; transform: rotate(-2deg);">真的</span>
+                <span class="cloud-word" style="left: 80px; top: 120px; font-size: 24px; color: #e53170; transform: rotate(20deg);">哈哈</span>
+            </div>
+            <div class="cloud-legend">
+                <div class="legend-item">
+                    <span class="legend-color" style="background-color: #00b4d8;"></span>
+                    <span class="legend-label">教育与成长</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background-color: #f25f4c;"></span>
+                    <span class="legend-label">社会现象</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background-color: #ff8906;"></span>
+                    <span class="legend-label">生活日常</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>数据来源：新茧聊天记录</p>
+        <p>生成时间：<span class="generation-time">2025-05-20 02:30:00</span></p>
+        <p>统计周期：2025-05-19 01:00:36 - 2025-05-20 01:45:56</p>
+        <p class="disclaimer">免责声明：本报告内容基于群聊公开讨论，如有不当内容或侵权问题请联系管理员处理。</p>
+    </footer>
+</body>
+</html>
