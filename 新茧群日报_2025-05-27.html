@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新茧日报 2025-05-27</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * {
+            font-family: 'Inter', ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .bento-card {
+            background-color: #ffffff;
+            border: 1px solid #e9e9eb;
+            border-radius: 1rem; /* 16px */
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .bento-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.07), 0 4px 6px -4px rgba(0,0,0,0.05);
+            transform: translateY(-3px);
+        }
+
+        .number-display {
+            font-weight: 900; /* black */
+            font-size: 4rem;
+            line-height: 1;
+            /* Color will be set by Tailwind, e.g., text-[#4D6BFE] or text-black */
+        }
+
+        .section-title {
+            font-weight: 800; /* extrabold */
+            font-size: 2.25rem; /* 36px */
+            color: #000000;
+            margin-bottom: 2rem; /* 32px, consistent with Tailwind mb-8 */
+        }
+
+        .tag-item {
+            background-color: rgba(77, 107, 254, 0.1); /* bg-[#4D6BFE] bg-opacity-10 */
+            color: #4D6BFE;
+            padding: 0.25rem 0.75rem; /* py-1 px-3 */
+            border-radius: 9999px; /* rounded-full */
+            font-size: 0.75rem; /* text-xs */
+            font-weight: 500; /* medium */
+        }
+        
+        .nav-button {
+            background: linear-gradient(135deg, #4D6BFE 0%, #6B8BFF 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(77, 107, 254, 0.1);
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px -3px rgba(77, 107, 254, 0.2);
+        }
+
+        .nav-button:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .history-link {
+            background: rgba(77, 107, 254, 0.1);
+            color: #4D6BFE;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            border: 1px solid rgba(77, 107, 254, 0.2);
+        }
+
+        .history-link:hover {
+            background: rgba(77, 107, 254, 0.15);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="bg-white text-black min-h-screen">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <header class="w-full mb-8">
+            <div class="bento-card p-8">
+                <div class="text-center">
+                    <h1 class="text-5xl font-black text-black mb-6">
+                        新茧日报
+                    </h1>
+                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-lg mb-4">
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-calendar-alt mr-2 text-[#4D6BFE]"></i>
+                            <span id="report-date">2025年5月27日</span>
+                        </div>
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-clock mr-2 text-[#4D6BFE]"></i>
+                            <span>16:30（26日） - 16:30（27日）</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-center">
+                        <a href="https://xinjian-bot.github.io/-/新茧历史日报汇总.html" class="history-link">
+                            <i class="fas fa-history"></i>
+                            新茧历史日报
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <nav class="w-full mb-8">
+            <div class="bento-card p-4">
+                <div class="flex justify-between items-center">
+                    <button id="prev-day" class="nav-button">
+                        <i class="fas fa-chevron-left"></i>
+                        上一天
+                    </button>
+                    
+                    <div class="text-center">
+                        <span class="text-sm text-gray-600">日报导航</span>
+                    </div>
+                    
+                    <button id="next-day" class="nav-button">
+                        下一天
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <section class="w-full mb-12">
+            <h2 class="section-title">
+                一、总消息概览
+            </h2>
+            <div class="bento-card p-8 bg-gradient-to-br from-[#4D6BFE]/20 via-[#4D6BFE]/10 to-[#4D6BFE]/5 text-center rounded-2xl">
+                <div class="number-display text-[#4D6BFE]">
+                    5080
+                </div>
+                <p class="text-xl font-semibold text-black mt-3">总消息数量</p>
+            </div>
+        </section>
+
+        <section class="w-full mb-12">
+            <h2 class="section-title">
+                二、火花碰撞时刻・热点话题
+            </h2>
+            <div class="space-y-8">
+                
+                <div class="bento-card p-6 rounded-xl">
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            民主党派与群团组织架构及运作机制
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            05-26 16:30 - 05-27 10:35
+                        </span>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            徐徐前行的小豆：一个背景知识补充，我们党领导的工青妇科协文联残联等等这些群团...
+                        </p>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">民主党派</span>
+                            <span class="tag-item">群团组织</span>
+                            <span class="tag-item">交叉党员</span>
+                            <span class="tag-item">统战</span>
+                            <span class="tag-item">政治协商</span>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <p class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            群内就民主党派和群团组织的架构及运作机制进行了深入讨论。<b>徐徐前行的小豆</b>详细解释了党领导下的群团组织（如工青妇、科协、文联等）和民主党派的运作方式，包括其工作人员（参公编制）多为中共党员，负责代表党服务各自联系的人群，确保组织运行在党的管理之下。讨论了丁真、张桂梅、冯巩、靳东等名人的兼职身份与实际行政职务的区别，以及"交叉党员"的概念，即少数中共党员因工作需要加入民主党派，或民主党派成员加入中共后保留原党派身份的情况。<b>🍒饱嗝丽🌻</b>和<b>高大壮太天真</b>也参与了讨论，对一些细节进行了 уточнение。<b>昍</b>引用并强调了"无党派人士"的定义，指出其是需经统战部认证的政治身份，不同于普通无党派群众。<b>徐徐前行的小豆</b>后续提供了组织架构图，进一步厘清了民主党派与群团在领导机制上的区别：群团由党组书记负责日常工作，而民主党派领袖通常实际主持工作，但其机关仍在我党领导和监督下运作。
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            民主党派和群团组织均在中国共产党领导下运作，其机关工作人员多数为中共党员，以确保党的方针政策得到贯彻。名誉领袖和实际运营管理者有所区分。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我党的机制设计是十分精密的[偷笑]
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>徐徐前行的小豆</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                大家可以看一下#交叉党员 这个概念，里面提到先入民主党派之后，加入我党并出于工作原因保留民主党派党籍的，算交叉党员，也就是双重党籍人士。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>高大壮太天真</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                领袖和机关领导是俩概念，领袖你可以理解为是"元首"那个概念。实际运营机构都是参公的公务员机关单位，这里面的领导基本都是党员。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>徐徐前行的小豆</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            "无党派人士"是一个需要统战部认证的特定政治身份，而非简单指不加入任何党派的群众。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                这里再厘清一个概念——无党派人士。无党派和无党派人士不是一回事...要想成为无党派人士，不但要符合规定标准，还需要市级以上统战部门认定。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                因为他确定不是党员，而且无党派人士是要经过统战部认证的，也是一种政治身份，还是他的标签。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>徐徐前行的小豆</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bento-card p-6 rounded-xl">
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            【小会】05：「防疫第一责任人」的探讨
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            05-26 16:41 - 05-26 22:27
+                        </span>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            昍：@所有人 今晚5.26周一晚上20:30的【小会】05，我们会讨论「防疫第一责任人」相关的一些问题。
+                        </p>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">防疫</span>
+                            <span class="tag-item">第一责任人</span>
+                            <span class="tag-item">客观规律</span>
+                            <span class="tag-item">实事求是</span>
+                            <span class="tag-item">个体与集体</span>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <p class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <b>昍</b>发起了关于"防疫第一责任人"的小会讨论，提出了四个相关问题，并引导大家思考这些问题的本质。群友们围绕"第一责任人"说法的合理性、如何帮助免疫力下降的室友、如何看待三观正的同事因病迷信玄学、以及如何统一家庭防疫措施等议题展开了热烈讨论。<b>昍</b>通过罗列群内不同观点（包括赞同和不赞同"第一责任人"的看法），引导大家认识到即便是认知水平相对较高的群体内部也存在巨大分歧。<b>核心观点是</b>："第一责任人"并非法律或规定，而是客观规律的体现，即个体最终要为自己的健康选择和行为后果负责，尤其在疫情这类不可抗力面前。<b>社会保护公民是应然，但个体自我负责是实然</b>。讨论强调了在复杂现实面前，理解和接受客观规律，并在此基础上做出个人选择的重要性。大家也分享了在疫情期间的个人经历和感悟，以及如何与家人、同事沟通防疫观念的困境与方法。
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            "第一责任人"的说法反映了客观现实，即个体需对自身健康承担最终责任，尤其在社会系统面临巨大挑战时。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                你的想法，别人改变不了的，所以你是你想法的第一责任人；你会按你的想法行事，别人拦不住的，所以你是你行为后果的第一责任人。这是什么？这不是法律，也不是规定，这是——客观规律。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                第一责任人是元规律，在健康这个问题上，做不到无限责任。而我当初质疑这句话时，是被动态清零锁了智。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>高大壮太天真</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                说"第一责任人"时，就像驾校教练强调"方向盘在自己手里"。不是出了事故不追责驾校，而是提醒别把命交给副驾驶。你得先意识到命是你的，你才能指望副驾驶（教练）帮你。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>幼儿园文体委员</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            面对他人（室友、同事、家人）与自身防疫观念的冲突，核心在于做好自我防护，并接受无法改变他人的现实。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我如何避免被免疫力降低的她影响到身体健康？
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>（提问者总结）</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                你总会遇到一个对你重要，或者影响大，但你又绝对不可能改变其对病毒态度的人。这时，你怎么办？
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我的第一责任人原则：抛弃不愿意改变又能抛弃的人，改变无法抛弃又能改变的人，接受无法抛弃无法改变的人，最后尽自己所有能力降低概率降低后果。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>学前班校霸（男的）</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bento-card p-6 rounded-xl">
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            减重与健康饮食讨论
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            05-26 17:35 - 05-26 17:55
+                        </span>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            糯米：减重三原则，这个是我个人结合自己的减重经历总结的...
+                        </p>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">减重</span>
+                            <span class="tag-item">健康饮食</span>
+                            <span class="tag-item">营养比例</span>
+                            <span class="tag-item">实事求是</span>
+                            <span class="tag-item">生活习惯</span>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <p class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <b>糯米</b>分享了个人总结的减重三原则：科学性、易操作性和可持续性。<b>昍</b>对此进行了引申，强调了"实事求是"在减重过程中的核心地位，包括尊重客观规律、人的惰性和生物习性。讨论还涉及了碳水、蛋白质、脂肪的合理摄入比例，如4:4:2的高蛋白饮食的优缺点，以及中国人传统饮食中优质蛋白缺乏的问题。<b>偷茱萸的狐狸</b>补充了"生活化减脂"的小方法，如记录爱吃的食物并逐步替代、准备健康零食抵抗饥饿感。大家强调了记录饮食、了解食物热量、循序渐进的重要性。
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            成功的减重需遵循科学性、易操作性和可持续性原则，核心在于实事求是，尊重客观规律和个体差异。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                减重的最大陷阱是追求快速见效，科学性是底线，拒绝伤害身体；易操作性是策略，让改变发生在舒适区的边缘；可持续性是目标，让减重"不知不觉且自然而然"。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>糯米</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                实事求是，尊重客观规律，才能事半功倍。<br>实事求是，尊重人的惰性，找到自己能坚持的方案，才能真正坚持。<br>实事求是，尊重生物习性，明白减重不是短期项目而是生活本身，才能真正一直健康。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                不要追求完美主义，只跟自己比，逐步的健康起来。这样难度小，易操作，不容易产生"逆反心理"。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>偷茱萸的狐狸</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bento-card p-6 rounded-xl">
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            债务问题与泡泡玛特现象讨论
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            05-26 17:22 - 05-26 20:28
+                        </span>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            昍：我一个堂妹，脑子进水莫名其妙欠了5W，还了三年之后还欠着10W...
+                        </p>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">网贷</span>
+                            <span class="tag-item">消费主义</span>
+                            <span class="tag-item">盲盒</span>
+                            <span class="tag-item">泡泡玛特</span>
+                            <span class="tag-item">赌徒心理</span>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <p class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            由<b>昍</b>分享的堂妹因减肥药欠下巨额网贷的案例引发了群内对债务问题的讨论，包括超前消费、以贷养贷、网赌、快招加盟等导致债务的常见原因。大家交流了身边类似的案例，并提到了"戒社"作为了解此类问题的参考。<b>学前班校霸（男的）</b>指出欠贷者在坦白时常有瞒报。随后，话题转向泡泡玛特的盲盒现象，<b>昍</b>提问其火爆原理。群友们讨论了泡泡玛特在海外的流行，<b>🦏（思维跳脱版</b>分析了明星效应（如LISA）和奢侈品搭配（如Labubu挂件）对其流行的推动作用。<b>伦敦金</b>认为这与得物炒鞋、山姆代购类似，是多方因素（少量买家、Vlog需求、代购炒作、平台推流、商家营销）共同作用的结果。大家普遍对盲盒的"丑"和高价表示不理解，认为其利用了消费者的赌徒心理和社交需求。
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            网贷问题复杂，常涉及瞒报和利滚利；泡泡玛特等盲盒经济的火爆，部分源于明星效应、奢侈品关联以及利用消费者的赌徒心理和社交需求。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                不好说是不是真话。。。因为很多借网贷的人最后坦白都是真假参半。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>学前班校霸（男的）</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                近期火起来的关键点，主要是泡泡玛特的labubu，lisa等明星用来做挂饰配件以后，大批量明星都用爱马仕等奢侈品包来挂labubu...
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>🦏（思维跳脱版</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我他妈花好几十买一个小玩具，还不能挑样儿了，这不纯纯受虐狂心理吗。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>飞扬大学生</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="w-full mb-12">
+            <h2 class="section-title">
+                三、解惑一点通・有问必答
+            </h2>
+            <div class="space-y-8">
+                
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <div class="mb-4">
+                        <h4 class="text-xl font-semibold text-black flex items-center">
+                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+                            如何增强宣传稿件中平凡故事的感染力？
+                        </h4>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            嘻嘻呀嘿：同志们，我是一名西部计划志愿者...最近换了科室，在搞道德模范宣讲报告会，宣讲稿件多事迹罗列，想增强平凡故事的感染力...
+                        </p>
+                    </div>
+                    <div class="border-t border-gray-200 pt-4">
+                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+                            解答
+                        </h5>
+                        <p class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+                            群友们针对<b>嘻嘻呀嘿</b>提出的如何增强道德模范宣讲稿感染力的问题，给出了多方面建议。<b>高大壮太天真</b>指出应突出党员的党性，将个人善举与党的教育和引领联系起来，使党员形象如山一般可靠。<b>啊怿子</b>则强调细节描写和情感共鸣的重要性，建议通过具象化的场景、对话和人物内心活动来增强故事的冲击力，并分享了AI润色稿件的案例，展示了如何通过具体细节（如"姐姐吃，甜甜的"野葱，"三个魂灵的襁褓"棉衣）来打动人心。<b>绅士坤</b>提到应避免材料罗列，可选择一两件事细致描写。<b>高大壮太天真</b>还补充了宣传需考虑受众和潜在的"翻车点"，要经得起质疑。<b>昍</b>则从写作技巧角度点出，好的作者自己会先代入情感，白描是高级手法，应减少空洞抒情，多用真实细节。
+                        </p>
+                    </div>
+                    <div class="mt-5 pt-4 border-t border-gray-200">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">宣传写作</span>
+                            <span class="tag-item">叙事技巧</span>
+                            <span class="tag-item">情感共鸣</span>
+                            <span class="tag-item">AI辅助写作</span>
+                            <span class="tag-item">党性教育</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="w-full mb-12">
+            <h2 class="section-title">
+                四、智慧火花匣・每日精选
+            </h2>
+            <div class="space-y-8">
+                
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <h4 class="text-xl font-semibold text-black mb-3">
+                        AI提示词：深度问题洞察与澄清助手"思澈"
+                    </h4>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            叽罗：我写了一个或许有助于实践日日提出来的「提真正的问题」的AI提示词。
+                        </p>
+                    </div>
+                    <p class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+                        <b>叽罗</b>分享了一个精心编写的AI提示词，旨在构建一个名为"思澈"的深度问题洞察与澄清助手。该助手运用"好问题指南"的原则，通过提问和引导，协助用户将模糊困惑转化为具体的、可深入探讨的"真实问题"，促进自我理解与成长，但不直接提供解决方案。提示词详细规定了AI的行为准则，如尊重用户、具体化引导、鼓励细节、保持中立等。<b>啊怿子</b>等群友对提示词的结构和"伪聊天记录"技巧进行了探讨，<b>昍</b>已将此工具备份至篝火论坛。
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tag-item">AI</span>
+                        <span class="tag-item">提示词工程</span>
+                        <span class="tag-item">问题解决</span>
+                        <span class="tag-item">自我认知</span>
+                        <span class="tag-item">工具分享</span>
+                    </div>
+                    <div class="flex justify-end">
+                        <a href="https://bbs.lavayou.cn/t/topic/429/24" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-[#4D6BFE] hover:text-blue-700 hover:underline flex items-center">
+                            查看篝火备份
+                            <i class="fas fa-external-link-alt ml-1.5 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <h4 class="text-xl font-semibold text-black mb-3">
+                        数据隐私与个性化推荐讨论
+                    </h4>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            徐徐前行的小豆：话说有懂技术的同志给解释下视频号 小红书 抖音除了监听，是怎么实现对其他软件上非点击行为的聊天或浏览内容实现抓取并推荐自己相关内容的吗。
+                        </p>
+                    </div>
+                    <p class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+                            群内讨论了APP如何实现跨平台内容推荐及数据隐私问题。<b>徐徐前行的小豆</b>分享了在微博浏览或微信聊天后，视频号、小红书会推送相关内容的经历。<b>冰镇啵子汽水</b>和<b>学前班校霸（男的）</b>等技术背景的群友解释，这可能涉及广告联盟、输入法数据共享、用户画像一致性、本地关键词提取等多种机制。大家一致认为，虽然分钟级实时跨APP精准推送技术成本高昂，但通过各种合法或灰色途径，平台间的数据共享和用户行为追踪是存在的。<b>昍</b>指出，关闭个性化推荐往往无效，普通用户在互联网时代基本没有绝对隐私，但也不必过度焦虑，因为平台更关注群体行为而非特定个体。
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tag-item">数据隐私</span>
+                        <span class="tag-item">个性化推荐</span>
+                        <span class="tag-item">APP算法</span>
+                        <span class="tag-item">信息安全</span>
+                        <span class="tag-item">技术讨论</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <footer class="w-full mt-16">
+            <div class="bento-card p-8">
+                <div class="text-center text-gray-700 space-y-3">
+                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-base">
+                        <div class="flex items-center">
+                            <i class="fas fa-database mr-2 text-[#4D6BFE]"></i>
+                            <span>微信群聊记录</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-robot mr-2 text-[#4D6BFE]"></i>
+                            <span id="generation-time">2025-05-27 16:30:00</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                        本报告基于群聊数据自动生成，仅供参考。内容可能包含个人观点，不代表群组官方立场。数据处理过程中已尽量匿名化处理敏感信息。
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const numberElements = document.querySelectorAll('.number-display');
+            numberElements.forEach(element => {
+                const finalValueText = element.textContent.replace(/,/g, '');
+                const finalValue = parseInt(finalValueText, 10);
+                if (isNaN(finalValue)) return;
+                let currentValue = 0;
+                const duration = 1500; 
+                const frameRate = 1000 / 60; 
+                const totalFrames = Math.round(duration / frameRate);
+                const increment = finalValue / totalFrames;
+                let currentFrame = 0;
+                const timer = setInterval(() => {
+                    currentFrame++;
+                    currentValue += increment;
+                    if (currentFrame >= totalFrames) {
+                        currentValue = finalValue;
+                        clearInterval(timer);
+                    }
+                    element.textContent = Math.floor(currentValue).toLocaleString('en-US');
+                }, frameRate);
+            });
+            initDailyNavigation();
+        });
+
+        async function initDailyNavigation() {
+            try {
+                const currentDate = getCurrentDateFromPage();
+                if (!currentDate) {
+                    console.warn('无法从页面中提取日期信息');
+                    document.querySelector('nav').style.display = 'none';
+                    return;
+                }
+                await setupNavigationButtons(currentDate);
+            } catch (error) {
+                console.error('初始化日报导航时出错:', error);
+                document.querySelector('nav').style.display = 'none';
+            }
+        }
+
+        function getCurrentDateFromPage() {
+            const dateElement = document.getElementById('report-date');
+            if (dateElement) {
+                const dateText = dateElement.textContent;
+                const dateMatch = dateText.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
+                if (dateMatch) {
+                    const year = dateMatch[1];
+                    const month = dateMatch[2].padStart(2, '0');
+                    const day = dateMatch[3].padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                }
+            }
+            const pathname = window.location.pathname;
+            const filenameMatch = pathname.match(/新茧群日报_(\d{4}-\d{2}-\d{2})\.html$/) || pathname.match(/新茧日报-(\d{4}-\d{2}-\d{2})\.html$/) ;
+            if (filenameMatch) return filenameMatch[1];
+            const titleMatch = document.title.match(/(\d{4}-\d{2}-\d{2})/);
+            if (titleMatch) return titleMatch[1];
+            return null;
+        }
+        
+        async function setupNavigationButtons(currentDate) {
+            const prevButton = document.getElementById('prev-day');
+            const nextButton = document.getElementById('next-day');
+            const navContainer = document.querySelector('nav');
+
+            const currentDateObj = new Date(currentDate + 'T00:00:00'); // Ensure it's parsed as local time
+
+            const prevDateObj = new Date(currentDateObj);
+            prevDateObj.setDate(prevDateObj.getDate() - 1);
+            const nextDateObj = new Date(currentDateObj);
+            nextDateObj.setDate(nextDateObj.getDate() + 1);
+
+            const prevDate = formatDate(prevDateObj);
+            const nextDate = formatDate(nextDateObj);
+
+            const prevExists = await checkReportExists(prevDate);
+            const nextExists = await checkReportExists(nextDate);
+            const isLatest = !nextExists; // If next day doesn't exist, this is likely the latest
+
+            // Show nav container only if there's at least one direction to navigate
+            if (prevExists || nextExists) {
+                navContainer.style.display = 'block';
+            } else {
+                navContainer.style.display = 'none';
+                return;
+            }
+            
+            if (prevExists) {
+                prevButton.onclick = () => {
+                    window.location.href = `https://xinjian-bot.github.io/-/新茧群日报_${prevDate}.html`;
+                };
+                prevButton.disabled = false;
+            } else {
+                prevButton.disabled = true;
+                prevButton.onclick = null;
+            }
+
+            if (nextExists) {
+                nextButton.onclick = () => {
+                    window.location.href = `https://xinjian-bot.github.io/-/新茧群日报_${nextDate}.html`;
+                };
+                nextButton.disabled = false;
+            } else {
+                nextButton.disabled = true;
+                nextButton.onclick = null;
+            }
+        }
+
+        async function checkReportExists(date) {
+            // First, try the primary naming convention
+            let reportUrl = `https://xinjian-bot.github.io/-/新茧群日报_${date}.html`;
+            try {
+                let response = await fetch(reportUrl, { method: 'HEAD' });
+                if (response.ok) return true;
+
+                // If not found, try the alternative naming convention (for historical files)
+                reportUrl = `https://xinjian-bot.github.io/-/新茧日报-${date}.html`;
+                response = await fetch(reportUrl, { method: 'HEAD' });
+                return response.ok;
+
+            } catch (error) {
+                // Network errors or other issues mean it doesn't exist or isn't accessible
+                return false;
+            }
+        }
+
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // Set generation time
+        const generationTimeElement = document.getElementById('generation-time');
+        if (generationTimeElement) {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            generationTimeElement.textContent = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+    </script>
+</body>
+</html>
