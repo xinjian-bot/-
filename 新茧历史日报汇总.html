@@ -58,7 +58,7 @@
             border: 1px solid #e9e9eb;
             border-radius: 0.75rem;
             padding: 1rem; /* 从 1.25rem 调整为 1rem，进一步减少高度 */
-            padding-right: 7rem; /* 为右侧按钮预留空间，避免文案重叠 */
+            padding-right: 7.5rem; /* 为右侧按钮预留更多空间，避免文案重叠 */
             margin-bottom: 1rem;
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             display: flex;
@@ -69,7 +69,7 @@
         /* 移动端优化：进一步增加右侧内边距 */
         @media (max-width: 640px) {
             .report-container {
-                padding-right: 8rem; /* 移动端增加更多右侧空间 */
+                padding-right: 9rem; /* 移动端增加更多右侧空间 */
             }
         }
 
@@ -348,11 +348,22 @@
 
         // 辅助函数：获取星期几的中文名称
         function getWeekdayName(year, month, day) {
-            const date = new Date(year, month -
-1, day);
+            const date = new Date(year, month - 1, day);
 // month is 0-indexed in Date constructor
             const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
             return weekdays[date.getDay()];
+        }
+
+        // 计算期数的函数（从2025年5月17日开始计数）
+        function calculateIssueNumber(year, month, day) {
+            const startDate = new Date(2025, 5 - 1, 17); // 2025年5月17日为第1期
+            const targetDate = new Date(year, month - 1, day);
+            
+            // 计算日期差值（毫秒）然后转换为天数
+            const diffTime = Math.abs(targetDate - startDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            return diffDays + 1; // +1 因为起始日为第1期
         }
 
         // 填充年份选择器
@@ -485,7 +496,8 @@
                     month: month,
                     displayText: `新茧群日报 ${year}年${month}月${day}日`,
                     weekday: getWeekdayName(year, month, day),
-                    date_display_full: `${year}年${month}月${day}日${getWeekdayName(year, month, day)}`
+                    date_display_full: `${year}年${month}月${day}日${getWeekdayName(year, month, day)}`,
+                    issueNumber: calculateIssueNumber(year, month, day)
                 });
 
                 checkTasks.push(checkLinkExists(url));
@@ -522,11 +534,11 @@
                     reportLinksContainer.innerHTML = existingReports.map(report => `
                         <div class="report-container">
                             <a href="${report.url}" class="report-title-link" target="_blank">
-                                ${report.displayText}
+                                新茧 ${report.year}.${report.month}.${report.day}
                             </a>
                             <div class="report-date-info">
                                 <i class="fas fa-calendar-day"></i>
-                                <span>${report.date_display_full}</span>
+                                <span>${report.weekday} 第${report.issueNumber}期</span>
                             </div>
                             <a href="${report.url}" class="view-details-btn" target="_blank">
                                 <i class="fas fa-external-link-alt"></i>
