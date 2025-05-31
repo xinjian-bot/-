@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF--8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新茧日报 2025-05-31</title>
+    <!-- 正常标题格式应为：新茧日报 yyyy-mm-dd，以便外部链接查看时了解日报日期 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * {
+            font-family: 'Inter', ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .bento-card {
+            background-color: #ffffff;
+            border: 1px solid #e9e9eb;
+            border-radius: 1rem; /* 16px */
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .bento-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.07), 0 4px 6px -4px rgba(0,0,0,0.05);
+            transform: translateY(-3px);
+        }
+
+        .number-display {
+            font-weight: 900; /* black */
+            font-size: 4rem;
+            line-height: 1;
+            /* Color will be set by Tailwind, e.g., text-[#4D6BFE] or text-black */
+        }
+
+        .section-title {
+            font-weight: 800; /* extrabold */
+            font-size: 2.25rem; /* 36px */
+            color: #000000;
+            margin-bottom: 2rem; /* 32px, consistent with Tailwind mb-8 */
+        }
+
+        .tag-item {
+            background-color: rgba(77, 107, 254, 0.1); /* bg-[#4D6BFE] bg-opacity-10 */
+            color: #4D6BFE;
+            padding: 0.25rem 0.75rem; /* py-1 px-3 */
+            border-radius: 9999px; /* rounded-full */
+            font-size: 0.75rem; /* text-xs */
+            font-weight: 500; /* medium */
+        }
+
+        /* HTML注释: 新增导航按钮样式，与现有设计保持一致 */
+        .nav-button {
+            background: linear-gradient(135deg, #4D6BFE 0%, #6B8BFF 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(77, 107, 254, 0.1);
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px -3px rgba(77, 107, 254, 0.2);
+        }
+
+        .nav-button:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .history-link {
+            background: rgba(77, 107, 254, 0.1);
+            color: #4D6BFE;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            border: 1px solid rgba(77, 107, 254, 0.2);
+        }
+
+        .history-link:hover {
+            background: rgba(77, 107, 254, 0.15);
+            transform: translateY(-1px);
+        }
+
+        /* HTML注释: 展开功能相关样式 */
+        .expandable-content {
+            position: relative;
+        }
+
+        .content-preview.collapsed {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .content-preview.collapsed::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(transparent, rgba(248, 250, 252, 0.9)); /* Tailwind bg-slate-50 equivalent */
+            pointer-events: none;
+        }
+        
+        .bento-card .content-preview.collapsed::after { /* Specific for bento-card background */
+            background: linear-gradient(transparent, rgba(255, 255, 255, 0.9)); /* #ffffff with opacity */
+        }
+        
+        .bg-slate-50 .content-preview.collapsed::after { /* Specific for bg-slate-50 background */
+             background: linear-gradient(transparent, rgba(248, 250, 252, 0.9)); /* Tailwind bg-slate-50 equivalent */
+        }
+
+
+        .expand-btn {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0;
+        }
+
+        .expand-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .expand-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .expand-btn.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="bg-white text-black min-h-screen">
+    <!-- HTML注释: 整体宽度通过 max-w-4xl 控制，实现日报宽度调小并保持响应式。-->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- === "新茧日报" 文件头区域 开始 === -->
+        <!-- HTML注释: 此模块作为单独一行，占据整行宽度。包含日报主标题、报告日期和时间范围。 -->
+        <!-- HTML注释: 新增了"新茧历史日报"链接，样式与整体设计保持统一协调 -->
+        <header class="w-full mb-8">
+            <div class="bento-card p-8">
+                <div class="text-center">
+                    <h1 class="text-5xl font-black text-black mb-6">
+                        新茧日报
+                    </h1>
+                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-lg mb-4">
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-calendar-alt mr-2 text-[#4D6BFE]"></i>
+                            <span id="report-date">2025年5月31日</span>
+                        </div>
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-clock mr-2 text-[#4D6BFE]"></i>
+                            <span>16:30 (05-30) - 03:00 (06-01)</span>
+                        </div>
+                    </div>
+                    <!-- HTML注释: 新增历史日报链接，位置合理且样式协调 -->
+                    <div class="flex justify-center">
+                        <a href="https://xinjian-bot.github.io/-/新茧历史日报汇总.html" class="history-link">
+                            <i class="fas fa-history"></i>
+                            新茧历史日报
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- === "新茧日报" 文件头区域 结束 === -->
+
+        <!-- HTML注释: 新增导航区域，包含"上一天"和"下一天"按钮 -->
+        <!-- HTML注释: 导航逻辑说明：
+             1. 通过JavaScript检查前后日期的日报文件是否存在
+             2. 根据当前页面日期确定前后日期
+             3. "下一天"按钮动态显示逻辑：仅当不是最新日报时显示
+             4. 兼容处理历史日报文件命名格式
+        -->
+        <nav class="w-full mb-8">
+            <div class="bento-card p-4">
+                <div class="flex justify-between items-center">
+                    <button id="prev-day" class="nav-button">
+                        <i class="fas fa-chevron-left"></i>
+                        上一天
+                    </button>
+                    
+                    <div class="text-center">
+                        <span class="text-sm text-gray-600">日报导航</span>
+                    </div>
+                    
+                    <button id="next-day" class="nav-button">
+                        下一天
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- === 模块一：总消息概览 开始 === -->
+        <!-- HTML注释: 此模块作为单独一行，占据整行宽度。显示当日群聊总消息数量。 -->
+        <section class="w-full mb-12">
+            <h2 class="section-title">
+                一、总消息概览
+            </h2>
+            <div class="bento-card p-8 bg-gradient-to-br from-[#4D6BFE]/20 via-[#4D6BFE]/10 to-[#4D6BFE]/5 text-center rounded-2xl">
+                <div class="number-display text-[#4D6BFE]">
+                    10948
+                </div>
+                <p class="text-xl font-semibold text-black mt-3">总消息数量</p>
+            </div>
+        </section>
+        <!-- === 模块一：总消息概览 结束 === -->
+
+        <!-- === 模块二：火花碰撞时刻・热点话题 开始 === -->
+        <section class="w-full mb-12">
+            <h2 class="section-title">
+                二、火花碰撞时刻・热点话题
+            </h2>
+            <!-- 列表容器: 讨论话题 -->
+            <div class="space-y-8">
+                
+                <!-- 热点话题卡片 1 开始 -->
+                <div class="bento-card p-6 rounded-xl">
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            探讨“女权”议题：从身边人变化谈起
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            19:08 (05-30) - 01:26 (05-31)
+                        </span>
+                    </div>
+
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            昍: "2025.5.30晚上20:30将开始的【小会】09讨论的主题是「身边的女权」..."
+                        </p>
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">女权</span>
+                            <span class="tag-item">女拳</span>
+                            <span class="tag-item">妇女解放</span>
+                            <span class="tag-item">性别叙事</span>
+                            <span class="tag-item">认知作战</span>
+                            <span class="tag-item">举报</span>
+                            <span class="tag-item">爱国</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="300">
+                                <div class="content-preview">
+                                    <b>一、话题背景与起因：</b><br><b>昍</b>同志预告了当晚20:30的小会主题为“身边的女权”，提及收到四位同志关于身边人（网友、朋友、表妹、妹妹）突然从正常状态转变为女权主义者，不知如何应对的提问。此预告引发了群内对“女权”及相关现象的热烈讨论和案例分享。<br><br><b>二、主要观点与讨论详情：</b><br>1.  <b>女权/女拳的界定与特征：</b>群友们普遍认为需要区分“女权主义（Feminism）”、“妇女解放”与网络上极端化的“女拳”。<b>啊怿子 -</b>提出将群内认可的“女权”定义为“妇女解放”。女拳的特征被描述为：使用特定攻击性词汇（如“下头男”、“生物爹”、“婚驴”、“蝻”）、双重标准（只要权利不要义务）、将所有问题归咎于男性和父权压迫、有时伴有恨国言论。<b>紫盈</b>提到“Shero”这类词汇。<b>读书者</b>认为女拳是“只要权利不要义务，理由是我是女的所以应该让着我”。<b>总归是要改个名字</b>认为女权思潮有迷惑性，能解释问题但无法解决问题，且存在“粉红女拳”这种怪胎。<br><br>2.  <b>女权思想的来源与影响：</b>群友认为女权思想的形成受多种因素影响。<b>昍</b>提到其朋友受短视频（抖音）影响。<b>归舟</b>指出留学群体是重灾区。<b>解婷婷</b>认为抖音等短视频平台流量为王，放大了家暴、男女互害等话题，使沉默大多数被代表。<b>学前班校霸（男的）</b>认为国内女拳泛滥与国外白左有相似的物质基础，即生活变好，但也提及境外势力渗透。<b>生如夏花</b>从社会学角度分析，认为女权思潮是城市原子化生活取代家族式生活方式的产物。<br><br>3.  <b>如何应对身边人的“女权化”：</b>
+    *   <b>沟通与引导：</b>部分群友尝试与受影响的亲友沟通，如推荐《姐姐妹妹站起来》电影，讲解妇女解放历史，但效果有限，对方可能拒绝沟通或认为“抖音更管用”。
+    *   <b>举报机制：</b>针对体制内人员，<b>昍</b>提出举报作为民主监督的可能性，认为即使证据不充分，也能引起组织警惕。<b>极品小学生</b>赞同此观点，认为谈话能促使其在网络言行上收敛。
+    *   <b>保持距离/放弃改变：</b><b>INSULAR12138</b>认为对非至亲好友，无需强求改变，远离即可，并强调“一个人进了茧房，最好的解决方式是让ta自己咬破茧”。<b>🦉</b>表示对重要亲友打拳，会不表态，若对方无法沟通则可能疏远。
+    *   <b>幼儿园文体委员</b>通过分享个人经历，提出“态度极化理论”，认为过度辩论可能适得其反，建议“埋下种子”，相信时间的力量和人的可变性。<br><br>4.  <b>案例分享：</b>
+    *   <b>学前班校霸（男的）:</b> 对象室友是山东考公女拳。
+    *   <b>幼儿园文体委员:</b> 前妻从自由主义者演变成反贼。
+    *   <b>飞扬大学生:</b> 分享了处理女权报警事件的经历，以及后续与当事女生的互动，展现了以真诚化解矛盾的可能性。
+    *   <b>昍:</b> 分享了“爱国女权”朋友的案例，其表现为爱国爱党（看《觉醒年代》、反感不当言论），但对男性群体有偏激恨意，对教员思想不响应，更倾向于“女权”而非“妇女解放”的表述。
+    *   <b>砂糖橘🍊:</b> 分享了相亲对象的言行，对方表现出对美国“单纯”的迷之自信，并暗示国内信息不透明，引发群友对其立场的质疑。<br><br><b>三、争议焦点（若有）：</b><br>主要在于如何界定“女权”与“女拳”，以及何种程度的言论构成“打拳”并需要干预。部分群友认为只要不涉及实际危害，口头表达可以容忍；另一些则认为极端思想需要警惕和纠正，尤其在体制内。<br><br><b>四、结论与启发：</b><br>本次讨论揭示了“女权”议题的复杂性。群友们普遍认同真正的妇女解放与网络“女拳”有本质区别。面对身边人的认知转变，应保持理性，区分情况，既要警惕极端思想的危害，也要理解其产生的社会和个人因素。加强自身理论学习，坚持实事求是，是应对各种思潮的关键。<b>昍</b>强调，党的神圣来自共产主义信仰，而非党本身；党员身份是自我要求，而非特权。最终，<b>幼儿园文体委员</b>的分享得到了广泛认同：改变他人认知是一个漫长过程，关键在于“埋下种子”，相信正确的思想和时间的检验力量。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            “女权”议题复杂，需区分“妇女解放”与网络极端“女拳”；后者常表现为双标、要特权及负面归因。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                女权本质是想要特权，想不劳而获。我们妇女解放是主张劳动创造价值，女权是主张各种权利各种优待。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我觉得我们现在定义好一件事情，就是我们认定认可的女权，就叫妇女解放。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>啊怿子 -</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                女拳也就在网上兴风作浪。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>策策</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            面对身边人受女权影响，应避免直接激烈辩论，可尝试引导或保持距离，体制内问题可考虑举报。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                当我们身边人开始被女权洗脑，出现明显倾向性的，我个人觉得最好不要劝太狠，否则可能适得其反。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>幼儿园文体委员</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                一个人进了茧房，最好的解决方式是让ta自己咬破茧；依靠外力，要么破不开，要么茧里整的被残废。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>INSULAR12138</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我一直是这个观点，人走着走着散了，才是常态。要么你进步慢，要么对方慢，不可能长期相对静止。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>昍</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            需警惕“女权”与“恨国”合流的倾向，加强自身理论建设，理解妇女解放的真正含义，坚持实事求是。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                党的神圣来自cp（即共产主义），不来自党本身。党员更是压根不神圣，党员身份只能用来自我要求，没有任何别的对外说服的作用。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                男的打拳真是犯贱。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>啊怿子 -</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                 因为从犯罪心理来讲——熟，意味着有安全感，有掌握感，所以「犯罪门槛」更低。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>昍</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 热点话题卡片 1 结束 -->
+
+                <!-- 热点话题卡片 2 开始 -->
+                <div class="bento-card p-6 rounded-xl">
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            男性情感与亲子关系：为何有些男性在婚变后对孩子态度骤变？
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            16:38 (05-30) - 16:50 (05-30)
+                        </span>
+                    </div>
+
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            昍: "> 佳桐 05-30 15:51:17..."
+                        </p>
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">离婚</span>
+                            <span class="tag-item">亲子关系</span>
+                            <span class="tag-item">催产素</span>
+                            <span class="tag-item">男性心理</span>
+                            <span class="tag-item">情感转变</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="300">
+                                <div class="content-preview">
+                                    <b>一、话题背景与起因：</b><br><b>昍</b>同志引用<b>佳桐</b>关于“男性离婚后不管孩子，抚养费难要”的观察，并结合自己身边三个男性婚内出轨离婚后对孩子从极度宠爱到不闻不问的案例，提出了对这种180度情感转变的困惑，引发了群友的讨论。<br><br><b>二、主要观点与讨论详情：</b><br>1.  <b>生理与环境因素：</b><b>昍</b>认为，男性离婚后离开育儿环境，催产素水平可能下降，导致对孩子的情感连接减弱。他还推测，婚内突然的转变可能是因为男性更在乎新建立的关系，担心与前任孩子的情感连接会影响新关系，从而做出“取舍”。<br><br>2.  <b>新恋情优先与本能压制：</b><b>卿缥缥</b>提出“精虫上脑”的观点，认为男性在热恋期可能将新的恋爱关系看得更重，对孩子的本能爱意因此被压制或盖过。<br><br>3.  <b>心理绑定与逃避：</b><b>叽罗</b>的观点得到<b>昍</b>的赞同，认为孩子在心理上与原配绑定程度较高，男性一想到孩子就可能联想到与原配的不愉快经历，为避免烦躁干脆选择逃避，不再关心孩子。<br><br>4.  <b>精力分配与“沉没成本”：</b><b>阿戒戒戒戒戒戒</b>分析，人的精力有限，当投入到新的恋情中，对原有孩子的关注自然会减少。另一方面，男性可能将之前对孩子的投入视为“沉没成本”，认为孩子最终还是跟母亲亲近，继续投入意义不大。<br><br>5.  <b>女性案例类比：</b><b>🦉</b>分享了一个女性朋友在热恋期间（婚外情）对孩子关心骤降的案例，从侧面印证了新恋情可能对育儿责任感产生的巨大冲击，不分男女。<br><br>6.  <b>血缘与法律困境：</b><b>极品小学生</b>分享了自己父亲的案例，其父在有新家庭和孩子后对其不闻不问，待新家庭关系破裂后又试图联系她，疑似为养老考虑。<b>昍</b>回应指出，血缘关系在法律上仍有赡养义务，可能导致未来复杂的家庭纠纷。<br><br><b>三、结论与启发：</b><br>男性在婚变后对孩子情感的巨大转变是一个复杂现象，并非单一“渣男”标签所能概括。讨论揭示了可能的多重动因，包括生理变化（催产素）、心理因素（新关系优先、逃避与原配的联想、沉没成本考量）、以及现实精力分配等。理解这些复杂性有助于更全面地看待此类家庭问题，但并不意味着为不负责任的行为开脱。强调了亲子关系中情感维系的重要性及婚变对子女可能造成的深远影响。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            男性在婚变后对孩子情感的转变，可能与离开育儿环境、催产素水平变化及新情感关系的建立有关。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                离婚后的我感觉相对容易理解，离开育儿环境，男性的催产素下降，自然就会情感淡一些了。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                他可能并不是不在乎以前的孩子，而是因为更在乎现在的关系，尤其是在乎过去的孩子可能会影响现在的关系，那就要做取舍了。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                孩子和原配在心理层面上很大程度绑定了，一想到孩子就想到原配，想多了就烦于是干脆不想。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>叽罗</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            “沉没成本”考量及对新关系的投入，也可能促使男性在情感上对前任孩子进行“切割”。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                能理解为精虫上脑把现在的恋爱关系看的更重吗？相比之下对孩子的爱这种本能就被盖住了（比下去了）。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>卿缥缥</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                感觉一方面人的精力是有限的，投入新恋情了就对小孩子关注少了，另一方面是不想再付出“沉没成本”？
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>阿戒戒戒戒戒戒</b>
+                                            </p>
+                                        </div>
+                                         <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                血缘这事真是麻烦。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>MIR🍈</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 热点话题卡片 2 结束 -->
+
+                <!-- 热点话题卡片 3 开始 -->
+                <div class="bento-card p-6 rounded-xl">
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                           直播间互动尺度探讨：何为情侣间的“高危”红线？
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            16:39 (05-30) - 16:58 (05-30)
+                        </span>
+                    </div>
+
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            Seawind: "我又来了，转发了群讨论后，后续来了..."
+                        </p>
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">直播</span>
+                            <span class="tag-item">情感边界</span>
+                            <span class="tag-item">信任危机</span>
+                            <span class="tag-item">双重标准</span>
+                            <span class="tag-item">皮套人</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="300">
+                                <div class="content-preview">
+                                    <b>一、话题背景与起因：</b><br>群友<b>Seawind</b>转发了一对情侣关于观看异性直播行为“高危标准”的争议。男方观看粉丝数较少、直播历史不可查的女主播唱歌（声称不互动，仅作背景音乐），女方则观看粉丝数众多、直播历史可查的男游戏主播（会发“哈哈哈”等弹幕，不送礼）。双方均认为对方的行为更高危，并对何为“安全”直播存在分歧。<br><br><b>二、主要观点与讨论详情：</b><br>1.  <b>男方观点及补充：</b>认为自己观看女主播唱歌仅作背景音乐（与女方共用账号），因女方不同意他此行为才提出对等要求。他认为女方发弹幕等同于和男主播聊天，产生了连接，行为更高危，且女方观看单机区男主播也属双标。<br><br>2.  <b>女方观点及补充：</b>认为男方观看小主播易被主播关注，且直播历史不明，风险高；建议其更换为头部大主播或皮套人。她认为自己在数万人的直播间发弹幕不可能引起男主播注意，男方对此的指责属不信任和荒谬。<br><br>3.  <b>群友反应：</b>
+    *   <b>学前班校霸（男的）</b>指出：“2明显就是俩人在抬杠了。他俩就是想让群友给推屁股。吵啥吵，谁都别看了好吧，去看卤蛋鉴宝”。
+    *   <b>高大壮</b>认为：“这男的好鸡毛....”，并分析这对情侣将矛盾抛给群友评判，已降低了矛盾烈度。
+    *   <b>昍</b>以吃素斋作类比评论女方建议男方“换成皮套人”的提议，暗示换汤不换药，并认为双方都看直播，时间不值钱，让他们继续争论也无妨。<br><br><b>三、结论与启发：</b><br>群友普遍认为此事核心是情侣间的信任问题和沟通障碍，而非直播行为本身。男方的辩解显得较为牵强和双标。此类情感中的边界问题，关键在于双方坦诚沟通各自的感受和不安全感，共同协商可接受的界限，而非单纯寻求外部评判或强制对等。用<b>学前班校霸（男的）</b>的话说，这更像是一场“推屁股”的争论。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            情侣间对观看异性直播的“高危”界定存在主观差异，男方侧重互动连接，女方侧重主播规模与内容风险。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                               男方强烈要求要补充信息...女方补充...（双方各执一词）
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>Seawind</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我很谨慎尽量不愿意说这句话....但是这男的好鸡毛....
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>高大壮</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                           此类争议的核心往往是信任缺失和沟通不畅，而非行为本身的技术性风险评估。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                2明显就是俩人在抬杠了。他俩就是想让群友给推屁股。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>学前班校霸（男的）</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                               把女主播换成皮套人，这个太好笑了...（素斋的比喻）
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>昍</b>
+                                            </p>
+                                        </div>
+                                         <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                               而且这俩人都看直播，他们的时间根本不值钱，我们干嘛要帮他们节省时间？毫无必要嘛，让他们接着吵。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>昍</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 热点话题卡片 3 结束 -->
+
+                 <!-- 热点话题卡片 4 开始 -->
+                <div class="bento-card p-6 rounded-xl">
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                           生命的脆弱与无常：群友热议“猝死”现象及健康警示
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            16:31 (05-30) - 16:36 (05-30)
+                        </span>
+                    </div>
+
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            飞扬大学生: "我上回所里那个兄弟也是，我头一天晚上还在跟他发微信要账呢"
+                        </p>
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">猝死</span>
+                            <span class="tag-item">心源性猝死</span>
+                            <span class="tag-item">健康</span>
+                            <span class="tag-item">生命无常</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="300">
+                                <div class="content-preview">
+                                    <b>一、话题背景与起因：</b><br><b>飞扬大学生</b>分享了身边一位同事（兄弟）因心源性猝死突然离世的经历，前一晚还在微信联系，第二天就接到噩耗，引发了群友对生命无常和健康问题的感慨与讨论。<br><br><b>二、主要观点与讨论详情：</b><br>1.  <b>飞扬大学生</b>详细描述了事件的经过，从前晚的正常沟通到次日接电话得知噩耗的震惊与不敢置信，强调了朋友离世的突然性（“我当时是10点联系的他，听说他11点就已经不行了”）。<br><br>2.  <b>好好学习天天向上小学生</b>对猝死原因提问（“殉职了？”），并在得知是“心源性猝死”后，用“突发、快速、不可预测。。。”来形容其特点，并配图表达。<br><br>3.  <b>高大壮</b>也深有感触，表示自己身边同学和学长学弟中也有数人离世，感慨“这玩意儿，不数不知道....”。<br><br>4.  <b>学前班校霸（男的）</b>则从自身角度出发，谈到独自在家发生猝死的无助感（“自己搁家里猝死是真的一点救都没有”），并担忧自己若遇不测，伴侣可能不知如何施救。<br><br><b>三、结论与启发：</b><br>群友们通过分享和讨论，共同表达了对生命突然逝去的惋惜和对健康问题的关注。猝死事件的频发提醒大家，生命无常，应珍惜当下，关注自身健康状况。同时，也间接反映出公众对于急救知识和应对突发健康事件能力的普遍焦虑。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            猝死事件的突发性和不可预测性给人们带来巨大冲击，引发对生命脆弱性的深刻思考。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                               结果第二天，我接到了一个我原来警长的电话。上来就说那兄弟没了。我都愣了，我问了他好几遍，什么？你说什么
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>飞扬大学生</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                突发、快速、不可预测。。。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>好好学习天天向上小学生</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                自己搁家里猝死是真的一点救都没有。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>学前班校霸（男的）</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 热点话题卡片 4 结束 -->
+            </div>
+        </section>
+        <!-- === 模块二：火花碰撞时刻・热点话题 结束 === -->
+
+        <!-- === 模块三：解惑一点通・有问必答 开始 === -->
+        <section class="w-full mb-12">
+            <h2 class="section-title">
+                三、解惑一点通・有问必答
+            </h2>
+            <div class="space-y-8">
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <div class="mb-4">
+                        <h4 class="text-xl font-semibold text-black flex items-center">
+                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+                            严重痛经，长期依赖止痛药（如依托考昔）有何潜在风险及注意事项？
+                        </h4>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            昍: "> 高大壮太天真(wxid_lswfn16k35lp12) 05-30 16:12:06 > 我媳妇痛经非常严重..."
+                        </p>
+                    </div>
+                    <div class="border-t border-gray-200 pt-4">
+                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+                            解答
+                        </h5>
+                        <div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、问题背景：</b><b>高大壮太天真</b>提及妻子痛经严重，常年依赖止痛药（依托考昔），引发群友关注。<br><br><b>二、核心原因分析：</b><b>昍</b>指出，止痛药通过限制前列腺素的分泌来阻断痛觉，但前列腺素同时具有保护胃壁的作用。因此，长期服用止痛药可能导致胃黏膜损伤，进而引发胃病。<br><br><b>三、解决方案与建议：</b><br>1.  <b>昍</b>提醒，长期服用止痛药可能形成胃病，使身体状况更复杂。痛经期间失血，本需营养补充，若消化力因胃药不足，将影响营养吸收和身体恢复，形成恶性循环。<br>2.  <b>高大壮太天真</b>表示，他们使用的“依托考昔”是经过筛选后，对肠胃反应相对较小且止痛效果较好的一款。<br>3.  <b>Dytto</b>提议是否可以和抑酸护胃的药一起服用，但<b>昍</b>认为这可能导致消化力不足，反而影响痛经期间的营养补充和身体运氧能力，形成恶性循环。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 pt-4 border-t border-gray-200">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">痛经</span>
+                            <span class="tag-item">止痛药</span>
+                            <span class="tag-item">依托考昔</span>
+                            <span class="tag-item">副作用</span>
+                            <span class="tag-item">胃健康</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <div class="mb-4">
+                        <h4 class="text-xl font-semibold text-black flex items-center">
+                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+                            为什么有的人在婚姻里痛苦，却不分开？是因为孩子吗？
+                        </h4>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            昍: "> @宝鹅(wxid_map2wko9iu2s22) 05-30 16:08:36 为什么有的人在婚姻里痛苦，却不分开..."
+                        </p>
+                    </div>
+                    <div class="border-t border-gray-200 pt-4">
+                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+                            解答
+                        </h5>
+                        <div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、问题背景：</b><b>@宝鹅</b>在群内提问，探究为何有些人在婚姻中感到痛苦却选择不分开，是否主要是因为孩子。<br><br><b>二、核心原因分析：</b><br>1.  <b>怕麻烦与惯性：</b><b>昍</b>认为，主要原因是“怕麻烦”。离婚涉及财产分割、关系重组等复杂事务，其麻烦程度可能超过维持现状的痛苦。他还类比了结婚的决策过程，即使遇到合适的人，一些人也会因怕麻烦而犹豫。<br>2.  <b>痛苦程度未达阈值：</b><b>qiqi</b>补充道：“还不够痛苦”，认为当痛苦达到一定程度，超过了离婚的麻烦和恐惧时，人们自然会选择离开。<b>昍</b>也用“杯水不烫手”的比喻认同此观点。<br>3.  <b>离婚的实际阻力：</b><b>高大壮</b>指出，“离婚的麻烦足以让当事双方忍耐相当多了”。<br>4.  <b>惰性与不愿改变：</b><b>学前班校霸（男的）</b>提到，有些人即使生活很惨也不愿改变，这可能是“结婚把人结废了”的一种表现。<b>qiqi</b>则认为，外人觉得惨，当事人自己可能不觉得那么惨。<br>5.  <b>类比生活中的将就：</b><b>阿戒戒戒戒戒戒</b>用公司订午餐类比：“不好吃，但是能吃，还送上楼，就一边吐槽难吃一边天天订”，形象地描绘了这种“虽然不满但还能忍”的状态。<br><br><b>三、相关讨论延申：</b><br>群友们还讨论了孩子对离婚决策的影响。<b>MIR🍈</b>认为孩子确实能起到绑定效果，即使离婚血缘关系仍在。<b>土豆</b>则指出，相爱时孩子是羁绊，不爱时是束缚。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 pt-4 border-t border-gray-200">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">婚姻</span>
+                            <span class="tag-item">离婚</span>
+                            <span class="tag-item">情感决策</span>
+                            <span class="tag-item">惯性思维</span>
+                            <span class="tag-item">沉没成本</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- === 模块三：解惑一点通・有问必答 结束 === -->
+
+        <!-- === 模块四：智慧火花匣・每日精选 开始 === -->
+        <section class="w-full mb-12">
+            <h2 class="section-title">
+                四、智慧火花匣・每日精选
+            </h2>
+            <div class="space-y-8">
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <h4 class="text-xl font-semibold text-black mb-3">
+                        《美国反对美国》读后感及意识形态渗透讨论
+                    </h4>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            昍: "> 凌零(xu1297509) 05-30 15:48:29..."
+                        </p>
+                    </div>
+                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+                        <div class="expandable-content" data-char-limit="200">
+                            <div class="content-preview">
+                                <b>一、推荐内容：</b>群友<b>昍</b>引用并回应了<b>凌零</b>关于阅读王沪宁著作《美国反对美国》的感想，特别是书中关于日本文化及美国对其态度的章节，以及由此联想到的中美关系和文艺作品中的意识形态渗透问题。<br><br><b>二、核心价值与特点：</b><br>1.  <b>昍</b>指出，王沪宁（被群友称为“国师”）在书中通过分析美国对日本文化（如《菊与刀》、《日本第一》）及其经济发展的态度变化，以及日本集体主义的优势等，<b>意在揭示西方（特别是美国）如何在文艺作品中巧妙地渗透其意识形态，并对潜在对手国家进行警惕和塑造负面印象。</b><br>2.  <b>昍</b>进一步分析，直接阐述意识形态渗透的道理可能不易令人信服，但通过日本这个具体案例，读者更容易理解和接受这一观点。这体现了“论举例的重要性”（<b>MIR🍈</b>评论）。<br><br><b>三、适用场景或补充信息：</b><br>该讨论适用于对国际关系、文化研究、意识形态分析以及传播策略感兴趣的群友。<b>啊怿子 -</b>将此讨论标记为#共读 #美国反对美国，表明了该书及相关讨论在群内的价值。
+                            </div>
+                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                <span class="expand-text">展开全文</span>
+                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tag-item">美国反对美国</span>
+                        <span class="tag-item">意识形态</span>
+                        <span class="tag-item">文化渗透</span>
+                        <span class="tag-item">国际关系</span>
+                        <span class="tag-item">读书分享</span>
+                    </div>
+                </div>
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <h4 class="text-xl font-semibold text-black mb-3">
+                        豆豆三部曲之《背叛》节选分享
+                    </h4>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                           糯米: "如果是刚开始看群里分享的那本背叛的同志，这中间少了一大段..."
+                        </p>
+                    </div>
+                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+                        <div class="expandable-content" data-char-limit="200">
+                            <div class="content-preview">
+                                <b>一、推荐内容：</b>群友<b>糯米</b>分享了豆豆作品《背叛》中的一段文字节选。内容描述了两位老朋友（方子云与宋义坤）久别重逢后的平淡对话，以及宋义坤在狱中帮厨时，从日常煮肉熬菜用布袋装大料的麻烦中获得灵感，构思出金属调味球的创意。<br><br><b>二、核心价值与特点：</b><br>这段节选展现了人物在平凡甚至困顿的生活细节中发现问题、思考改良，并从中获得“坐牢的一点儿收获”的智慧。它体现了作者豆豆对现实生活敏锐的观察力和深刻的人性洞察，以及作品中蕴含的生活哲理。<br><br><b>三、适用场景或补充信息：</b><br>该分享为正在共读豆豆三部曲的群友提供了文本补充，有助于更好地理解作品内容和风格。<b>啊怿子 -</b>将此标记为#共读 #豆豆三部曲，表明了其在群内共读活动中的价值。
+                            </div>
+                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                <span class="expand-text">展开全文</span>
+                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tag-item">文学分享</span>
+                        <span class="tag-item">豆豆三部曲</span>
+                        <span class="tag-item">背叛</span>
+                        <span class="tag-item">共读</span>
+                        <span class="tag-item">生活智慧</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- === 模块四：智慧火花匣・每日精选 结束 === -->
+
+        <!-- === 文件底部 开始 === -->
+        <footer class="w-full mt-16">
+            <div class="bento-card p-8">
+                <div class="text-center text-gray-700 space-y-3">
+                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-base">
+                        <div class="flex items-center">
+                            <i class="fas fa-database mr-2 text-[#4D6BFE]"></i>
+                            <span>微信群聊记录</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-robot mr-2 text-[#4D6BFE]"></i>
+                            <span>2025-06-01 05:00:00</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                        本报告基于群聊数据自动生成，仅供参考。内容可能包含个人观点，不代表群组官方立场。数据处理过程中已尽量匿名化处理敏感信息。
+                    </p>
+                </div>
+            </div>
+        </footer>
+        <!-- === 文件底部 结束 === -->
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Bento card hover effect is handled by CSS :hover pseudo-class
+
+            // Number animation effect
+            const numberElements = document.querySelectorAll('.number-display');
+            numberElements.forEach(element => {
+                const finalValueText = element.textContent.replace(/,/g, '');
+                const finalValue = parseInt(finalValueText, 10);
+
+                if (isNaN(finalValue)) return;
+
+                let currentValue = 0;
+                const duration = 1500; // Animation duration in ms
+                const frameRate = 1000 / 60; // 60fps
+                const totalFrames = Math.round(duration / frameRate);
+                const increment = finalValue / totalFrames;
+
+                let currentFrame = 0;
+                const timer = setInterval(() => {
+                    currentFrame++;
+                    currentValue += increment;
+
+                    if (currentFrame >= totalFrames) {
+                        currentValue = finalValue;
+                        clearInterval(timer);
+                    }
+                    // Format number with commas for display
+                    element.textContent = Math.floor(currentValue).toLocaleString('en-US');
+                }, frameRate);
+            });
+
+            // HTML注释: 初始化日报导航功能
+            initDailyNavigation();
+
+            // HTML注释: 初始化展开功能
+            initExpandableContent();
+        });
+
+        // HTML注释: 这个函数实现了日报间的导航功能，包括：
+        // 1. 从当前页面URL或内容中提取日期
+        // 2. 检查前后日期的日报文件是否存在
+        // 3. 设置"上一天"和"下一天"按钮的状态和链接
+        // 4. 实现"下一天"按钮的动态显示逻辑
+        async function initDailyNavigation() {
+            try {
+                // HTML注释: 获取当前页面的日期
+                const currentDate = getCurrentDateFromPage();
+                if (!currentDate) {
+                    console.warn('无法从页面中提取日期信息');
+                    return;
+                }
+
+                // HTML注释: 设置导航按钮
+                await setupNavigationButtons(currentDate);
+
+            } catch (error) {
+                console.error('初始化日报导航时出错:', error);
+            }
+        }
+
+        // HTML注释: 从页面中提取当前日期
+        // HTML注释: 支持多种方式提取日期：优先从页面元素、URL文件名或页面标题
+        function getCurrentDateFromPage() {
+            // HTML注释: 方法1：从报告日期元素中提取（优先级最高）
+            const dateElement = document.getElementById('report-date');
+            if (dateElement) {
+                const dateText = dateElement.textContent;
+                const dateMatch = dateText.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
+                if (dateMatch) {
+                    const year = dateMatch[1];
+                    const month = dateMatch[2].padStart(2, '0');
+                    const day = dateMatch[3].padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                }
+            }
+
+            // HTML注释: 方法2：从URL文件名中提取日期
+            const pathname = window.location.pathname;
+            const filenameMatch = pathname.match(/新茧群日报_(\d{4}-\d{2}-\d{2})\.html/);
+            if (filenameMatch) {
+                return filenameMatch[1];
+            }
+
+            // HTML注释: 方法3：从页面标题中提取日期
+            const titleMatch = document.title.match(/(\d{4}-\d{2}-\d{2})/);
+            if (titleMatch) {
+                return titleMatch[1];
+            }
+
+            return null;
+        }
+
+        // HTML注释: 设置导航按钮的状态和链接
+         // HTML注释: 根据当前日期，检查前后日期的日报文件是否存在
+         async function setupNavigationButtons(currentDate) {
+             const prevButton = document.getElementById('prev-day');
+             const nextButton = document.getElementById('next-day');
+             const navContainer = document.querySelector('nav');
+             
+             // HTML注释: 计算前一天和后一天的日期
+             const currentDateObj = new Date(currentDate);
+             const prevDateObj = new Date(currentDateObj);
+             prevDateObj.setDate(prevDateObj.getDate() - 1);
+             const nextDateObj = new Date(currentDateObj);
+             nextDateObj.setDate(nextDateObj.getDate() + 1);
+             
+             const prevDate = formatDate(prevDateObj);
+             const nextDate = formatDate(nextDateObj);
+             
+             // HTML注释: 检查前一天和后一天的日报是否存在
+             const prevExists = await checkReportExists(prevDate);
+             const nextExists = await checkReportExists(nextDate);
+             
+             // HTML注释: 如果前后日期的日报都不存在，隐藏整个导航栏容器
+             if (!prevExists && !nextExists) {
+                 navContainer.style.display = 'none';
+                 return;
+             }
+             
+             // HTML注释: 显示导航栏容器
+             navContainer.style.display = 'block';
+             
+             // HTML注释: 设置前一天按钮
+             if (prevExists) {
+                 prevButton.onclick = () => {
+                     window.location.href = `https://xinjian-bot.github.io/-/新茧群日报_${prevDate}.html`;
+                 };
+                 prevButton.disabled = false;
+             } else {
+                 prevButton.disabled = true;
+                 prevButton.onclick = null;
+             }
+
+             // HTML注释: 设置后一天按钮
+             if (nextExists) {
+                 nextButton.onclick = () => {
+                     window.location.href = `https://xinjian-bot.github.io/-/新茧群日报_${nextDate}.html`;
+                 };
+                 nextButton.disabled = false;
+             } else {
+                 // HTML注释: 后一天的日报不存在，禁用"下一天"按钮
+                 nextButton.disabled = true;
+                 nextButton.onclick = null;
+             }
+         }
+
+        // HTML注释: 检查指定日期的日报文件是否存在
+        async function checkReportExists(date) {
+            try {
+                const response = await fetch(`https://xinjian-bot.github.io/-/新茧群日报_${date}.html`, { method: 'HEAD' });
+                return response.ok;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        // HTML注释: 格式化日期为YYYY-MM-DD格式
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // HTML注释: 初始化展开功能
+        function initExpandableContent() {
+            const expandableContents = document.querySelectorAll('.expandable-content');
+            
+            expandableContents.forEach(container => {
+                const charLimit = parseInt(container.getAttribute('data-char-limit')) || 200;
+                const contentPreview = container.querySelector('.content-preview');
+                const expandBtn = container.querySelector('.expand-btn');
+                
+                if (!contentPreview || !expandBtn) return;
+                
+                const fullContent = contentPreview.innerHTML;
+                const fullText = contentPreview.textContent || contentPreview.innerText;
+                
+                // HTML注释: 如果内容长度超过限制，则显示展开按钮
+                if (fullText.length > charLimit) {
+                    // HTML注释: 创建一个临时元素来正确截取HTML内容
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = fullContent;
+                    
+                    // HTML注释: 截取文本内容到指定长度
+                    const truncatedText = fullText.substring(0, charLimit);
+                    
+                    // HTML注释: 使用更简单可靠的方法截取内容
+                    let truncatedContent = '';
+                    let charCount = 0;
+                    
+                    // HTML注释: 逐字符遍历，保持简单的HTML结构
+                    const walker = document.createTreeWalker(
+                        tempDiv,
+                        NodeFilter.SHOW_TEXT,
+                        null,
+                        false
+                    );
+                    
+                    let node;
+                    const textNodes = [];
+                    while (node = walker.nextNode()) {
+                        textNodes.push(node);
+                    }
+                    
+                    // HTML注释: 计算需要保留的文本内容
+                    for (let textNode of textNodes) {
+                        const text = textNode.textContent;
+                        if (charCount + text.length <= charLimit) {
+                            charCount += text.length;
+                        } else {
+                            const remainingChars = charLimit - charCount;
+                            textNode.textContent = text.substring(0, remainingChars) + '...';
+                            charCount = charLimit;
+                            
+                            // HTML注释: 新的、更干净的移除后续所有节点的逻辑
+                            let currentNodeToClearAfter = textNode;
+                            while (currentNodeToClearAfter && currentNodeToClearAfter !== tempDiv) {
+                                let sibling = currentNodeToClearAfter.nextSibling;
+                                while (sibling) {
+                                    const nodeToRemove = sibling;
+                                    sibling = sibling.nextSibling;
+                                    nodeToRemove.remove();
+                                }
+                                currentNodeToClearAfter = currentNodeToClearAfter.parentElement;
+                            }
+                            break; // 完成截断和清理，跳出 textNodes 循环
+                        }
+                    }
+                    
+                    const previewContent = tempDiv.innerHTML;
+                    
+                    contentPreview.innerHTML = previewContent;
+                    contentPreview.classList.add('collapsed');
+                    expandBtn.style.display = 'flex';
+                    
+                    // HTML注释: 绑定展开/收起事件
+                    expandBtn.addEventListener('click', function() {
+                        const isExpanded = expandBtn.classList.contains('expanded');
+                        
+                        if (isExpanded) {
+                            // HTML注释: 收起内容
+                            contentPreview.innerHTML = previewContent;
+                            contentPreview.classList.add('collapsed');
+                            expandBtn.querySelector('.expand-text').textContent = '展开全文';
+                            expandBtn.classList.remove('expanded');
+                        } else {
+                            // HTML注释: 展开内容
+                            contentPreview.innerHTML = fullContent;
+                            contentPreview.classList.remove('collapsed');
+                            expandBtn.querySelector('.expand-text').textContent = '收起';
+                            expandBtn.classList.add('expanded');
+                        }
+                    });
+                } else {
+                    // HTML注释: 内容较短，隐藏展开按钮
+                    expandBtn.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
