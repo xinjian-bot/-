@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新茧日报 2025-06-04</title>
+    <!-- 正常标题格式应为：新茧日报 yyyy-mm-dd，以便外部链接查看时了解日报日期 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * {
+            font-family: 'Inter', ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .bento-card {
+            background-color: #ffffff;
+            border: 1px solid #e9e9eb;
+            border-radius: 1rem; /* 16px */
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .bento-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.07), 0 4px 6px -4px rgba(0,0,0,0.05);
+            transform: translateY(-3px);
+        }
+
+        .number-display {
+            font-weight: 900; /* black */
+            font-size: 4rem;
+            line-height: 1;
+            /* Color will be set by Tailwind, e.g., text-[#4D6BFE] or text-black */
+        }
+
+        .section-title {
+            font-weight: 800; /* extrabold */
+            font-size: 2.25rem; /* 36px */
+            color: #000000;
+            margin-bottom: 2rem; /* 32px, consistent with Tailwind mb-8 */
+        }
+
+        .tag-item {
+            background-color: rgba(77, 107, 254, 0.1); /* bg-[#4D6BFE] bg-opacity-10 */
+            color: #4D6BFE;
+            padding: 0.25rem 0.75rem; /* py-1 px-3 */
+            border-radius: 9999px; /* rounded-full */
+            font-size: 0.75rem; /* text-xs */
+            font-weight: 500; /* medium */
+        }
+
+        /* HTML注释: 新增导航按钮样式，与现有设计保持一致 */
+        .nav-button {
+            background: linear-gradient(135deg, #4D6BFE 0%, #6B8BFF 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(77, 107, 254, 0.1);
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px -3px rgba(77, 107, 254, 0.2);
+        }
+
+        .nav-button:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .history-link {
+            background: rgba(77, 107, 254, 0.1);
+            color: #4D6BFE;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            border: 1px solid rgba(77, 107, 254, 0.2);
+        }
+
+        .history-link:hover {
+            background: rgba(77, 107, 254, 0.15);
+            transform: translateY(-1px);
+        }
+
+        /* HTML注释: 展开功能相关样式 */
+        .expandable-content {
+            position: relative;
+        }
+
+        .content-preview.collapsed {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .content-preview.collapsed::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(transparent, rgba(248, 250, 252, 0.9)); /* Light mode gradient */
+            pointer-events: none;
+        }
+        
+        body.dark .content-preview.collapsed::after {
+            background: linear-gradient(transparent, rgba(30, 41, 59, 0.9)); /* Dark mode gradient for dark theme */
+        }
+
+        .expand-btn {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0;
+        }
+
+        .expand-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .expand-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .expand-btn.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="bg-white text-black min-h-screen">
+    <!-- HTML注释: 整体宽度通过 max-w-4xl 控制，实现日报宽度调小并保持响应式。-->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- === "新茧日报" 文件头区域 开始 === -->
+        <header class="w-full mb-8">
+            <div class="bento-card p-8">
+                <div class="text-center">
+                    <h1 class="text-5xl font-black text-black mb-6">
+                        新茧日报
+                    </h1>
+                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-lg mb-4">
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-calendar-alt mr-2 text-[#4D6BFE]"></i>
+                            <span id="report-date">2025年6月4日</span>
+                        </div>
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-clock mr-2 text-[#4D6BFE]"></i>
+                            <span>03:13 - 02:59 (5日)</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-center">
+                        <a href="https://xinjian-bot.github.io/-/新茧历史日报汇总.html" class="history-link">
+                            <i class="fas fa-history"></i>
+                            新茧历史日报
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- === "新茧日报" 文件头区域 结束 === -->
+
+        <nav class="w-full mb-8">
+            <div class="bento-card p-4">
+                <div class="flex justify-between items-center">
+                    <button id="prev-day" class="nav-button">
+                        <i class="fas fa-chevron-left"></i>
+                        上一天
+                    </button>
+                    
+                    <div class="text-center">
+                        <span class="text-sm text-gray-600">日报导航</span>
+                    </div>
+                    
+                    <button id="next-day" class="nav-button">
+                        下一天
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- === 模块一：总消息概览 开始 === -->
+        <section class="w-full mb-12">
+            <h2 class="section-title">
+                一、总消息概览
+            </h2>
+            <div class="bento-card p-8 bg-gradient-to-br from-[#4D6BFE]/20 via-[#4D6BFE]/10 to-[#4D6BFE]/5 text-center rounded-2xl">
+                <div class="number-display text-[#4D6BFE]">
+                    6118
+                </div>
+                <p class="text-xl font-semibold text-black mt-3">总消息数量</p>
+            </div>
+        </section>
+        <!-- === 模块一：总消息概览 结束 === -->
+
+        <!-- === 模块二：火花碰撞时刻・热点话题 开始 === -->
+        <section class="w-full mb-12">
+            <h2 class="section-title">
+                二、火花碰撞时刻・热点话题
+            </h2>
+            <div class="space-y-8">
+                <div class="bento-card p-6 rounded-xl">
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            医疗经验与医生选择的玄学
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            03:13 - 03:14
+                        </span>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            AA昍: "你也真是受了不少苦，仍然这么坚强"
+                        </p>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">医疗</span>
+                            <span class="tag-item">小针刀</span>
+                            <span class="tag-item">医生技术</span>
+                            <span class="tag-item">经验</span>
+                            <span class="tag-item">玄学</span>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、话题背景与起因：</b><br>讨论由<b>AA昍</b>引用<b>Seawind</b>的就医经历开始。<b>Seawind</b>分享了自己辗转多家医院，最终找到一位小针刀医生成功治愈的经历，强调了找对医生的重要性。<br><br><b>二、主要观点与讨论详情：</b><br><b>Seawind</b>认为，医生与医生之间存在巨大差距，很多医生在两年后都宣布无能为力，而最终的小针刀医生却能治好，这体现了不同医生的技术和判断力差异。<b>AA昍</b>对此评论，认为这种现象反映了医生技术如同“熟练工”，因人体和技术本身的不标准性，使得寻医问药的过程非常“玄学”。<br><br><b>三、争议焦点（若有）：</b><br>无明显争议，更多的是对就医难、寻良医难的共鸣。<br><br><b>四、结论与启发：</b><br>在复杂的医疗过程中，患者经验和医生的技术熟练度都扮演着重要角色。由于个体差异和医疗技术本身的不确定性，找到真正有效的治疗方法和合适的医生，有时确实需要一定的运气和坚持，甚至带有一些“玄学”色彩。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            <b>寻找合适的医生至关重要</b>，不同医生的技术和判断力差异巨大，寻医过程可能充满不确定性。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                但找对医生特别重要。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>Seawind</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                医生和医生还是有差距的。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>Seawind</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                真的是「熟练工」了，人体本来就不标准，医生技术也不标准，非常玄学。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>AA昍</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bento-card p-6 rounded-xl">
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            佛教哲思：指月典故与文字的局限性
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            04:06 - 04:14, 13:01, 13:05
+                        </span>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            呼吸自己: "『指月』源于六祖慧能与无尽藏尼对话的一个典故；"
+                        </p>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">佛教</span>
+                            <span class="tag-item">指月典故</span>
+                            <span class="tag-item">慧能</span>
+                            <span class="tag-item">真理</span>
+                            <span class="tag-item">文字</span>
+                            <span class="tag-item">佛性</span>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、话题背景与起因：</b><br><b>呼吸自己</b>分享了“指月典故”的来源和含义，即六祖慧能用月亮和手指比喻真理与文字的关系，强调文字只是指向真理的工具，而非真理本身。<br><br><b>二、主要观点与讨论详情：</b><br><b>呼吸自己</b>阐释道，文字所记载的佛法经文如同指月的手指，而真正的佛性（真理）才是明月所在。这个典故提醒人们不要执着于文字表面，而应透过文字去领悟其背后的实质。<b>AA昍</b>对此典故作出了生活化的回应，提到他家流浪狗只看他指东西的手指，而不看所指之物，形象地表达了执着于工具而忽略目标的现象。<b>MIR🍈</b>也引用了“如人观指月，观指不观月”来呼应此观点，并表示这是他校对佛教文献时收获最大的一句。<br><br><b>三、争议焦点（若有）：</b><br>无明显争议，群友们对这一哲学观点多表示认同或进行了引申思考。<br><br><b>四、结论与启发：</b><br>该典故揭示了语言文字作为信息传递工具的局限性。在追求真理或深层理解时，应避免停留在表面的符号或形式，而要努力探究其指向的本质内涵。无论是佛法学习还是日常生活，都应警惕“观指不观月”的认知误区。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            文字是<b>指向真理的手指，而非真理本身</b>；重要的是领悟文字背后的佛性或实质。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                真理是与文字无关的，真理好像天上的明月，而文字只是指月的手指，手指可指出明月的所在，但手指并不是明月。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>呼吸自己</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                文字所载的佛法经文，都只是指月的手指，只有佛性才是明月的所在。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>呼吸自己</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我家流浪狗子就是这样，我指任何地方，他只看我手指……
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>AA昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                「如人观指月，观指不观月」可能这是我校对佛教文献，收获最大的一句了。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>MIR🍈</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bento-card p-6 rounded-xl">
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            藏传佛教的争议性：天葬、明妃及文化认知
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            08:47 - 09:12, 12:43
+                        </span>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            策策: "昨天看了小言，男主是“清冷佛子”。。。但是是“藏传佛子”。。。根本无法带入😂一股满满的落后味"
+                        </p>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">藏传佛教</span>
+                            <span class="tag-item">天葬</span>
+                            <span class="tag-item">明妃</span>
+                            <span class="tag-item">文化习俗</span>
+                            <span class="tag-item">宗教认知</span>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、话题背景与起因：</b><br>讨论由<b>策策</b>提到看小说时对“藏传佛子”设定的不适感引发，认为其带有“落后味”。这开启了群内对藏传佛教一些特定习俗和文化现象的讨论。<br><br><b>二、主要观点与讨论详情：</b><br><b>AA昍</b>曾指出（在昨日聊天记录中被引用）藏传佛教与本土苯教融合，产生了一些与汉传佛教不同的特点，如转世制度。<b>夏屿微蓝</b>直接点出藏传佛教有“明妃”传统，引发了群友的负面情绪。<b>策策</b>表示“佛子思凡”的设定可以接受，但“藏传佛子”因其文化背景而难以代入。<b>521Messi</b>提及了藏传佛教中的人皮鼓等事物，并对其“净化心灵”的说法表示不解。群友们普遍认为媒体对藏传佛教有所美化。<b>阿戒</b>分享了亲身观看天葬的经历，描述其过程为“人跟动物没区别，死了被切块扔栅栏里让秃鹫随便吃”，并提到现场气味难闻，与“神圣”感相去甚远。<b>读书者</b>补充了天葬分尸的细节和宗教解释，指出是为了让秃鹫更容易食用，体现舍身布施精神。<br><br><b>三、争议焦点（若有）：</b><br>主要的争议点在于对藏传佛教某些习俗（如天葬、明妃）的理解和接受程度。一部分群友基于现代伦理和个人观感表示难以接受甚至反感，另一部分则从文化和宗教解释的角度提供了信息，但整体讨论氛围偏向批判性审视。<br><br><b>四、结论与启发：</b><br>藏传佛教中的一些习俗在现代语境下容易引发争议和不适感。媒体宣传与实际情况可能存在差异，深入了解不同文化的复杂性和历史背景有助于形成更全面的认知。天葬作为一种古老的丧葬仪式，其具体操作和宗教意义对于外界而言，往往与“神圣”、“净化”等浪漫化想象存在较大出入。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            藏传佛教的某些习俗（如“明妃”、天葬仪式中的分尸）<b>与大众普遍认知和接受的佛教形象差异较大</b>，引发了群友的强烈不适和批判性讨论。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                昨天看了小言，男主是“清冷佛子”。。。但是是“藏传佛子”。。。根本无法带入😂一股满满的落后味。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>策策</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                啧啧，藏传佛教可是有明妃传统的，yue。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>夏屿微蓝</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                这些年媒体特爱美化藏传佛教，一搞就是一路朝拜纯净心灵坚定信仰。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>夏屿微蓝</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                了解藏传佛教后我感觉自己的心灵与之相比太纯净了。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>夏屿微蓝</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                结果去看了一次（天葬），最大的感受是人跟动物没区别，死了被切块扔栅栏里让秃鹫随便吃。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>阿戒</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bento-card p-6 rounded-xl">
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            中国老龄化问题的独特视角与信心
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            00:05 - 00:15, 06:36, 13:10, 15:00 - 15:15
+                        </span>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            心之力: "『老龄化越来越严重』是如何得出这个结论的" (讨论由此延伸)
+                        </p>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">老龄化</span>
+                            <span class="tag-item">人口结构</span>
+                            <span class="tag-item">生产力</span>
+                            <span class="tag-item">国家体量</span>
+                            <span class="tag-item">养老问题</span>
+                            <span class="tag-item">计划生育</span>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、话题背景与起因：</b><br>讨论由群友对“老龄化越来越严重”的普遍担忧引出，<b>心之力</b>首先质疑此结论的绝对性，认为中国与日韩情况不同，老龄化是暂时的。随后，多位群友从不同角度探讨了中国老龄化问题的独特性和未来前景。<br><br><b>二、主要观点与讨论详情：</b><br><b>521Messi</b>指出，日韩老龄化因绝对人口少易崩盘，而中国是绝对人口多情况下的相对老龄化，年轻人口数量仍足以支撑发展。<b>AA昍</b>提出了“鲸鱼的肿瘤”比喻，强调中国体量巨大，老龄化如同鲸鱼身上的小肿瘤，不足以致命。他认为，随着生产力发展，单位青壮年创造的财富能养活更多人，3亿年轻人养5亿老人将越来越容易，关键在于科技进步和生产效率提升。<b>极品小学生</b>汇总的聊天记录也显示，多位群友认为AI和机器人发展将缓解劳动力问题。<b>娇🦄</b>（徐徐前行的小豆）在总结中提到，教员留下的人口是战略资源，打破了核讹诈。<b>AA昍</b>也反思了过去对教员鼓励生育政策的误解，并指出对计划生育的痛恨也因此有了另一层含义。<br><br><b>三、争议焦点（若有）：</b><br>主要是对老龄化问题严重程度和未来影响的看法差异。部分群友有忧虑，但主流观点，尤其是<b>AA昍</b>和<b>521Messi</b>的分析，倾向于认为中国有能力应对，问题不像外界渲染的那么悲观。<br><br><b>四、结论与启发：</b><br>中国的老龄化问题具有其特殊性，不能简单类比其他国家。<b>巨大的国家体量、持续发展的生产力、科技进步（如AI和机器人）以及人口作为战略资源的观念</b>，为应对老龄化挑战提供了坚实基础。讨论提示我们，在分析社会问题时，应考虑中国的具体国情和动态发展，避免陷入西方话术或过度悲观。同时，也反思了历史政策（如计划生育）在不同时代背景下的复杂影响。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            中国的<b>老龄化是相对的</b>，凭借<b>巨大的国家体量和持续发展的生产力</b>，有能力应对挑战，无需过度悲观。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我们老龄化是绝对人口多的情况下的相对老龄化...我们的年轻人的数量足够支撑发展。数量关系不一样，比较没意义。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>521Messi</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                华夏就有点像鲸，她的基因并不是说多么特别，而是特别在她的体量极大...老龄化对中国就是一个小的青春痘。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>AA昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                3亿年轻人养5亿老人会越来越容易，因为3亿人里有3000W工程师站在流水线旁边可能就够了。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>AA昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                鲸鱼那个例子好赞，然后就感叹这是他老人家给留下的人口战略资源啊。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>徐徐前行的小豆</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <!-- === 模块二：火花碰撞时刻・热点话题 结束 === -->
+
+        <!-- === 模块三：秉烛共谈录・小会精粹 开始 === -->
+        <section class="w-full mb-12">
+            <h2 class="section-title">
+                三、秉烛共谈录・小会精粹
+            </h2>
+            <div class="space-y-8">
+                <div class="bento-card p-6 rounded-xl">
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            临终关怀与家庭抉择：如何面对长辈的离去
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-users mr-1.5 text-gray-500"></i>
+                            20:43 - 21:15
+                        </span>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            AA昍: "今天（周三）晚上20:30的【小会】11讨论的话题，延续了昨天的「丁克养老」..."
+                        </p>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">临终关怀</span>
+                            <span class="tag-item">家庭决策</span>
+                            <span class="tag-item">医疗伦理</span>
+                            <span class="tag-item">情感调适</span>
+                            <span class="tag-item">丧葬仪式</span>
+                            <span class="tag-item">生命尊严</span>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、问题提出与背景补充</b><br>本次小会问题一由一位匿名提问者通过<b>AA昍</b>转述，核心困境是：家中88岁老人因新冠后肺部感染，病情无好转可能，意识清醒时表现出不愿继续治疗（如试图拔管），但家人难以做出放弃治疗的决定。提问者反思，这种“全家人民主决策执行”是否合理，尤其当违背老人可能的意愿时，是否过于残忍。并询问未来面对类似情况，应如何引导家人做判断。<br><br><b>二、多方观点与方案探讨</b><br>群友们对此展开了深入且感性的讨论。<b>AA昍</b>分享了一个《读者》上的故事，讲述一个中年男人为优先照顾下一代而选择不全力救治重病父亲，自己承担“不孝”之名，引发了对现实困境中伦理抉择的思考。他也指出，老人“拔管”动作未必是明确求死，可能是身体不适的本能反应，家属不应过度投射自身想法。<b>521Messi</b>分享了自己母亲去世时做主放弃无意义抢救的经历，认为抢救有时更多是为了安慰生者，应优先考虑逝者的尊严。<b>高大壮太天真</b>认为88岁高龄，家属的纠结可能源于“只要老人在，家就不会散”的心理。<b>极品小学生</b>和<b>大京</b>等都分享了亲人离世的经历和由此产生的复杂情感，如后悔未能多做、梦中相见等。<b>呼吸自己</b>和<b>桃乐丝</b>等则从尊重逝者意愿、减轻痛苦的角度出发，倾向于在无治愈希望时考虑放弃过度治疗。多位群友（如<b>重金属绵羊</b>, <b>吴卦卦</b>, <b>AA昍</b>）都认同繁琐的丧葬仪式对生者有心理抚慰作用，帮助宣泄悲伤，是重要的社会和心理调适过程。<b>匿名提问人</b>（另一位）分享了其奶奶的故事，强调继承长辈精神遗产是生命能量的另一种延续。<br><br><b>三、讨论焦点与潜在争议</b><br>核心焦点在于：1. 如何平衡家属的爱与不舍和患者可能的痛苦与意愿。2. 在患者无法明确表达时，如何解读其行为并做出最符合其利益的决策。3. 丧葬仪式的意义和作用。<br><br><b>四、群主 (<b>AA昍</b>) 引导与方案点评</b><br><b>AA昍</b>通过分享故事、分析细节（如拔管行为的多种可能性）、总结丧葬仪式的双重作用（社会层面和心理层面）等方式引导讨论。他强调，在亲人离世这件事上，没有完美的对错，重要的是尽心尽力，并在事后找到让自己内心平静的方式。他认为，通过讨论这些沉重话题，本身就是一种“仪式”，帮助大家抚平过去伤痛、预演未来，强化心态以应对现实。<br><br><b>五、思考沉淀与启发</b><br>面对亲人临终，是一个极其艰难的抉择过程，没有标准答案。重要的是：1. <b>尽早沟通</b>：在亲人尚能清晰表达时，了解其意愿。2. <b>尊重生命</b>：既要努力救治，也要考虑生命质量和尊严。3. <b>情感支持</b>：家庭成员间应互相扶持，共同分担决策压力和悲伤情绪。4. <b>珍惜当下</b>：如<b>521Messi</b>所言，珍惜与亲人相处的每一刻，多创造美好回忆。5. <b>精神传承</b>：如匿名提问者所感悟，继承长辈的精神遗产是生命延续的重要形式。6. <b>仪式作用</b>：正视并利用好丧葬等仪式的情感宣泄和心理调适功能。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            在无法逆转的病情面前，<b>家属应在尊重患者可能的意愿、减轻其痛苦与延续生命之间艰难权衡</b>，而丧葬仪式对生者具有重要的心理抚慰和社会功能。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                对于不可能有转机的病情，如果病人没有继续治疗的意愿，作为家人继续坚持治疗，这真的是合理的吗？
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>匿名提问人</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                老人「拔管」的动作也未必就是「求死」的表达...反倒是活着的人自己想法的投射。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>AA昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                抢救就是为了给活着的人安慰，对躺在那里的人没有任何意义。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>521Messi</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                繁琐的丧葬过程是要把人累得没时间悲伤。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>重金属绵羊</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                明白并且继承长辈的精神遗产是她们生命能量的另一种存在形式。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>匿名提问人</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我们现在群里的讨论，又何尝不是一种「仪式」？对前者是一种抚平，对后者是一种预演。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>AA昍</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            面对年老失能和孤独，<b>40+单身女性需关注健康管理、财务规划、情感寄托及社会支持系统</b>，积极心态和主动准备是关键。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                但等父母都离开之后，身边就没有亲人了，你怎么面对孤独？
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>匿名提问人</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                女性比起男性，可能整体骨骼肌还是差一些...要多运动，多做一些核心训练，把骨骼肌撑起来。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>AA昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                单身女性，不信女权，但也不耽误公开支持女权...按老中的性格，这种社会问题肯定会有人来解决，顺便就把你救了。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>AA昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                有个提议，选择...单身养老的朋友，也许可以找时间去当一下养老院志愿者...近距离观察一下现实中目前的养老现状。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>33</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                和闺蜜一起养老不靠谱...但可以和闺蜜一起进同一家养老院。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>AA昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                想起我爸退休后，每天上午看文学方面的书，下午学英语，一天到晚忙得很。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>匿名提问人</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- === 模块三：秉烛共谈录・小会精粹 结束 === -->
+
+        <!-- === 模块四：解惑一点通・有问必答 开始 === -->
+        <section class="w-full mb-12">
+            <h2 class="section-title">
+                四、解惑一点通・有问必答
+            </h2>
+            <div class="space-y-8">
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <div class="mb-4">
+                        <h4 class="text-xl font-semibold text-black flex items-center">
+                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+                            体制内困境：领导要求实验数据造假如何应对？
+                        </h4>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            匿名提问人: "我现在遇到了工作上的问题想请教一下..."
+                        </p>
+                    </div>
+                    <div class="border-t border-gray-200 pt-4">
+                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+                            解答
+                        </h5>
+                        <div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、问题背景</b>：匿名提问者因病休假，科长在其身体未完全恢复且实验用品未到位的情况下，要求其伪造实验数据以应付DDL，并暗示提问者需独自承担所有记录和上报责任。提问者担心造假被上级复核会导致饭碗不保，且察觉到领导此举可能意在推卸责任或针对个人。<br><br><b>二、核心原因分析</b>：<b>AA昍</b>分析，领导选择电话沟通而非文字，本身就透露出恶意和规避责任的意图。领导可能因项目延期压力，或对提问者不满，试图让其背锅。<b>事不关猫己</b>认为，项目超期首先是领导管理责任，领导此举是为了规避自身风险。群内普遍认为，领导要求下属造假并独自承担责任的行为极不负责，可能存在甩锅或“埋人”的意图。<br><br><b>三、解决方案与建议</b>：<br>1.  <b>坚决拒绝造假</b>：<b>铀铀罗</b>、<b>Zac</b>等多位群友强调，生病耽误工作是小错，数据造假是大错，尤其涉及上报国家系统，后果严重，绝不能开此先例。<br>2.  <b>留存证据</b>：<b>卿缥缥</b>、<b>mighty girl</b>、<b>AA昍</b>、<b>黄云</b>等都强调，务必将领导的口头指示通过微信、邮件等方式进行文字确认，留下证据，以防日后被追责时无法自证。<b>AA昍</b>指出，领导选择电话沟通本身就是“恶意”的体现，因其刻意避免留痕。<br>3.  <b>向上汇报或寻求帮助</b>：<b>随远</b>建议，若与科长沟通无效，可向更高级别的分管领导汇报情况，阐明利弊。<b>桃乐丝</b>建议直接向自己的直属领导（如果科长不是）解释，不理会科长的无理要求。<br>4.  <b>评估风险，选择最优解</b>：<b>卿缥缥</b>建议评估造假与不造假的风险大小。若造假后果严重，则应坚决拒绝。<b>33</b>指出，造假最坏结果是饭碗不保，延期最坏结果可能是边缘化，应权衡利弊。<br>5.  <b>利用病假“缓冲”</b>：<b>桃乐丝</b>、<b>Lena_姜采薇</b>等建议，可以继续以身体未完全恢复为由“装死”或“示弱”，拖延时间，避免直接冲突，让领导自行处理或重新评估风险。<br>6.  <b>明确责任归属</b>：<b>事不关猫己</b>指出，项目无法按期完成，首要责任在管理者（科长），而非因病休假的员工。员工应做好本职工作，不应替领导的失误背锅。<br>7.  <b>体制内“无欲则刚”</b>：多位群友如<b>AA昍</b>、<b>33</b>、<b>策策</b>提到，在体制内若不追求晋升，则领导难以用常规手段施压，个人拥有更大的自主权。<br><br><b>总结</b>：面对领导要求数据造假，提问者应<b>坚守职业道德底线</b>，<b>不参与造假</b>。同时，注意<b>收集证据</b>，<b>向上级反映情况</b>，并利用病假作为缓冲。在体制内，明确自身权责，不轻易替他人背锅，是重要的自我保护方式。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 pt-4 border-t border-gray-200">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">职场伦理</span>
+                            <span class="tag-item">数据造假</span>
+                            <span class="tag-item">体制内</span>
+                            <span class="tag-item">领导压力</span>
+                            <span class="tag-item">风险规避</span>
+                            <span class="tag-item">自我保护</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <div class="mb-4">
+                        <h4 class="text-xl font-semibold text-black flex items-center">
+                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+                            肺结节微创手术后能否继续打羽毛球？
+                        </h4>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            蹦蹦君: "同志们早[太阳][太阳]请问群里有同志了解肺结节微创手术吗？"
+                        </p>
+                    </div>
+                    <div class="border-t border-gray-200 pt-4">
+                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+                            解答
+                        </h5>
+                        <div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、问题背景</b>：<b>蹦蹦君</b>咨询关于肺结节微创手术（胸腔镜）后，是否会影响其打羽毛球等运动。<br><br><b>二、核心原因分析</b>：手术本身对身体机能会有一定影响，术后的恢复情况、个体差异以及手术的具体范围都会决定运动能力的恢复程度和时间。<br><br><b>三、解决方案与建议</b>：<br>1.  <b>521Messi</b>分享了其婆婆的经历：婆婆在60岁时做过此类手术，多年后日常生活并无大碍，但由于年龄和生活习惯，没有进行大量运动，所以无法直接判断对羽毛球这类剧烈运动的影响。<br>2.  <b>桃乐丝</b>分享了自己腹腔镜手术（非胸腔镜，但同为微创）的经验作为参考：她在春节前做了腹腔镜手术，目前除了骑自行车这类强度较大的运动仍有些微拉扯感外，日常生活如爬楼等已无不适感觉。<br>3.  综合来看，群友们提供的经验表明微创手术后恢复良好，对日常生活影响不大。但对于高强度运动如羽毛球，<b>蹦蹦君</b>仍需<b>具体咨询主治医生</b>的专业意见，并根据自身术后恢复的实际情况，<b>循序渐进地尝试恢复运动</b>，不可操之过急。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 pt-4 border-t border-gray-200">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">肺结节</span>
+                            <span class="tag-item">微创手术</span>
+                            <span class="tag-item">胸腔镜</span>
+                            <span class="tag-item">术后恢复</span>
+                            <span class="tag-item">运动</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- === 模块四：解惑一点通・有问必答 结束 === -->
+
+        <!-- === 模块五：智慧火花匣・每日精选 开始 === -->
+        <section class="w-full mb-12">
+            <h2 class="section-title">
+                五、智慧火花匣・每日精选
+            </h2>
+            <div class="space-y-8">
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <h4 class="text-xl font-semibold text-black mb-3">
+                        糯米同志的万字减重经验长文分享（第二部分）
+                    </h4>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            糯米: "插个楼继续分享减重经历。"
+                        </p>
+                    </div>
+                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+                        <div class="expandable-content" data-char-limit="200">
+                            <div class="content-preview">
+                                <b>一、推荐内容</b>：继上次分享基础代谢、代谢当量等概念后，<b>糯米</b>同志继续分享其详细的减重经验第二部分，主题为“食物的热量”，并结合国家卫健委《体重管理指导原则（2024年版）》及个人实践进行阐述。<br><br><b>二、核心价值与特点</b>：<br>1.  <b>自我监测</b>：强调了自我监测的重要性，包括定期称重（建议关注周平均体重而非每日波动）和记录每日饮食。<b>糯米</b>特别指出，精确记录饮食初期需使用食物秤，这有助于认清实际摄入量，破除“喝水都胖”的迷思。他还分享了211饮食法作为简易估算方法，以及将无意识进食转化为有意识进食的技巧（如吃零食前先记录）。<br>2.  <b>食物交换份</b>：列举了常见食物（馒头、米饭、土豆、芹菜、西瓜、瘦肉、坚果等）的90大卡等热量食物交换份及其碳水、蛋白质、脂肪含量，直观展示了不同食物的能量密度差异。<br>3.  <b>血糖管理</b>：详细解释了血糖稳定对减重的重要性，包括胰岛素的作用、高血糖与低血糖的恶性循环、以及胰岛素抵抗的风险。强调保持血糖平稳是减重成功的关键。<br>4.  <b>升糖指数（GI）</b>：介绍了GI值的概念、测试方法及判断技巧（如原始状态GI低、加工多GI高、冷却产生抗性淀粉等）。建议以粗加工、高纤维食物为主，并调整进食顺序（先菜后肉再主食）以降低整体GI。<br>5.  <b>皮质醇</b>：阐述了皮质醇的生理功能、分泌规律及其与压力、脂肪堆积（尤其腹部）、肌肉分解的关系。强调了按时吃早餐对稳定血糖、保护肌肉的重要性。<br>6.  <b>生活化减脂</b>：采纳了<b>偷茱萸的狐狸</b>的补充，提出了从个人喜好食物中选择相对健康的替代品，以及常备健康零食（如小番茄、板栗）以应对“饿急眼”的策略，强调“适合自己的才是最好的”。<br>7.  <b>个人方案与成果</b>：分享了其减重初期的具体饮食安排（先保证蛋白质，控制脂肪，灵活补充碳水）和一个月不运动减重8公斤的成果，并给出了近期一天的详细饮食记录与热量计算实例。<br><br><b>三、适用场景或补充信息</b>：<br><b>糯米</b>的分享系统、科学且贴近实际，对有减重需求的群友具有极高的参考价值和可操作性。他强调了<b>实事求是</b>的原则，以及<b>易操作性</b>和<b>可持续性</b>在减重过程中的核心地位。
+                            </div>
+                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                <span class="expand-text">展开全文</span>
+                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tag-item">减重</span>
+                        <span class="tag-item">健康管理</span>
+                        <span class="tag-item">饮食控制</span>
+                        <span class="tag-item">营养学</span>
+                        <span class="tag-item">血糖管理</span>
+                        <span class="tag-item">GI值</span>
+                        <span class="tag-item">皮质醇</span>
+                    </div>
+                </div>
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <h4 class="text-xl font-semibold text-black mb-3">
+                        AA昍对中国老龄化问题的“鲸鱼肿瘤”比喻及其他洞察
+                    </h4>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            AA昍: "其实可以把「老龄化」类比成「鲸鱼的肿瘤」..."
+                        </p>
+                    </div>
+                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+                        <div class="expandable-content" data-char-limit="200">
+                            <div class="content-preview">
+                                <b>一、推荐内容</b>：群主<b>AA昍</b>针对中国老龄化问题，提出了一个新颖的“鲸鱼的肿瘤”比喻，并分享了关于中国教育模式、中西方文化对比以及个人健康听觉等方面的洞察。<br><br><b>二、核心价值与特点</b>：<br>1.  <b>老龄化“鲸鱼肿瘤”论</b>：<b>AA昍</b>认为，中国的巨大体量使其对老龄化等社会问题的承受能力远超小国。如同鲸鱼体型庞大，癌细胞即便长到理论最大值也仅相当于青春痘。他强调，随着生产力发展，单位青壮年创造的财富能养活更多人，中国庞大的年轻人口基数（即使相对老龄化）仍足以支撑发展。<b>核心在于生产效率的提升，而非单纯的人口数量对比</b>。<br>2.  <b>中国教育模式的优越性</b>：<b>AA昍</b>指出中国教育体系的特点是<b>全面兜底到初中，高等教育成本低廉</b>，确保个体发展主要受限于学习能力而非经济因素。他批评了德国学者Sven鼓吹中国教育早分流的观点，认为其用心可疑。<br>3.  <b>中西方文化与信仰对比</b>：在讨论佛教时，<b>AA昍</b>认为大乘佛学在全球范围内仍属顶尖思维智慧，其辩证法、度众生理念及无神论根基秒杀多数宗教。他还提到周代弑神传统对中国文化深远影响，与藏地苯教融合产生差异。并指出，与动物相比，人类因存在养老文化，生孩子更“划算”。<br>4.  <b>心理调适与共产主义信仰</b>：<b>AA昍</b>认为，<b>心理咨询效果有限，不如信仰共产主义</b>，后者能提供顶级心理按摩并缓解现实焦虑。在中国整体向上的大趋势下，个体即便排位最低也能水涨船高。<br>5.  <b>个人健康与听觉现象</b>：<b>AA昍</b>分享了自己能听到小夜灯电路高频噪音的经历，并查阅资料解释了“电流声”的原理（磁致伸缩、电弧、电晕放电等），为群友科普了相关冷知识。<br><br><b>三、适用场景或补充信息</b>：<br><b>AA昍</b>的系列观点为群友提供了分析社会问题、个人发展以及文化现象的新视角。他强调了<b>从中国国情和体量出发看问题的重要性</b>，以及<b>生产力发展和制度优势</b>在应对挑战中的决定性作用。这些讨论有助于群友在纷繁信息中保持清醒的头脑和坚定的自信。
+                            </div>
+                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                <span class="expand-text">展开全文</span>
+                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tag-item">老龄化</span>
+                        <span class="tag-item">国家体量</span>
+                        <span class="tag-item">生产力</span>
+                        <span class="tag-item">中国教育</span>
+                        <span class="tag-item">文化自信</span>
+                        <span class="tag-item">共产主义信仰</span>
+                        <span class="tag-item">AA昍</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- === 模块五：智慧火花匣・每日精选 结束 === -->
+
+        <!-- === 文件底部 开始 === -->
+        <footer class="w-full mt-16">
+            <div class="bento-card p-8">
+                <div class="text-center text-gray-700 space-y-3">
+                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-base">
+                        <div class="flex items-center">
+                            <i class="fas fa-database mr-2 text-[#4D6BFE]"></i>
+                            <span>微信群聊记录</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-robot mr-2 text-[#4D6BFE]"></i>
+                            <span id="generation-time">2025-06-05 03:00:00</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                        本报告基于群聊数据自动生成，仅供参考。内容可能包含个人观点，不代表群组官方立场。数据处理过程中已尽量匿名化处理敏感信息。
+                    </p>
+                </div>
+            </div>
+        </footer>
+        <!-- === 文件底部 结束 === -->
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Bento card hover effect is handled by CSS :hover pseudo-class
+
+            // Number animation effect
+            const numberElements = document.querySelectorAll('.number-display');
+            numberElements.forEach(element => {
+                const finalValueText = element.textContent.replace(/,/g, '');
+                const finalValue = parseInt(finalValueText, 10);
+
+                if (isNaN(finalValue)) return;
+
+                let currentValue = 0;
+                const duration = 1500; // Animation duration in ms
+                const frameRate = 1000 / 60; // 60fps
+                const totalFrames = Math.round(duration / frameRate);
+                const increment = finalValue / totalFrames;
+
+                let currentFrame = 0;
+                const timer = setInterval(() => {
+                    currentFrame++;
+                    currentValue += increment;
+
+                    if (currentFrame >= totalFrames) {
+                        currentValue = finalValue;
+                        clearInterval(timer);
+                    }
+                    // Format number with commas for display
+                    element.textContent = Math.floor(currentValue).toLocaleString('en-US');
+                }, frameRate);
+            });
+
+            // HTML注释: 初始化日报导航功能
+            initDailyNavigation();
+
+            // HTML注释: 初始化展开功能
+            initExpandableContent();
+        });
+
+        // HTML注释: 这个函数实现了日报间的导航功能，包括：
+        // 1. 从当前页面URL或内容中提取日期
+        // 2. 检查前后日期的日报文件是否存在
+        // 3. 设置"上一天"和"下一天"按钮的状态和链接
+        // 4. 实现"下一天"按钮的动态显示逻辑
+        async function initDailyNavigation() {
+            try {
+                // HTML注释: 获取当前页面的日期
+                const currentDate = getCurrentDateFromPage();
+                if (!currentDate) {
+                    console.warn('无法从页面中提取日期信息');
+                    return;
+                }
+
+                // HTML注释: 设置导航按钮
+                await setupNavigationButtons(currentDate);
+
+            } catch (error) {
+                console.error('初始化日报导航时出错:', error);
+            }
+        }
+
+        // HTML注释: 从页面中提取当前日期
+        // HTML注释: 支持多种方式提取日期：优先从页面元素、URL文件名或页面标题
+        function getCurrentDateFromPage() {
+            // HTML注释: 方法1：从报告日期元素中提取（优先级最高）
+            const dateElement = document.getElementById('report-date');
+            if (dateElement) {
+                const dateText = dateElement.textContent;
+                const dateMatch = dateText.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
+                if (dateMatch) {
+                    const year = dateMatch[1];
+                    const month = dateMatch[2].padStart(2, '0');
+                    const day = dateMatch[3].padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                }
+            }
+
+            // HTML注释: 方法2：从URL文件名中提取日期
+            const pathname = window.location.pathname;
+            const filenameMatch = pathname.match(/新茧群日报_(\d{4}-\d{2}-\d{2})\.html/);
+            if (filenameMatch) {
+                return filenameMatch[1];
+            }
+
+            // HTML注释: 方法3：从页面标题中提取日期
+            const titleMatch = document.title.match(/(\d{4}-\d{2}-\d{2})/);
+            if (titleMatch) {
+                return titleMatch[1];
+            }
+
+            return null;
+        }
+
+        // HTML注释: 设置导航按钮的状态和链接
+         // HTML注释: 根据当前日期，检查前后日期的日报文件是否存在
+         async function setupNavigationButtons(currentDate) {
+             const prevButton = document.getElementById('prev-day');
+             const nextButton = document.getElementById('next-day');
+             const navContainer = document.querySelector('nav');
+             
+             // HTML注释: 计算前一天和后一天的日期
+             const currentDateObj = new Date(currentDate);
+             const prevDateObj = new Date(currentDateObj);
+             prevDateObj.setDate(prevDateObj.getDate() - 1);
+             const nextDateObj = new Date(currentDateObj);
+             nextDateObj.setDate(nextDateObj.getDate() + 1);
+             
+             const prevDate = formatDate(prevDateObj);
+             const nextDate = formatDate(nextDateObj);
+             
+             // HTML注释: 检查前一天和后一天的日报是否存在
+             const prevExists = await checkReportExists(prevDate);
+             const nextExists = await checkReportExists(nextDate);
+             
+             // HTML注释: 如果前后日期的日报都不存在，隐藏整个导航栏容器
+             if (!prevExists && !nextExists) {
+                 navContainer.style.display = 'none';
+                 return;
+             }
+             
+             // HTML注释: 显示导航栏容器
+             navContainer.style.display = 'block';
+             
+             // HTML注释: 设置前一天按钮
+             if (prevExists) {
+                 prevButton.onclick = () => {
+                     window.location.href = `https://xinjian-bot.github.io/-/新茧群日报_${prevDate}.html`;
+                 };
+                 prevButton.disabled = false;
+             } else {
+                 prevButton.disabled = true;
+                 prevButton.onclick = null;
+             }
+
+             // HTML注释: 设置后一天按钮
+             if (nextExists) {
+                 nextButton.onclick = () => {
+                     window.location.href = `https://xinjian-bot.github.io/-/新茧群日报_${nextDate}.html`;
+                 };
+                 nextButton.disabled = false;
+             } else {
+                 // HTML注释: 后一天的日报不存在，禁用"下一天"按钮
+                 nextButton.disabled = true;
+                 nextButton.onclick = null;
+             }
+         }
+
+        // HTML注释: 检查指定日期的日报文件是否存在
+        async function checkReportExists(date) {
+            try {
+                const response = await fetch(`https://xinjian-bot.github.io/-/新茧群日报_${date}.html`, { method: 'HEAD' });
+                return response.ok;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        // HTML注释: 格式化日期为YYYY-MM-DD格式
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // HTML注释: 初始化展开功能
+        function initExpandableContent() {
+            const expandableContents = document.querySelectorAll('.expandable-content');
+            
+            expandableContents.forEach(container => {
+                const charLimit = parseInt(container.getAttribute('data-char-limit')) || 200;
+                const contentPreview = container.querySelector('.content-preview');
+                const expandBtn = container.querySelector('.expand-btn');
+                
+                if (!contentPreview || !expandBtn) return;
+                
+                const fullContent = contentPreview.innerHTML;
+                const fullText = contentPreview.textContent || contentPreview.innerText;
+                
+                // HTML注释: 如果内容长度超过限制，则显示展开按钮
+                if (fullText.length > charLimit) {
+                    // HTML注释: 创建一个临时元素来正确截取HTML内容
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = fullContent;
+                    
+                    // HTML注释: 截取文本内容到指定长度
+                    const truncatedText = fullText.substring(0, charLimit);
+                    
+                    // HTML注释: 使用更简单可靠的方法截取内容
+                    let truncatedContent = '';
+                    let charCount = 0;
+                    
+                    // HTML注释: 逐字符遍历，保持简单的HTML结构
+                    const walker = document.createTreeWalker(
+                        tempDiv,
+                        NodeFilter.SHOW_TEXT,
+                        null,
+                        false
+                    );
+                    
+                    let node;
+                    const textNodes = [];
+                    while (node = walker.nextNode()) {
+                        textNodes.push(node);
+                    }
+                    
+                    // HTML注释: 计算需要保留的文本内容
+                    for (let textNode of textNodes) {
+                        const text = textNode.textContent;
+                        if (charCount + text.length <= charLimit) {
+                            charCount += text.length;
+                        } else {
+                            const remainingChars = charLimit - charCount;
+                            textNode.textContent = text.substring(0, remainingChars) + '...';
+                            charCount = charLimit;
+                            
+                            // HTML注释: 新的、更干净的移除后续所有节点的逻辑
+                            let currentNodeToClearAfter = textNode;
+                            while (currentNodeToClearAfter && currentNodeToClearAfter !== tempDiv) {
+                                let sibling = currentNodeToClearAfter.nextSibling;
+                                while (sibling) {
+                                    const nodeToRemove = sibling;
+                                    sibling = sibling.nextSibling;
+                                    nodeToRemove.remove();
+                                }
+                                currentNodeToClearAfter = currentNodeToClearAfter.parentElement;
+                            }
+                            break; // 完成截断和清理，跳出 textNodes 循环
+                        }
+                    }
+                    
+                    const previewContent = tempDiv.innerHTML;
+                    
+                    contentPreview.innerHTML = previewContent;
+                    contentPreview.classList.add('collapsed');
+                    expandBtn.style.display = 'flex';
+                    
+                    // HTML注释: 绑定展开/收起事件
+                    expandBtn.addEventListener('click', function() {
+                        const isExpanded = expandBtn.classList.contains('expanded');
+                        
+                        if (isExpanded) {
+                            // HTML注释: 收起内容
+                            contentPreview.innerHTML = previewContent;
+                            contentPreview.classList.add('collapsed');
+                            expandBtn.querySelector('.expand-text').textContent = '展开全文';
+                            expandBtn.classList.remove('expanded');
+                        } else {
+                            // HTML注释: 展开内容
+                            contentPreview.innerHTML = fullContent;
+                            contentPreview.classList.remove('collapsed');
+                            expandBtn.querySelector('.expand-text').textContent = '收起';
+                            expandBtn.classList.add('expanded');
+                        }
+                    });
+                } else {
+                    // HTML注释: 内容较短，隐藏展开按钮
+                    expandBtn.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
