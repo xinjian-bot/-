@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新茧日报</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6C9T7FPDT2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-6C9T7FPDT2');
+    </script>
+    <!-- 正常标题格式应为：新茧日报 yyyy-mm-dd，以便外部链接查看时了解日报日期 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * {
+            font-family: 'Inter', ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .bento-card {
+            background-color: #ffffff;
+            border: 1px solid #e9e9eb;
+            border-radius: 1rem; /* 16px */
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .bento-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.07), 0 4px 6px -4px rgba(0,0,0,0.05);
+            transform: translateY(-3px);
+        }
+
+        .number-display {
+            font-weight: 900; /* black */
+            font-size: 4rem;
+            line-height: 1;
+            /* Color will be set by Tailwind, e.g., text-[#4D6BFE] or text-black */
+        }
+
+        .section-title {
+            font-weight: 800; /* extrabold */
+            font-size: 2.25rem; /* 36px */
+            color: #000000;
+            margin-bottom: 2rem; /* 32px, consistent with Tailwind mb-8 */
+        }
+
+        .tag-item {
+            background-color: rgba(77, 107, 254, 0.1); /* bg-[#4D6BFE] bg-opacity-10 */
+            color: #4D6BFE;
+            padding: 0.25rem 0.75rem; /* py-1 px-3 */
+            border-radius: 9999px; /* rounded-full */
+            font-size: 0.75rem; /* text-xs */
+            font-weight: 500; /* medium */
+        }
+
+        /* HTML注释: 新增导航按钮样式，与现有设计保持一致 */
+        .nav-button {
+            background: linear-gradient(135deg, #4D6BFE 0%, #6B8BFF 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(77, 107, 254, 0.1);
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px -3px rgba(77, 107, 254, 0.2);
+        }
+
+        .nav-button:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .history-link {
+            background: rgba(77, 107, 254, 0.1);
+            color: #4D6BFE;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            border: 1px solid rgba(77, 107, 254, 0.2);
+        }
+
+        .history-link:hover {
+            background: rgba(77, 107, 254, 0.15);
+            transform: translateY(-1px);
+        }
+
+        /* HTML注释: 展开功能相关样式 */
+        .expandable-content {
+            position: relative;
+        }
+
+        .content-preview.collapsed {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .content-preview.collapsed::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(transparent, rgba(248, 250, 252, 0.9));
+            pointer-events: none;
+        }
+
+        .expand-btn {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0;
+        }
+
+        .expand-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .expand-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .expand-btn.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="bg-white text-black min-h-screen">
+    <!-- HTML注释: 整体宽度通过 max-w-4xl 控制，实现日报宽度调小并保持响应式。-->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- === "新茧日报" 文件头区域 开始 === -->
+        <!-- HTML注释: 此模块作为单独一行，占据整行宽度。包含日报主标题、报告日期和时间范围。 -->
+        <!-- HTML注释: 新增了"新茧历史日报"链接，样式与整体设计保持统一协调 -->
+        <header class="w-full mb-8">
+            <div class="bento-card p-8">
+                <div class="text-center">
+                    <h1 class="text-5xl font-black text-black mb-6">
+                        新茧日报
+                    </h1>
+                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-lg mb-4">
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-calendar-alt mr-2 text-[#4D6BFE]"></i>
+                            <span id="report-date">2025年10月12日</span>
+                        </div>
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-clock mr-2 text-[#4D6BFE]"></i>
+                            <span>02:00 - 02:00（次日）</span>
+                        </div>
+                    </div>
+                    <!-- HTML注释: 新增历史日报链接，位置合理且样式协调 -->
+                    <div class="flex justify-center">
+                        <a id="history-link" href="#" class="history-link">
+                            <i class="fas fa-history"></i>
+                            新茧历史日报
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- === "新茧日报" 文件头区域 结束 === -->
+
+        <!-- HTML注释: 新增导航区域，包含"上一天"和"下一天"按钮 -->
+        <!-- HTML注释: 导航逻辑说明：
+             1. 通过JavaScript检查前后日期的日报文件是否存在
+             2. 根据当前页面日期确定前后日期
+             3. "下一天"按钮动态显示逻辑：仅当不是最新日报时显示
+             4. 兼容处理历史日报文件命名格式
+        -->
+        <nav class="w-full mb-8">
+            <div class="bento-card p-4">
+                <div class="flex justify-between items-center">
+                    <button id="prev-day" class="nav-button">
+                        <i class="fas fa-chevron-left"></i>
+                        上一天
+                    </button>
+                    
+                    <div class="text-center">
+                        <span class="text-sm text-gray-600">日报导航</span>
+                    </div>
+                    
+                    <button id="next-day" class="nav-button">
+                        下一天
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- === 模块一：总消息概览 开始 === -->
+        <!-- HTML注释: 此模块作为单独一行，占据整行宽度。显示当日群聊总消息数量。 -->
+        <section class="w-full mb-12">
+            <h2 class="section-title">
+                一、总消息概览
+            </h2>
+            <div class="bento-card p-8 bg-gradient-to-br from-[#4D6BFE]/20 via-[#4D6BFE]/10 to-[#4D6BFE]/5 text-center rounded-2xl">
+                <div class="number-display text-[#4D6BFE]">
+                    3175
+                </div>
+                <p class="text-xl font-semibold text-black mt-3">总消息数量</p>
+            </div>
+        </section>
+        <!-- === 模块一：总消息概览 结束 === -->
+
+        <!-- === 模块二：火花碰撞时刻・热点话题 开始 === -->
+        <!-- HTML注释: 此模块作为单独一行，占据整行宽度。用于展示群内讨论的热点话题。 -->
+        <!-- HTML注释: 模块二内容结构说明: -->
+        <!-- 1. 话题: 作为卡片的主标题 -->
+        <!-- 2. 关键结论: 每个话题下可以包含多个关键结论 (模板结构示例展示支持最多3个关键结论，如需更多可复制结构)；关键结论应按照话题讨论的时间线来编写。 -->
+        <!-- 3. **金句时刻**: 每个关键结论下对应约3个**金句时刻**金句必须是让人获得“啊哈”或恍然大悟的发言。 -->
+        <!-- HTML注释: "爬楼关键词"说明: 每个话题卡片中包含爬楼关键词区域，话题讨论起始句，用于用户快速定位到群聊记录中的对应讨论位置。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
+        <section class="w-full mb-12">
+            <h2 class="section-title">
+                二、火花碰撞时刻・热点话题
+            </h2>
+            <!-- 列表容器: 讨论话题 -->
+            <div class="space-y-8">
+
+                <!-- 热点话题卡片 1 开始 -->
+                <div class="bento-card p-6 rounded-xl"> 
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            “三阶思维”的实战演练：从商业拓展（BD）到文艺作品解读
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            20:14 - 21:15
+                        </span>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            SR：在整理《内容创作的“三阶思维”：从释经到建设》的过程里，我也有了一些看法。
+                        </p>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">三阶思维</span>
+                            <span class="tag-item">商务拓展(BD)</span>
+                            <span class="tag-item">组织架构</span>
+                            <span class="tag-item">绩效考核</span>
+                            <span class="tag-item">文艺评论</span>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、话题背景与起因</b><br>
+                                    群内关于“三阶思维”的讨论从理论走向实践，成员<b>SR</b>以自身互联网公司BD（商务拓展）的职业身份为切入点，分享了ta对三阶思维的理解，并将其类比为电影《盗梦空间》的层次：一阶是陈述事实，二阶是理解需求并“造梦”，三阶则是在对方意识深处植入一个想法（Inception），从而影响其行为。这一分享引发了群内关于互联网公司职能分工、个人价值实现和思维模式应用的热烈探讨，该话题随后被<b>AA昍</b>标注为值得收录的干货。<br><br>
+                                    <b>二、主要观点与讨论详情</b><br>
+                                    <b>1. BD、销售与市场（MKT）的本质区别：</b><br>
+                                    讨论的核心围绕BD这一职位的独特性展开。<b>SR</b>首先澄清，BD与传统销售有本质区别：<b>“其实核心就是，BD没有货卖”</b>。销售通常有标准化的产品或服务（如云服务、SaaS），而BD更多是“卖公司”本身，旨在促成机构间的非标合作。<b>AA昍</b>精辟地总结，BD卖的是<b>“一种概念，一种合作的念头”</b>。<br>
+                                    <b>转念之间</b>和<b>SR</b>进一步探讨，将BD、MKT、Branding（品牌）和Sales（销售）的关系进行了梳理。MKT和Branding侧重前期市场拓展和品牌建设，而BD则介于其间，核心是“创造/发现需求-内外部联动-完成”，更具主观能动性。<br><br>
+                                    <b>2. BD的价值与绩效衡量：</b><br>
+                                    <b>转念之间</b>提出了一个关键问题：在没有标准化交付物的情况下，BD的绩效如何考核？<b>SR</b>坦言这是“盲点”，并解释BD的价值更多体现在增量市场，而非存量市场（后者更偏向运营）。考核方式多样，可能是务虚的“计件式”（如签订战略合作协议数量），也可能是具体的量化指标，如“与XX机构的合作费率降到XX”。最终，这考验的是BD整合内外部资源，撮合多方（产品、运营、合作机构）为共同目标服务的能力。<br><br>
+                                    <b>3. “生物态”的公司与BD的角色：</b><br>
+                                    <b>AA昍</b>在讨论中提出了一个生动的比喻，将公司视为一个有机体。他认为，产品是果实，运营是脉络，而BD则扮演着<b>“引导根须朝着水源蔓延”</b>的角色，负责感知外部环境（水源、盐碱、天敌），为公司的发展方向提供指引。<b>SR</b>对此表示认同，并进一步阐释，BD的最高境界便是在合作中“埋下种子”，让对方在不知不觉中接受己方方案，实现“双赢”（但为自己想得更多些）。<br><br>
+                                    <b>4. “三阶思维”在文艺评论中的应用：</b><br>
+                                    讨论延伸至文艺评论领域。<b>讨厌的橙子🍊</b>提问，当面对一个“反贼”作者的作品时，是否可以使用三阶思维进行“按头建设”，即无视作者本意，按照我方理念进行诠释，但这是否会变相为对方引流。群内观点认为，这需要具体问题具体分析，但核心在于争夺解释权。<b>转念之间</b>指出：<b>“你不这样讲，也会有妖魔鬼怪照你的反方向讲。”</b> 这与SR在商务工作中的“Inception”理念不谋而合，都是在对方的场域里，植入自己的思想，最终实现影响和引导。<br><br>
+                                    <b>四、结论与启发</b><br>
+                                    本次讨论深刻揭示了“三阶思维”作为一种底层思维模型，不仅适用于内容创作，更能贯穿于商业谈判、职场协作乃至文化斗争等多个领域。无论是互联网公司的BD通过“植入概念”促成合作，还是在舆论场上争夺对文艺作品的解释权，其核心都是从简单的信息陈列（一阶）和方法执行（二阶），上升到价值观与意识层面的引导与建设（三阶）。这要求实践者不仅要有专业能力，更需要具备跨界视野、资源整合能力和深刻的洞察力。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            商务拓展（BD）的核心是<b>“卖公司”</b>而非“卖货”，旨在通过创造和发现需求，促成非标准化的机构间合作，其价值体现在增量市场。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                其实核心就是，BD没有货卖。销售大概手里都有东西要卖，很明确的。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>SR</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                BD是卖一种概念，一种合作的念头，或者说卖的是「自己公司」这个产品。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>AA昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我理解BD的价值，应该更多在增量市场里，而非存量市场。存量市场，要做的其实是运营。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>SR</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            将组织比作生物体，BD如同植物的“根须”或感知系统，负责探索外部环境，引导组织向有利的生态位发展。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我这个工种最牛的那种了，在和机构对接的过程中用语言埋下种子，绩效考核期收获果实。机构都没觉得被inception，还得夸我给他着想呢。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>SR</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                不对，甚至不是根须，而是「引导根须朝着水源蔓延」的某种机制。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>AA昍</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 热点话题卡片 1 结束 -->
+                
+                <!-- 热点话题卡片 2 开始 -->
+                <div class="bento-card p-6 rounded-xl"> 
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            现代女性地位的真实体现：从“精英上限”到“普通下限”
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            02:00 - 02:06
+                        </span>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            AA昍：女性地位提高主要不是体现在精英女性的上限更高了，而是普通女性更不需要有下限了。
+                        </p>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">女性地位</span>
+                            <span class="tag-item">社会进步</span>
+                            <span class="tag-item">性别议题</span>
+                            <span class="tag-item">内容创作伦理</span>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、话题背景与起因</b><br>
+                                    凌晨时分，群成员<b>AA昍</b>提出了一个关于女性地位变化的深刻观察，认为其核心标志并非精英女性的天花板提升，而是普通女性底线的解放。这一观点迅速引发了群内女性成员的共鸣和进一步讨论。<br><br>
+                                    <b>二、主要观点与讨论详情</b><br>
+                                    <b>1. 地位提高的衡量标准：普通人的自由度</b><br>
+                                    <b>AA昍</b>的核心观点是，女性地位的真正提高，体现在<b>“普通女性更不需要有下限了”</b>。他进一步阐释，这意味着普通女性如今可以活得像过去的普通男性一样，<b>“普通且自信，没羞又没臊”</b>。这并非贬义，而是指女性从传统道德枷锁中解放出来，获得了更大的行为和表达自由，他认为这“确实是一个巨大的进步”。<br><br>
+                                    <b>2. 对当前舆论环境中性别议题的反思：</b><br>
+                                    <b>紫盈</b>对此观点表示强烈认同，并延伸至当下的舆论环境。她坦言，在当前国内环境下，自己“一句‘我要为女性发声争取更大权益’的话都说不出来”。她区分了个人层面遇到的“渣男”（在所难免的个体问题）与社会层面的系统性偏袒，认为后者在当前中国并不构成主要矛盾。她清晰地表达了自己对制造性别对立以获取流量行为的排斥，更希望自己能成为<b>“缝缝补补的那个人”</b>，致力于弥合社会分歧而非激化矛盾。<br><br>
+                                    <b>3. 内容创作者的责任与选择：</b><br>
+                                    <b>糕级</b>从内容创作者的角度回应了这一话题。她同样表示说不出“为女性发声”的话，并将利用制造对立来赚钱的行为类比为“卖肉”，认为两者都是<b>“没底线”</b>，区别不大。这反映出部分创作者在面对流量诱惑时的道德坚守与价值判断。<br><br>
+                                    <b>四、结论与启发</b><br>
+                                    本次讨论虽然简短，但精准地捕捉到了社会变迁中一个深刻的侧面。它提供了一个新的视角来衡量社会进步——即观察普通个体的自由度是否扩大，而非仅仅聚焦于精英阶层的成就。同时，讨论也反映了在复杂的舆论场中，一部分有社会责任感的个体（尤其是女性自身）对极端化、流量化的性别议题的警惕和反思，她们更倾向于成为建设者而非破坏者，展现了一种成熟和理性的公民态度。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            女性地位提高的标志，更多在于普通女性获得了更大的行为自由和更低的道德门槛，能够像传统普通男性一样“普通且自信”。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                女性地位提高主要不是体现在精英女性的上限更高了，而是普通女性更不需要有下限了。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>AA昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                普通女性完全可以活得像以前的普通男性一样了，普通且自信，没羞又没臊。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>AA昍</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            面对流量巨大的性别对立议题，部分创作者选择坚守底线，拒绝通过制造社会撕裂来获利，更愿意扮演弥合分歧的角色。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                制造对立不是我想要的，我想做缝缝补补的那个人。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>紫盈</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                对我来说做这种没底线的事赚钱和卖肉差不多，都是没底线，区别不大了。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>糕级（健康饮食第 13天</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 热点话题卡片 2 结束 -->
+
+                <!-- 热点话题卡片 3 开始 -->
+                <div class="bento-card p-6 rounded-xl"> 
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            跨越生死的对话：从法医见闻到各地丧葬风俗
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            11:17 - 12:12
+                        </span>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            醉嘻嘻泳往直前：法医学我也有个八卦。我以前实验室，也有司法相关业务，亲子鉴定什么的都已经不够看了
+                        </p>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">法医学</span>
+                            <span class="tag-item">亲子鉴定</span>
+                            <span class="tag-item">丧葬习俗</span>
+                            <span class="tag-item">生命教育</span>
+                            <span class="tag-item">地方文化</span>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、话题背景与起因</b><br>
+                                    由群成员<b>大学生主播</b>讨论直播内容创作素材开始，话题意外地转向了法医学领域的奇闻轶事。<b>醉嘻嘻泳往直前</b>分享了其实验室遇到的真实案例，其内容的冲击性和独特性迅速点燃了群内讨论，并从猎奇的法医故事自然过渡到对生死、传统与习俗的严肃探讨。<br><br>
+                                    <b>二、主要观点与讨论详情</b><br>
+                                    <b>1. 真实法医世界的冰山一角：</b><br>
+                                    <b>醉嘻嘻泳往直前</b>分享了两个令人匪夷所思的案例：一是有人为“认祖归宗”，竟拿着一个<b>骷髅头</b>来做亲子鉴定；二是为了争夺遗产，有“小三”去<b>偷取逝者部分尸体</b>以证明私生子的血缘关系。这些超越普通人想象的事件，揭示了人性在巨大利益面前的复杂与极端，也让群友对法医工作的现实有了更深的认识。<br><br>
+                                    <b>2. 从器官触感到生命敬畏：</b><br>
+                                    <b>大学生主播</b>结合自己的法医学知识，生动地描述了停尸房的气味、尸体上脾脏的褶皱（比喻为“放了很久的橘子皮”），以及触摸脾脏如同“摸在一块儿被水泡了很久的抹布上”的感觉。这些极具感官冲击力的描述，让抽象的医学知识变得具体可感。<b>AA昍</b>也补充了自己表弟的经历，触摸过健康与病变肝脏后，深受触动，开始注重健康和减肥。这些分享从另一个角度阐释了生命教育的意义——直面死亡与病痛，更能激发对生命的敬畏与珍惜。<br><br>
+                                    <b>3. 多元化的丧葬习俗与文化差异：</b><br>
+                                    话题从法医学转向了更广泛的丧葬文化。群友们分享了各自家乡迥异的习俗，展现了一幅中国地方文化多样性的画卷：<br>
+                                    <ul>
+                                        <li><b>参与禁忌：</b><b>亮晶晶</b>和<b>宇世无争</b>提到，在他们老家，女性和小孩不被允许参加下葬仪式，理由是“不吉利”或“怕上身”，这被认为是封建迷信的体现。而<b>阿南plus（早睡输出）</b>的家乡则允许所有人参加，但有“离开时不许回头”的规矩。</li>
+                                        <li><b>着装规范：</b>大部分地区遵循丧事穿素色衣服的传统。<b>亮晶晶</b>分享了有亲戚穿大红羽绒服参加葬礼，被众人视为“碍眼”的例子。但也存在特殊情况，如<b>李猪猪我在这</b>提到，有些地区喜丧时孙辈穿红、曾孙辈穿绿。</li>
+                                        <li><b>仪式行为：</b><b>今天猪比向肌肉姐姐表白了吗？</b>提到女性经期不让跪拜的说法。<b>亮晶晶</b>描述了“哭丧”的表演性质，平时不孝顺的人反而嚎得最大声。<b>大学生主播</b>则分享了传统葬礼中“打狗棍”等不同辈分的不同道具。</li>
+                                    </ul><br>
+                                    <b>四、结论与启发</b><br>
+                                    这场从法医故事开始的讨论，最终演变为一次深刻的生命教育和文化交流。它不仅满足了群友对未知领域的好奇心，更重要的是，通过对死亡、遗体和仪式的坦诚交流，打破了文化禁忌，促使大家思考生命的价值、健康的意义以及传统的多元性。这些看似遥远和猎奇的话题，最终都回归到对“人”本身的关照，提醒人们珍惜当下，并以更开放和理解的心态看待不同地域的文化习俗。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            法医学的真实案例远超影视剧的想象，往往与人性、利益和家庭纠纷紧密相连，是观察社会的独特窗口。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                有一年我们遇到一个外面回来的人嘛，他拿着一个骷髅头，说要做亲子鉴定，为毛呢，因为他想去认祖坟。认祖归宗。。。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>醉嘻嘻泳往直前</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            直面死亡和病变的器官，能够 powerfully 激发个体对健康的重视和对生命的敬畏，是一种深刻的生命教育。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我表弟说摸完之后就特别在乎自己器官的健康了………………都开始减肥了。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>AA昍</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            中国的丧葬习俗地域差异巨大，繁杂的仪式和禁忌背后，既有封建迷信的残留，也蕴含着复杂的地方文化和人情社会逻辑。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我老家还有哭丧，就是一直嚎，没有眼泪，平时不孝顺的嚎最大声，以表示自己其实是孝顺的。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>亮晶晶（干中学）</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 热点话题卡片 3 结束 -->
+            </div>
+        </section>
+        <!-- === 模块二：火花碰撞时刻・热点话题 结束 === -->
+
+        <!-- === 模块三：解惑一点通・有问必答 开始 === -->
+        <section class="w-full mb-12">
+            <h2 class="section-title">
+                三、解惑一点通・有问必答
+            </h2>
+            <div class="space-y-8">
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <div class="mb-4">
+                        <h4 class="text-xl font-semibold text-black flex items-center">
+                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+                            大促期间如何在“内卷”氛围下坚持健身？
+                        </h4>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            亮晶晶（干中学）：家人们，有个问题想听听大家的建议：大促月我要不要抽时间去健身？
+                        </p>
+                    </div>
+                    <div class="border-t border-gray-200 pt-4">
+                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+                            解答
+                        </h5>
+                        <div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、问题背景</b><br>
+                                    成员<b>亮晶晶</b>提出一个典型的职场困境：在公司“大促月”期间，整个部门都沉浸在加班和“战斗”的氛围中，她虽然实际工作量不大（加班主打陪伴），但担心在午休或晚饭时间去健身，会给领导和同事留下“松弛”、“不合群”的负面印象，从而引发内耗。<br><br>
+                                    <b>二、核心原因分析</b> <br>
+                                    问题的核心并非健身本身，而是职场中的<b>“氛围压力”</b>和<b>“表演需求”</b>。<b>子蟹</b>指出，在老板和同事眼中，大促是赚钱的关键时刻，个人健身需求需要让位于集体“卷”的氛围，否则可能被视为“给领导上眼药”。<b>SR</b>也提到，要看公司和团队是否注重所谓的<b>“味儿”</b>，即文化和价值观的一致性。<br><br>
+                                    <b>三、解决方案与建议</b> <br>
+                                    群友们从“向上管理”和“技术处理”两个层面给出了综合建议：<br>
+                                    <b>1. 向上管理与沟通：</b>
+                                    <ul>
+                                        <li><b>AA昍</b>建议，可以主动铺垫一种话术逻辑，即“健身是为了提高工作效率”，甚至尝试带动领导和同事一起，将个人行为转化为团队正向活动。</li>
+                                        <li><b>亮晶晶</b>表示自己的直属领导人不错，群友建议可以直接沟通，说明情况，获得理解。</li>
+                                    </ul>
+                                    <b>2. 技术性规避与伪装：</b>
+                                    <ul>
+                                        <li><b>时间选择：</b>将健身时间调整到不那么敏感的中午时段。</li>
+                                        <li><b>装备隐藏：</b>不带显眼的健身包，可将轻薄的速干运动裤揣在兜里，或用不显眼的袋子装衣物。<b>Bazinga</b>和<b>齐四亿</b>分享了将运动包藏在他人空工位的“技巧”。</li>
+                                        <li><b>着装一体化：</b>上班时直接内穿运动服，或全天穿着休闲运动装，减少换装的动静。</li>
+                                        <li><b>路线规划：</b><b>吃好喝好路过的卡卡罗特</b>和<b>Bazinga</b>分享了走货梯以避开人群和视线的经验。</li>
+                                    </ul>
+                                    <b>3. 心理建设：</b>
+                                    <ul>
+                                        <li><b>AA昍</b>和<b>BB宝鹅</b>都指出，需要评估此事对职业发展的实际影响。如果不健身会影响健康，而健身并不会导致延迟退休或降薪，那么就不应过度内耗。</li>
+                                    </ul>
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 pt-4 border-t border-gray-200">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">职场生存</span>
+                            <span class="tag-item">向上管理</span>
+                            <span class="tag-item">工作与生活平衡</span>
+                            <span class="tag-item">内卷</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]"> <!-- 边框颜色修改为 border-[#93c5fd] -->
+                    <div class="mb-4">
+                        <h4 class="text-xl font-semibold text-black flex items-center">
+                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+                            感冒后干咳不止，如何科学用药？
+                        </h4>
+                    </div>
+
+                    <!-- HTML注释: 爬楼关键词区域 - 讨论起始句，用于快速定位群聊记录中的对应讨论。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            花笙米：同志们，我想问一下干咳吃什么药比较好？
+                        </p>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-4">
+                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+                            解答
+                        </h5>
+                        <div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、问题背景</b><br>
+                                    群友<b>花笙米</b>出现感冒后遗症状，主要表现为无痰干咳，且咳得胸腔痛，希望能获得对症的用药建议。<br><br>
+                                    <b>二、核心原因分析与解决方案</b><br>
+                                    群友们围绕“干咳”这一核心症状，提供了多角度的建议，并强调了用药的注意事项。<br><br>
+                                    <b>1. 核心镇咳药物推荐</b><br>
+                                    <b>宇世无争</b>迅速给出了核心建议：使用<b>右美沙芬</b>。他进一步解释，如果完全没有痰，可以购买单方的右美沙芬；如果感觉有痰咳不出，则可以选择含有愈创甘油醚的复方制剂（如愈美片），后者能促进排痰。他还补充了其他对症药物，如用于化痰的氨溴特罗和缓解喉咙痛的华素片。<br><br>
+                                    <b>2. 用药安全提醒</b><br>
+                                    <b>良猫</b>及时补充了重要的安全提示，指出<b>右美沙芬</b>如果与某些抗抑郁药物同时服用，需要特别注意药物相互作用。此外，她和<b>宇世无争</b>都提到，由于该药有被滥用的风险，单方右美沙芬目前已成为处方药，购买可能受限。<br><br>
+                                    <b>3. 就医建议与其他思路</b><br>
+                                    <b>66</b>则从更谨慎的角度出发，建议“去看医生啊，不要自己乱吃”，强调了专业诊断的重要性。<b>AA昍</b>也提供了一个传统但有效的选择：<b>复方甘草片</b>，并指出其含有阿片成分，对镇咳效果显著，但不喜欢其味道的人不易上瘾。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 列表容器: 问题解答卡片标签 -->
+                    <div class="mt-5 pt-4 border-t border-gray-200">
+                        <div class="flex flex-wrap gap-2">
+                            <!-- HTML注释: 为每个标签重复以下 span.tag-item 结构。 -->
+                            <span class="tag-item">健康用药</span>
+                            <span class="tag-item">干咳</span>
+                            <span class="tag-item">右美沙芬</span>
+                            <span class="tag-item">家庭药箱</span>
+                        </div>
+                    </div>
+                    <!-- 列表容器结束: 问题解答卡片标签 -->
+                </div>                
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <div class="mb-4">
+                        <h4 class="text-xl font-semibold text-black flex items-center">
+                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+                            电脑C盘莫名爆满，如何快速排查“罪魁祸首”？
+                        </h4>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            大学生主播：有什么办法能降低C盘磁盘空间吗
+                        </p>
+                    </div>
+                    <div class="border-t border-gray-200 pt-4">
+                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+                            解答
+                        </h5>
+                        <div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、问题背景</b><br>
+                                    成员<b>大学生主播</b>求助，表示自己的电脑C盘（150GB）在没有安装新程序的情况下，空间却越来越小，已经爆满，不知如何处理。<br><br>
+                                    <b>二、核心原因分析</b><br>
+                                    <b>猪猪男孩</b>迅速指出了几个常见原因：<b>微信聊天记录</b>和<b>剪辑软件的缓存</b>默认会存储在C盘，即使用户将软件主体安装在D盘。这是一个常见的认知误区，许多应用的数据和缓存文件会默认占用系统盘空间。<br><br>
+                                    <b>三、解决方案与建议</b><br>
+                                    <b>宇世无争</b>提供了精准且高效的排查方法：
+                                    <ol>
+                                        <li>打开C盘的资源管理器。</li>
+                                        <li>在右上角的搜索框中输入一个英文句号 `.` 并回车，这将列出C盘所有文件。</li>
+                                        <li>在搜索工具栏中，选择“大小”，并筛选出“巨大（>100MB）”的文件。</li>
+                                    </ol>
+                                    通过这个方法，<b>大学生主播</b>很快就定位到了问题所在——一个体积巨大的“课件”文件夹被直接存放在了桌面上。因为Windows系统桌面在物理上属于C盘路径，所以大量文件堆放在桌面是导致C盘爆满的直接原因。最终，他通过将该文件夹移动到其他磁盘，成功解决了问题。<br><br>
+                                    群友也顺带讨论了现代电脑硬盘分区的策略，<b>猪猪男孩</b>提出，对于大容量固态硬盘（SSD），不分区（即只有一个1TB的C盘）也是一种可行的使用方式，可以避免分区不合理导致的单一分区空间不足问题。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 pt-4 border-t border-gray-200">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">电脑维护</span>
+                            <span class="tag-item">Windows技巧</span>
+                            <span class="tag-item">磁盘管理</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- === 模块三：解惑一点通・有问必答 结束 === -->
+
+        <!-- === 模块四：智慧火花匣・每日精选 开始 === -->
+        <section class="w-full mb-12">
+            <h2 class="section-title">
+                四、智慧火花匣・每日精选
+            </h2>
+            <div class="space-y-8">
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <h4 class="text-xl font-semibold text-black mb-3">
+                        运用《毛选》智慧解决家庭婆媳矛盾
+                    </h4>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            小月半皮：[链接|我发布了一篇笔记：如何用毛选搞定婆媳育儿争端，全家都听我的]
+                        </p>
+                    </div>
+                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+                        <div class="expandable-content" data-char-limit="200">
+                            <div class="content-preview">
+                                <b>一、推荐内容</b><br>
+                                成员<b>小月半皮</b>分享了一篇极具创意和实用性的笔记，主题为如何运用《毛选》中的思想来处理家庭中常见的婆媳育儿争端，并最终实现“全家都听我的”的和谐局面。<br><br>
+                                <b>二、核心价值与特点</b><br>
+                                该笔记的核心是将经典的斗争与统一战线思想创造性地应用于家庭人际关系。<b>转念之间</b>对此进行了“三阶思维”的解读：
+                                <ul>
+                                    <li><b>一阶（表面冲突）：</b>直接面对婆媳间的育儿观念冲突，如“科学育儿”与“传统经验”的对立。在这种层面直接辩论，往往陷入“你讲科学，她讲传统”的无效沟通。</li>
+                                    <li><b>二阶（解决问题）：</b>跳出争论本身，改变策略和角度，运用《毛选》中的智慧，如统一战线、分清主要矛盾和次要矛盾、团结一切可以团结的力量等，来解决具体的婆媳问题。</li>
+                                    <li><b>三阶（建设与升华）：</b>将这种解决家庭矛盾的方法论提炼并升华，使其适用于职场等其他场景，并以此为基础建立个人品牌，吸引关注。</li>
+                                </ul><br>
+                                <b>三、适用场景或补充信息</b><br>
+                                这一方法论不仅为处理复杂的家庭关系提供了全新的、行之有效的思路，也展示了将经典理论“活学活用”于日常生活问题的强大能力。它启示我们，面对看似无解的矛盾时，升级思维维度、改变斗争策略，往往能找到破局的关键。
+                            </div>
+                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                <span class="expand-text">展开全文</span>
+                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tag-item">家庭关系</span>
+                        <span class="tag-item">毛选</span>
+                        <span class="tag-item">育儿</span>
+                        <span class="tag-item">思维模型</span>
+                    </div>
+                    <div class="flex justify-end">
+                        <a href="https://www.xiaohongshu.com/discovery/item/68eb74f7000000000303726a" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-[#4D6BFE] hover:text-blue-700 hover:underline flex items-center">
+                            阅读原文
+                            <i class="fas fa-external-link-alt ml-1.5 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]"> <!-- 边框颜色修改为 border-[#93c5fd] -->
+                    <h4 class="text-xl font-semibold text-black mb-3">
+                        消费指南：优质乳品选购策略与电商平台“薅羊毛”技巧
+                    </h4>
+
+                    <!-- HTML注释: 爬楼关键词区域 - 讨论起始句，用于快速定位群聊记录中的对应讨论。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            阿南plus（早睡输出）：牛奶当水喝，拼多多常温奶很便宜我推荐几个
+                        </p>
+                    </div>
+
+                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+                        <div class="expandable-content" data-char-limit="200">
+                            <div class="content-preview">
+                                <b>一、推荐内容</b><br>
+                                围绕日常饮奶需求，群友们分享了各自的优质牛奶品牌选择、消费避坑经验以及在电商平台获取优惠的实用技巧。<br><br>
+                                <b>二、核心价值与特点</b><br>
+                                <b>1. 品牌推荐：地方奶优于全国性品牌</b><br>
+                                <ul>
+                                    <li><b>共识</b>：多位群友，包括来自内蒙的<b>尼克干中学的产房1号</b>，都认为伊利、蒙牛等全国性品牌的常温奶口感不佳。</li>
+                                    <li><b>地方品牌推荐</b>：大家普遍推崇口感更佳的地方或区域性品牌。<b>阿南plus（早睡输出）</b>推荐了云南的<b>新希望（邓川/欧亚）</b>系列常温奶，认为其性价比高，口感优于主流品牌。<b>佳桐JJ</b>也建议关注本地乳品企业。新疆的<b>天润、花园、西域春</b>和广西的<b>石埠水牛奶</b>也获得了好评。对于鲜奶，<b>宇世无争</b>力荐<b>光明优倍</b>。</li>
+                                </ul>
+                                <b>2. 消费避坑：警惕“调制乳”与“风味奶”</b><br>
+                                <ul>
+                                    <li>群友们提醒，市面上一些口感异常香甜、浓稠的牛奶，如部分水牛奶和特浓奶，很可能是添加了奶油、糖或香精的“<b>调制乳</b>”，而非纯牛奶。消费者在购买时需仔细查看配料表，避免被其包装和宣传误导。</li>
+                                </ul>
+                                <b>3. 电商“薅羊毛”技巧分享</b><br>
+                                <b>MIR🍈</b>和<b>阿南plus（早睡输出）</b>分享了在京东购物省钱的实用技巧：
+                                <ul>
+                                    <li><b>利用“顺手买一件”功能</b>：将想买的商品加入购物车后，系统可能会在商品下方或结算页面推荐同类的低价换购商品。通过这种方式，可以以远低于日常价的价格买到心仪的牛奶等产品。</li>
+                                    <li><b>多浏览以触发推荐</b>：经常浏览目标商品，能增加系统推荐低价换购的概率。</li>
+                                </ul>
+                                <b>三、适用场景或补充信息</b><br>
+                                对于乳糖不耐受的群友，<b>阿南plus（早睡输出）</b>推荐了添加了乳糖酶的零乳糖牛奶。讨论还涉及到不同牛奶（如鲜奶、常温奶、水牛奶）在蛋白质含量和口感上的细微差别，为不同需求的消费者提供了全面的参考。
+                            </div>
+                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                <span class="expand-text">展开全文</span>
+                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tag-item">消费指南</span>
+                        <span class="tag-item">牛奶</span>
+                        <span class="tag-item">电商技巧</span>
+                        <span class="tag-item">食品安全</span>
+                    </div>
+                    <!-- HTML注释: 此条目无资源链接，因此不包含资源链接区域的HTML。 -->
+                    <!-- 如果要为此条目添加资源链接, 请在上方 </div> (包含标签的 div) 之后，本卡片的结束 </div> 之前，添加与上一个卡片中类似的 "资源链接区域" HTML片段, 并填充相应数据。 -->
+                </div>
+                <!-- 知识卡片 结束 -->
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]"> <!-- 边框颜色修改为 border-[#93c5fd] -->
+                    <h4 class="text-xl font-semibold text-black mb-3">
+                        群友力荐的高性价比食品与健康补剂
+                    </h4>
+
+                    <!-- HTML注释: 爬楼关键词区域 - 讨论起始句，用于快速定位群聊记录中的对应讨论。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            良猫：家人们有什么纯甜无酸的水果推荐吗？
+                        </p>
+                    </div>
+
+                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+                        <div class="expandable-content" data-char-limit="200">
+                            <div class="content-preview">
+                                <b>一、推荐内容</b><br>
+                                群友们围绕日常饮食和健康展开热烈讨论，分享了从水果、主食到巧克力、蛋白粉等多种高性价比食品和补剂的选择心得，构成了一份实用的“吃货”与“健身党”消费指南。<br><br>
+                                <b>二、核心价值与特点</b><br>
+                                <b>1. 美味水果与主食推荐</b><br>
+                                <ul>
+                                    <li><b>水果</b>：针对<b>良猫</b>提出的“纯甜无酸”水果需求，群友们推荐了<b>爱媛橙、阳光玫瑰、西瓜和榴莲</b>。<b>阿南plus（早睡输出）</b>还分享了京东的优惠链接。</li>
+                                    <li><b>番薯（地瓜）</b>：<b>糕级（健康饮食第 13天</b>推荐的广东鸣门金时红薯受到<b>紫盈</b>等群友的高度赞扬，被誉为“人生中最好吃的番薯”，特点是“非常甜，软硬适中”。</li>
+                                </ul>
+                                <br>
+                                <b>2. 巧克力品鉴与选购指南</b><br>
+                                针对<b>🍔头🍔脑</b>提出的“便宜好吃的巧克力”需求，群友<b>熊，熊，xióng，熊</b>贡献了一份详尽的“高中低”三档推荐清单：
+                                <ul>
+                                    <li><b>高端之选</b>：意大利品牌<b>Amedei</b>，尤其推荐其橙皮条和杏仁口味。</li>
+                                    <li><b>中端佳品</b>：意大利品牌<b>Venchi</b>的鱼子酱系列，以及烘焙界知名的<b>法芙娜（Valrhona）</b>。</li>
+                                    <li><b>平价经典</b>：<b>瑞士莲（Lindt）</b>和国民品牌<b>德芙（Dove）</b>。<b>熊，熊，xióng，熊</b>特别强调，德芙的“纵享丝滑”得益于其优秀的研磨工艺，口感细腻，其“脆香米”系列更是获得多人喜爱。</li>
+                                    <li><b>黑巧百分比</b>：对于黑巧爱好者，<b>熊，熊，xióng，熊</b>推荐尝试70%以上的产品，他个人偏爱85%的比例。</li>
+                                </ul>
+                                <br>
+                                <b>3. 健身蛋白粉选择与避坑</b><br>
+                                <ul>
+                                    <li><b>品牌避坑</b>：<b>康比特</b>被多位群友（<b>🍔头🍔脑、吃好喝好路过的卡卡罗特</b>）吐槽“难喝且难溶解”。</li>
+                                    <li><b>性价比之选</b>：<b>宇世无争</b>推荐了原料蛋白粉，认为许多品牌只是在原料粉基础上添加调味粉和包装，溢价过高。对于非乳糖不耐受人群，无需特意购买更昂贵的分离蛋白。</li>
+                                    <li><b>食用技巧</b>：对于难溶解的蛋白粉，<b>吃好喝好路过的卡卡罗特</b>分享了“干吃一口，喝水送下”的硬核吃法。</li>
+                                </ul>
+                                <br>
+                                <b>三、适用场景或补充信息</b><br>
+                                讨论还涉及了食物的趣味吃法，如芭乐蘸辣椒面、牛奶泡米饭等，展现了群友们开放的美食探索精神。同时，关于水果的糖分问题也被提及，提醒大家在享受美味的同时也要注意健康。
+                            </div>
+                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                <span class="expand-text">展开全文</span>
+                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tag-item">美食推荐</span>
+                        <span class="tag-item">巧克力</span>
+                        <span class="tag-item">蛋白粉</span>
+                        <span class="tag-item">消费指南</span>
+                    </div>
+                    <!-- HTML注释: 此条目无资源链接，因此不包含资源链接区域的HTML。 -->
+                    <!-- 如果要为此条目添加资源链接, 请在上方 </div> (包含标签的 div) 之后，本卡片的结束 </div> 之前，添加与上一个卡片中类似的 "资源链接区域" HTML片段, 并填充相应数据。 -->
+                </div>                
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <h4 class="text-xl font-semibold text-black mb-3">
+                        心理学小课堂：认识“詹森效应”——为何总在关键时候掉链子？
+                    </h4>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            啊怿子 -：周日：心理学·詹森效应
+                        </p>
+                    </div>
+                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+                        <div class="expandable-content" data-char-limit="200">
+                            <div class="content-preview">
+                                <b>一、推荐内容</b><br>
+                                成员<b>啊怿子 -</b>分享了关于“詹森效应”的心理学科普，通过生动的故事和贴近生活的案例，解释了人们为何会“平时表现好，关键时候掉链子”。<br><br>
+                                <b>二、核心价值与特点</b><br>
+                                <ul>
+                                    <li><b>定义清晰：</b>詹森效应指的是平时能力强、表现稳定的人，在重要场合（如考试、面试）因过度关注结果、心理压力过大而发挥失常的现象。</li>
+                                    <li><b>案例生动：</b>分享通过“小羚羊奔奔”的故事——一个平时训练轻松夺冠，但在正式大赛中因观众和心理压力而失常的例子，将抽象概念形象化，便于理解。</li>
+                                    <li><b>贴近现实：</b>将效应与成年人生活中的常见情景（如向大领导汇报工作、参加高考）相结合，引发了广泛共鸣。</li>
+                                </ul><br>
+                                <b>三、解决方案与建议</b><br>
+                                克服詹森效应的关键在于<b>“降低对结果的过度关注”</b>。分享者提出了具体的心理调适方法：将注意力从“结果好不好”（如“怕出错”、“考不上好大学”）转移到<b>“过程该怎么做”</b>（如“把内容说清楚就好”、“尽力就行”）。这种焦点的转移有助于减轻心理负担，从而让个体能够发挥出真实水平。这份分享为群成员提供了一个简单有效的心理学工具，以应对生活和工作中的高压时刻。
+                            </div>
+                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                <span class="expand-text">展开全文</span>
+                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tag-item">心理学</span>
+                        <span class="tag-item">詹森效应</span>
+                        <span class="tag-item">压力管理</span>
+                        <span class="tag-item">个人成长</span>
+                    </div>
+                </div>
+                 <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <h4 class="text-xl font-semibold text-black mb-3">
+                        实用税务知识：专项附加扣除七大项填报指南
+                    </h4>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            苏卡不列-主体性&主线+41：[链接|我发布了一篇笔记：专项附加扣除七大项...]
+                        </p>
+                    </div>
+                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+                        <div class="expandable-content" data-char-limit="200">
+                            <div class="content-preview">
+                                <b>一、推荐内容</b> <br>
+                                成员<b>苏卡不列-主体性&主线+41</b>分享了一篇关于个人所得税专项附加扣除的实用指南笔记，内容详实，操作性强。<br><br>
+                                <b>二、核心价值与特点</b><br>
+                                该指南系统梳理了个人所得税中常见的七大项专项附加扣除，包括：
+                                <ul>
+                                    <li>房贷利息</li>
+                                    <li>住房租金</li>
+                                    <li>子女教育</li>
+                                    <li>3岁以下婴幼儿照护</li>
+                                    <li>赡养老人</li>
+                                    <li>继续教育</li>
+                                    <li>大病医疗</li>
+                                </ul>
+                                笔记的核心价值在于为群成员提供了清晰的填报注意事项，帮助大家合法合规地享受税收优惠政策，实现“省钱”的目的。对于即将进行年度个税汇算清缴或首次填报的群成员来说，是一份非常及时的参考资料。<br><br>
+                                <b>三、适用场景或补充信息</b> <br>
+                                这份指南适用于所有在中国大陆境内取得综合所得的纳税人，尤其是对税务政策不熟悉的职场人士。通过学习和正确填报，可以有效降低个人税负，增加可支配收入。
+                            </div>
+                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                <span class="expand-text">展开全文</span>
+                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tag-item">税务知识</span>
+                        <span class="tag-item">个人所得税</span>
+                        <span class="tag-item">专项附加扣除</span>
+                        <span class="tag-item">生活理财</span>
+                    </div>
+                     <div class="flex justify-end">
+                        <a href="https://www.xiaohongshu.com/discovery/item/68eb4f67000000000303bb11" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-[#4D6BFE] hover:text-blue-700 hover:underline flex items-center">
+                            阅读原文
+                            <i class="fas fa-external-link-alt ml-1.5 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- === 模块四：智慧火花匣・每日精选 结束 === -->
+
+        <!-- === 文件底部 开始 === -->
+        <footer class="w-full mt-16">
+            <div class="bento-card p-8">
+                <div class="text-center text-gray-700 space-y-3">
+                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-base">
+                        <div class="flex items-center">
+                            <i class="fas fa-database mr-2 text-[#4D6BFE]"></i>
+                            <span>微信群聊记录</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-robot mr-2 text-[#4D6BFE]"></i>
+                            <span>2025-10-13 02:00:00</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                        本报告基于群聊数据自动生成，仅供参考。内容可能包含个人观点，不代表群组官方立场。数据处理过程中已尽量匿名化处理敏感信息。
+                    </p>
+                </div>
+            </div>
+        </footer>
+        <!-- === 文件底部 结束 === -->
+    </div>
+
+    <script>
+        // 定义基础URL常量
+        const BASE_URL = 'https://xinjian-bot.github.io/-';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Bento card hover effect is handled by CSS :hover pseudo-class
+
+            // Number animation effect
+            const numberElements = document.querySelectorAll('.number-display');
+            numberElements.forEach(element => {
+                const finalValueText = element.textContent.replace(/,/g, '');
+                const finalValue = parseInt(finalValueText, 10);
+
+                if (isNaN(finalValue)) return;
+
+                let currentValue = 0;
+                const duration = 1500; // Animation duration in ms
+                const frameRate = 1000 / 60; // 60fps
+                const totalFrames = Math.round(duration / frameRate);
+                const increment = finalValue / totalFrames;
+
+                let currentFrame = 0;
+                const timer = setInterval(() => {
+                    currentFrame++;
+                    currentValue += increment;
+
+                    if (currentFrame >= totalFrames) {
+                        currentValue = finalValue;
+                        clearInterval(timer);
+                    }
+                    // Format number with commas for display
+                    element.textContent = Math.floor(currentValue).toLocaleString('en-US');
+                }, frameRate);
+            });
+
+            // HTML注释: 初始化日报导航功能
+            initDailyNavigation();
+
+            // HTML注释: 初始化展开功能
+            initExpandableContent();
+            
+            // 初始化历史汇总链接
+            const historyLink = document.getElementById('history-link');
+            if (historyLink) {
+                historyLink.href = BASE_URL + '/新茧历史日报汇总.html';
+            }
+        });
+
+        // HTML注释: 这个函数实现了日报间的导航功能，包括：
+        // 1. 从当前页面URL或内容中提取日期
+        // 2. 检查前后日期的日报文件是否存在
+        // 3. 设置"上一天"和"下一天"按钮的状态和链接
+        // 4. 实现"下一天"按钮的动态显示逻辑
+        async function initDailyNavigation() {
+            try {
+                // HTML注释: 获取当前页面的日期
+                const currentDate = getCurrentDateFromPage();
+                if (!currentDate) {
+                    console.warn('无法从页面中提取日期信息');
+                    return;
+                }
+
+                // HTML注释: 设置导航按钮
+                await setupNavigationButtons(currentDate);
+
+            } catch (error) {
+                console.error('初始化日报导航时出错:', error);
+            }
+        }
+
+        // HTML注释: 从页面中提取当前日期
+        // HTML注释: 支持多种方式提取日期：优先从页面元素、URL文件名或页面标题
+        function getCurrentDateFromPage() {
+            // HTML注释: 方法1：从报告日期元素中提取（优先级最高）
+            const dateElement = document.getElementById('report-date');
+            if (dateElement) {
+                const dateText = dateElement.textContent;
+                const dateMatch = dateText.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
+                if (dateMatch) {
+                    const year = dateMatch[1];
+                    const month = dateMatch[2].padStart(2, '0');
+                    const day = dateMatch[3].padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                }
+            }
+
+            // HTML注释: 方法2：从URL文件名中提取日期
+            const pathname = window.location.pathname;
+            const filenameMatch = pathname.match(/新茧群日报_(\d{4}-\d{2}-\d{2})\.html/);
+            if (filenameMatch) {
+                return filenameMatch[1];
+            }
+
+            // HTML注释: 方法3：从页面标题中提取日期
+            const titleMatch = document.title.match(/(\d{4}-\d{2}-\d{2})/);
+            if (titleMatch) {
+                return titleMatch[1];
+            }
+
+            return null;
+        }
+
+        // HTML注释: 设置导航按钮的状态和链接
+         // HTML注释: 根据当前日期，检查前后日期的日报文件是否存在
+         async function setupNavigationButtons(currentDate) {
+             const prevButton = document.getElementById('prev-day');
+             const nextButton = document.getElementById('next-day');
+             const navContainer = document.querySelector('nav');
+             
+             // HTML注释: 计算前一天和后一天的日期
+             const currentDateObj = new Date(currentDate);
+             const prevDateObj = new Date(currentDateObj);
+             prevDateObj.setDate(prevDateObj.getDate() - 1);
+             const nextDateObj = new Date(currentDateObj);
+             nextDateObj.setDate(nextDateObj.getDate() + 1);
+             
+             const prevDate = formatDate(prevDateObj);
+             const nextDate = formatDate(nextDateObj);
+             
+             // HTML注释: 检查前一天和后一天的日报是否存在
+             const prevExists = await checkReportExists(prevDate);
+             const nextExists = await checkReportExists(nextDate);
+             
+             // HTML注释: 如果前后日期的日报都不存在，隐藏整个导航栏容器
+             if (!prevExists && !nextExists) {
+                 navContainer.style.display = 'none';
+                 return;
+             }
+             
+             // HTML注释: 显示导航栏容器
+             navContainer.style.display = 'block';
+             
+             // HTML注释: 设置前一天按钮
+             if (prevExists) {
+                 prevButton.onclick = () => {
+                     window.location.href = `${BASE_URL}/新茧群日报_${prevDate}.html`;
+                 };
+                 prevButton.disabled = false;
+             } else {
+                 prevButton.disabled = true;
+                 prevButton.onclick = null;
+             }
+
+             // HTML注释: 设置后一天按钮
+             if (nextExists) {
+                 nextButton.onclick = () => {
+                     window.location.href = `${BASE_URL}/新茧群日报_${nextDate}.html`;
+                 };
+                 nextButton.disabled = false;
+             } else {
+                 // HTML注释: 后一天的日报不存在，禁用"下一天"按钮
+                 nextButton.disabled = true;
+                 nextButton.onclick = null;
+             }
+         }
+
+        // HTML注释: 检查指定日期的日报文件是否存在
+        async function checkReportExists(date) {
+            try {
+                const response = await fetch(`${BASE_URL}/新茧群日报_${date}.html`, { method: 'HEAD' });
+                return response.ok;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        // HTML注释: 格式化日期为YYYY-MM-DD格式
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // HTML注释: 初始化展开功能
+        function initExpandableContent() {
+            const expandableContents = document.querySelectorAll('.expandable-content');
+            
+            expandableContents.forEach(container => {
+                const charLimit = parseInt(container.getAttribute('data-char-limit')) || 200;
+                const contentPreview = container.querySelector('.content-preview');
+                const expandBtn = container.querySelector('.expand-btn');
+                
+                if (!contentPreview || !expandBtn) return;
+                
+                const fullContent = contentPreview.innerHTML;
+                const fullText = contentPreview.textContent || contentPreview.innerText;
+                
+                // HTML注释: 如果内容长度超过限制，则显示展开按钮
+                if (fullText.length > charLimit) {
+                    // HTML注释: 创建一个临时元素来正确截取HTML内容
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = fullContent;
+                    
+                    // HTML注释: 截取文本内容到指定长度
+                    const truncatedText = fullText.substring(0, charLimit);
+                    
+                    // HTML注释: 使用更简单可靠的方法截取内容
+                    let truncatedContent = '';
+                    let charCount = 0;
+                    
+                    // HTML注释: 逐字符遍历，保持简单的HTML结构
+                    const walker = document.createTreeWalker(
+                        tempDiv,
+                        NodeFilter.SHOW_TEXT,
+                        null,
+                        false
+                    );
+                    
+                    let node;
+                    const textNodes = [];
+                    while (node = walker.nextNode()) {
+                        textNodes.push(node);
+                    }
+                    
+                    // HTML注释: 计算需要保留的文本内容
+                    for (let textNode of textNodes) {
+                        const text = textNode.textContent;
+                        if (charCount + text.length <= charLimit) {
+                            charCount += text.length;
+                        } else {
+                            const remainingChars = charLimit - charCount;
+                            textNode.textContent = text.substring(0, remainingChars) + '...';
+                            charCount = charLimit;
+                            
+                            // HTML注释: 新的、更干净的移除后续所有节点的逻辑
+                            let currentNodeToClearAfter = textNode;
+                            while (currentNodeToClearAfter && currentNodeToClearAfter !== tempDiv) {
+                                let sibling = currentNodeToClearAfter.nextSibling;
+                                while (sibling) {
+                                    const nodeToRemove = sibling;
+                                    sibling = sibling.nextSibling;
+                                    nodeToRemove.remove();
+                                }
+                                currentNodeToClearAfter = currentNodeToClearAfter.parentElement;
+                            }
+                            break; // 完成截断和清理，跳出 textNodes 循环
+                        }
+                    }
+                    
+                    const previewContent = tempDiv.innerHTML;
+                    
+                    contentPreview.innerHTML = previewContent;
+                    contentPreview.classList.add('collapsed');
+                    expandBtn.style.display = 'flex';
+                    
+                    // HTML注释: 绑定展开/收起事件
+                    expandBtn.addEventListener('click', function() {
+                        const isExpanded = expandBtn.classList.contains('expanded');
+                        
+                        if (isExpanded) {
+                            // HTML注释: 收起内容
+                            contentPreview.innerHTML = previewContent;
+                            contentPreview.classList.add('collapsed');
+                            expandBtn.querySelector('.expand-text').textContent = '展开全文';
+                            expandBtn.classList.remove('expanded');
+                        } else {
+                            // HTML注释: 展开内容
+                            contentPreview.innerHTML = fullContent;
+                            contentPreview.classList.remove('collapsed');
+                            expandBtn.querySelector('.expand-text').textContent = '收起';
+                            expandBtn.classList.add('expanded');
+                        }
+                    });
+                } else {
+                    // HTML注释: 内容较短，隐藏展开按钮
+                    expandBtn.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
