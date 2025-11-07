@@ -1,13 +1,14 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>新茧日报 2025-05-28</title>
-    <!-- 正常标题格式应为：新茧日报 yyyy-mm-dd，以便外部链接查看时了解日报日期 -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>新茧日报 2025-05-28</title>
+<!-- 正常标题格式应为：新茧日报 yyyy-mm-dd，以便外部链接查看时了解日报日期 -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
         * {
@@ -17,6 +18,11 @@
         body {
             background-color: #ffffff;
             color: #000000;
+        }
+
+        :root {
+            --directory-main-font-size: clamp(0.85rem, 0.9vw + 0.6rem, 0.95rem);
+            --directory-sub-font-size: clamp(0.78rem, 0.75vw + 0.5rem, 0.88rem);
         }
 
         .bento-card {
@@ -103,696 +109,966 @@
             background: rgba(77, 107, 254, 0.15);
             transform: translateY(-1px);
         }
+
+        /* HTML注释: 展开功能相关样式 */
+        .expandable-content {
+            position: relative;
+        }
+
+        .content-preview.collapsed {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .content-preview.collapsed::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(transparent, rgba(248, 250, 252, 0.9));
+            pointer-events: none;
+        }
+
+        .expand-btn {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0;
+        }
+
+        .expand-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .expand-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .expand-btn.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        /* HTML注释: 目录锚点滚动偏移，避免标题被遮挡 */
+        .anchor-target {
+            scroll-margin-top: 120px;
+        }
+
+        .anchor-placeholder {
+            height: 0;
+        }
+
+        /* HTML注释: 右下角浮动快捷按钮区域样式 */
+        .floating-actions {
+            position: fixed;
+            right: 1.25rem;
+            bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            z-index: 50;
+        }
+
+        .floating-button {
+            background: linear-gradient(135deg, #4D6BFE 0%, #6B8BFF 100%);
+            color: #ffffff;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px -5px rgba(77, 107, 254, 0.35);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .floating-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -6px rgba(77, 107, 254, 0.45);
+        }
+
+        .floating-button:focus-visible {
+            outline: 2px solid rgba(77, 107, 254, 0.45);
+            outline-offset: 2px;
+        }
+
+        .floating-button--hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            pointer-events: none;
+        }
+
+        .directory-wrapper {
+            position: relative;
+        }
+
+        .directory-panel {
+            position: absolute;
+            right: 0;
+            bottom: 3.5rem;
+            width: 18rem;
+            background: #ffffff;
+            border: 1px solid rgba(77, 107, 254, 0.2);
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 40px -15px rgba(77, 107, 254, 0.35);
+            padding: 1rem;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            max-height: min(75vh, 30rem);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+
+        .directory-panel.open {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .directory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .directory-title {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: var(--directory-main-font-size);
+        }
+
+        .directory-close {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 9999px;
+           transition: color 0.2s ease;
+        }
+
+        .directory-close:hover {
+            color: #4D6BFE;
+        }
+
+        .directory-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .directory-list button {
+            width: 100%;
+            text-align: left;
+            background: rgba(77, 107, 254, 0.08);
+            color: #1f2937;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.55rem 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: var(--directory-main-font-size);
+        }
+
+        .directory-list button:hover {
+            background: rgba(77, 107, 254, 0.18);
+            color: #1d4ed8;
+        }
+
+        /* HTML注释: 二级导航容器样式，支持主模块与子模块层级展示 */
+        .directory-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .directory-entry {
+            background: rgba(77, 107, 254, 0.08);
+        }
+
+        .directory-sublist {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-left: 2.5rem;
+            padding-left: 0.75rem;
+            border-left: 1px solid rgba(77, 107, 254, 0.2);
+        }
+
+        .directory-subitem {
+            background: rgba(77, 107, 254, 0.04);
+            padding-top: 0.45rem;
+            padding-bottom: 0.45rem;
+            font-size: var(--directory-sub-font-size);
+        }
+
+        .directory-subitem:hover {
+            background: rgba(77, 107, 254, 0.14);
+        }
+
+        .directory-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 9999px;
+            background: rgba(77, 107, 254, 0.12);
+            color: #4D6BFE;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .directory-text {
+            flex: 1;
+            color: inherit;
+        }
+
+        @media (max-width: 640px) {
+            .floating-actions {
+                right: 0.75rem;
+                bottom: 1rem;
+            }
+
+            .directory-panel {
+                width: min(80vw, 15rem);
+                bottom: 3.25rem;
+                max-height: min(70vh, 20rem);
+            }
+            :root {
+                --directory-main-font-size: 0.8rem;
+                --directory-sub-font-size: 0.72rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-white text-black min-h-screen">
-    <!-- HTML注释: 整体宽度通过 max-w-4xl 控制，实现日报宽度调小并保持响应式。-->
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-
-        <!-- === "新茧日报" 文件头区域 开始 === -->
-        <!-- HTML注释: 此模块作为单独一行，占据整行宽度。包含日报主标题、报告日期和时间范围。 -->
-        <!-- HTML注释: 新增了"新茧历史日报"链接，样式与整体设计保持统一协调 -->
-        <header class="w-full mb-8">
-            <div class="bento-card p-8">
-                <div class="text-center">
-                    <h1 class="text-5xl font-black text-black mb-6">
+<!-- HTML注释: 整体宽度通过 max-w-4xl 控制，实现日报宽度调小并保持响应式。-->
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+<!-- === "新茧日报" 文件头区域 开始 === -->
+<!-- HTML注释: 此模块作为单独一行，占据整行宽度。包含日报主标题、报告日期和时间范围。 -->
+<!-- HTML注释: 新增了"新茧历史日报"链接，样式与整体设计保持统一协调 -->
+<header class="w-full mb-8">
+<div class="bento-card p-8">
+<div class="text-center">
+<h1 class="text-5xl font-black text-black mb-6">
                         新茧日报
                     </h1>
-                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-lg mb-4">
-                        <div class="flex items-center text-gray-700">
-                            <i class="fas fa-calendar-alt mr-2 text-[#4D6BFE]"></i>
-                            <span id="report-date">2025年5月28日</span>
-                        </div>
-                        <div class="flex items-center text-gray-700">
-                            <i class="fas fa-clock mr-2 text-[#4D6BFE]"></i>
-                            <span>16:30（27日） - 16:30（28日）</span>
-                        </div>
-                    </div>
-                    <!-- HTML注释: 新增历史日报链接，位置合理且样式协调 -->
-                    <div class="flex justify-center">
-                        <a href="https://xinjian-bot.github.io/-/新茧历史日报汇总.html" class="history-link">
-                            <i class="fas fa-history"></i>
+<div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-lg mb-4">
+<div class="flex items-center text-gray-700">
+<i class="fas fa-calendar-alt mr-2 text-[#4D6BFE]"></i>
+<span id="report-date">2025年5月28日</span>
+</div>
+<div class="flex items-center text-gray-700">
+<i class="fas fa-clock mr-2 text-[#4D6BFE]"></i>
+<span>16:30（27日） - 16:30（28日）</span>
+</div>
+</div>
+<!-- HTML注释: 新增历史日报链接，位置合理且样式协调 -->
+<div class="flex justify-center">
+<a class="history-link" href="#" id="history-link">
+<i class="fas fa-history"></i>
                             新茧历史日报
                         </a>
-                    </div>
-                </div>
-            </div>
-        </header>
-        <!-- === "新茧日报" 文件头区域 结束 === -->
-
-        <!-- HTML注释: 新增导航区域，包含"上一天"和"下一天"按钮 -->
-        <!-- HTML注释: 导航逻辑说明：
+</div>
+</div>
+</div>
+</header>
+<!-- === "新茧日报" 文件头区域 结束 === -->
+<!-- HTML注释: 新增导航区域，包含"上一天"和"下一天"按钮 -->
+<!-- HTML注释: 导航逻辑说明：
              1. 通过JavaScript检查前后日期的日报文件是否存在
              2. 根据当前页面日期确定前后日期
              3. "下一天"按钮动态显示逻辑：仅当不是最新日报时显示
              4. 兼容处理历史日报文件命名格式
         -->
-        <nav class="w-full mb-8">
-            <div class="bento-card p-4">
-                <div class="flex justify-between items-center">
-                    <button id="prev-day" class="nav-button">
-                        <i class="fas fa-chevron-left"></i>
+<nav class="w-full mb-8 daily-nav">
+<div class="bento-card p-4">
+<div class="flex justify-between items-center">
+<button class="nav-button day-nav-prev" type="button">
+<i class="fas fa-chevron-left"></i>
                         上一天
                     </button>
-                    
-                    <div class="text-center">
-                        <span class="text-sm text-gray-600">日报导航</span>
-                    </div>
-                    
-                    <button id="next-day" class="nav-button">
+<div class="text-center">
+<span class="text-sm text-gray-600">日报导航</span>
+</div>
+<button class="nav-button day-nav-next" type="button">
                         下一天
                         <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-        </nav>
-
-        <!-- === 模块一：总消息概览 开始 === -->
-        <!-- HTML注释: 此模块作为单独一行，占据整行宽度。显示当日群聊总消息数量。 -->
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+</button>
+</div>
+</div>
+</nav>
+<!-- === 模块一：总消息概览 开始 === -->
+<!-- HTML注释: 此模块作为单独一行，占据整行宽度。显示当日群聊总消息数量。 -->
+<section class="w-full mb-12 anchor-target" id="section-overview">
+<h2 class="section-title">
                 一、总消息概览
             </h2>
-            <div class="bento-card p-8 bg-gradient-to-br from-[#4D6BFE]/20 via-[#4D6BFE]/10 to-[#4D6BFE]/5 text-center rounded-2xl">
-                <div class="number-display text-[#4D6BFE]">
+<div class="bento-card p-8 bg-gradient-to-br from-[#4D6BFE]/20 via-[#4D6BFE]/10 to-[#4D6BFE]/5 text-center rounded-2xl">
+<div class="number-display text-[#4D6BFE]">
                     5381
                 </div>
-                <p class="text-xl font-semibold text-black mt-3">总消息数量</p>
-            </div>
-        </section>
-        <!-- === 模块一：总消息概览 结束 === -->
-
-        <!-- === 模块二：火花碰撞时刻・热点话题 开始 === -->
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+<p class="text-xl font-semibold text-black mt-3">总消息数量</p>
+</div>
+</section>
+<!-- === 模块一：总消息概览 结束 === -->
+<!-- === 模块二：火花碰撞时刻・热点话题 开始 === -->
+<section class="w-full mb-12 anchor-target" id="section-hot-topics">
+<h2 class="section-title">
                 二、火花碰撞时刻・热点话题
             </h2>
-            <div class="space-y-8">
-                <!-- 热点话题卡片 1 开始 -->
-                <div class="bento-card p-6 rounded-xl">
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+<div class="space-y-8">
+<!-- 热点话题卡片 1 开始 -->
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             钱钟书、杨绛及文人风骨的讨论
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             05-27 16:31 - 16:33
                         </span>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             昍：是的，包括杨绛其实是一类人……只是包装出来了，就不能随便批评了，一批评就要有人说「你是极左」了。
                         </p>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">文人风骨</span>
-                            <span class="tag-item">钱钟书</span>
-                            <span class="tag-item">杨绛</span>
-                            <span class="tag-item">郭沫若</span>
-                            <span class="tag-item">批评</span>
-                            <span class="tag-item">士大夫</span>
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <p class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">文人风骨</span>
+<span class="tag-item">钱钟书</span>
+<span class="tag-item">杨绛</span>
+<span class="tag-item">郭沫若</span>
+<span class="tag-item">批评</span>
+<span class="tag-item">士大夫</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<p class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
                             群内就钱钟书、杨绛等文人的“风骨”及其作品评价展开讨论。<b>昍</b>引用Dawn的观点，认为杨绛与钱钟书在某些认知上可能相似，不应因其名望而免于批评，并质疑“一个被窝能睡出两种人”的说法。讨论延伸至明史中士大夫阶层追求“与士大夫共治天下”的实质，<b>昍</b>认为这背后是个人私欲和对特权的追求，而非单纯的“名”。
                         </p>
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             对文化名人的评价应实事求是，不应因其声望或特定包装而避免必要的批评和探讨。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 是的，包括杨绛其实是一类人……只是包装出来了，就不能随便批评了，一批评就要有人说「你是极左」了。可是「难道一个被窝能睡出两种人」？
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>昍</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 那这么一看他们一家人还真是求仁得仁
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>啊怿子 -</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             历史上士大夫阶层追求的政治理想，其实质往往与个人或阶层私利及特权相关联。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 @Dawn 这个我瞎猜，都是「名」，在「实」的层面就是人人都想往「上」走一步，不是官就想做官，做了官就想封侯，然后就想世袭罔替。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>昍</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 叫法是「名」，实际上就是自私自利不劳而获而已。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>昍</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- 热点话题卡片 1 结束 -->
-
-                <!-- 热点话题卡片 2 开始 -->
-                <div class="bento-card p-6 rounded-xl">
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 热点话题卡片 1 结束 -->
+<!-- 热点话题卡片 2 开始 -->
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             【小会】06 读书讨论：求知欲、作品三观与《遥远的救世主》
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             05-27 20:45 - 22:30
                         </span>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             昍：#提问 问题一 你好uu，谢谢你拉我进这个群...
                         </p>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">求知欲</span>
-                            <span class="tag-item">读书性价比</span>
-                            <span class="tag-item">三观判断</span>
-                            <span class="tag-item">遥远的救世主</span>
-                            <span class="tag-item">豆豆三部曲</span>
-                            <span class="tag-item">阶级视角</span>
-                            <span class="tag-item">作品分析</span>
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <p class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">求知欲</span>
+<span class="tag-item">读书性价比</span>
+<span class="tag-item">三观判断</span>
+<span class="tag-item">遥远的救世主</span>
+<span class="tag-item">豆豆三部曲</span>
+<span class="tag-item">阶级视角</span>
+<span class="tag-item">作品分析</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<p class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
                             群内就如何提升求知欲、平衡学习知识的“性价比”以及如何判断作品或作者的“三观”等问题展开了热烈讨论。<b>昍</b>引导大家以豆豆的小说《遥远的救世主》中“丁元英与刘冰”的情节为例，深入探讨了作者立场、作品叙事与读者解读之间的复杂关系。讨论强调了从兴趣出发、通过输出形成正反馈、运用阶级分析视角以及警惕作品中潜在叙事陷阱的重要性。群友们还分享了各自的读书方法和感悟，并提议共读豆豆三部曲。
                         </p>
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             提升求知欲可将“求知”转化为“好奇心”或“兴趣”，通过实践、交流和输出（如分享、讨论）形成正反馈，不必过分追求功利性“性价比”。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 “求知欲”好像是一个比较让人有压力的词，换成“好奇心”、“感兴趣”会不会好一点？
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>33</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 觉得我要面对我自己的诚实，推动我看书的欲望，不是求知欲，最早的时候是因为要装逼。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>啊怿子 -</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 西方有句谚语，我觉得也是对的，「fake it until you make it」，装逼直到牛逼。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>黄云</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             面对三观存疑的作品或作者，应采取批判性思维，区分作品价值与作者立场，警惕被误导。运用阶级分析等视角有助于深入理解作品，同时阅读经典、经过检验的作品有助于建立稳固的认知框架。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 路线错了，知识越多越反动。知识本身是不存在歪不歪，知识本身是知识。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>啊怿子 -</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 分开客观事实和价值判断。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>蚂蚁窝</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 这个「遥远的救世主」它到底是在救谁呢？是在救赎「农民」，还是在救赎「精英自己」的良心？
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>昍</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                             <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             分析《遥远的救世主》等作品时，需跳出情节本身，思考作者的创作意图和作品所反映的阶级立场与社会价值观，警惕“精英视角”对“农民”等群体的刻板描绘。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 因为这是一个作者自己编出来的故事。你着相啦~
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>昍</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 永远「以阶级斗争为纲」就好了。因为人是动物，活着消耗财富，财富需要分配，永远会有阶级冲突。所以你是哪个阶级，时刻提醒自己。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>昍</b>
-                                            </p>
-                                        </div>
-                                         <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 教员为什么深刻地意识到「无政府主义」行不通？他真的参加了一个……马上就知道了。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>昍</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- 热点话题卡片 2 结束 -->
-
-                <!-- 热点话题卡片 3 开始 -->
-                <div class="bento-card p-6 rounded-xl">
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 热点话题卡片 2 结束 -->
+<!-- 热点话题卡片 3 开始 -->
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             关于入党公示期被举报恋爱作风问题的讨论
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             05-27 23:42 - 05-28 01:30 / 05-28 15:05 - 16:17
                         </span>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             昍：各位同志们好，因为是工科女生，一个我认为比较严重的问题...
                         </p>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">入党审查</span>
-                            <span class="tag-item">作风问题</span>
-                            <span class="tag-item">人际关系</span>
-                            <span class="tag-item">举报处理</span>
-                            <span class="tag-item">高校政治</span>
-                            <span class="tag-item">群众基础</span>
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <p class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">入党审查</span>
+<span class="tag-item">作风问题</span>
+<span class="tag-item">人际关系</span>
+<span class="tag-item">举报处理</span>
+<span class="tag-item">高校政治</span>
+<span class="tag-item">群众基础</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<p class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
                             群内一位女同志（研究生，工科，团支书）作为入党发展对象，被举报“恋爱作风问题”，起因是她拒绝了两名追求者A和B后，被B的室友C（党员）举报。举报内容涉及B帮其写代码，以及她与A、B的关系被视为“三角恋”。书记已找其谈话。群友们对此展开了激烈讨论，分析了举报动机、书记态度、当事人应如何应对、以及此类事件在高校环境下的复杂性。讨论强调了实事求是、争取组织信任、处理好人际关系、以及必要时采取斗争策略的重要性。<b>昍</b>也提醒大家要跳出当事人叙事，进行多角度思考。
                         </p>
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             面对不实举报，应冷静分析，实事求是向组织说明情况，争取辅导员、导师等关键人物的支持，并注意人际界限，必要时进行自我批评，同时保持斗争精神。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 所谓的谈话，我猜测更多的是看看当事人的精神面貌...你表现好，举报就成假的了，表现得不好，可能假的也成真的了。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>飞扬大学生</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 你把一个人从位置上拉下来，需要证据。阻碍一个人到位置上去，一两句话就够了。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>高大壮太天真</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 大部分同志仍然做不到这样全面思考，而是上来就会假定「提问者说的是真的」。这是需要改进的地方。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>昍</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- 热点话题卡片 3 结束 -->
-
-                <!-- 热点话题卡片 4 开始 -->
-                <div class="bento-card p-6 rounded-xl">
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 热点话题卡片 3 结束 -->
+<!-- 热点话题卡片 4 开始 -->
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             捡到手机是否应索要报酬及相关法律与人情讨论
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             05-28 11:03 - 11:23
                         </span>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                            飞扬大学生：[语音]（内容关于出租车司机捡到手机算侵占，乘客捡算盗窃）
                         </p>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">失物招领</span>
-                            <span class="tag-item">拾金不昧</span>
-                            <span class="tag-item">索要报酬</span>
-                            <span class="tag-item">法律责任</span>
-                            <span class="tag-item">民法典</span>
-                            <span class="tag-item">人情世故</span>
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <p class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">失物招领</span>
+<span class="tag-item">拾金不昧</span>
+<span class="tag-item">索要报酬</span>
+<span class="tag-item">法律责任</span>
+<span class="tag-item">民法典</span>
+<span class="tag-item">人情世故</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<p class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
                             群内讨论了大学生将手机遗落在操场，被清洁工阿姨捡到后索要200元感谢费的事件。由此延伸探讨了捡到遗失物品（特别是手机）后，是否应该归还、能否索要报酬、以及相关的法律责任（如侵占、不当得利、无因管理）和人情世故。<b>飞扬大学生</b>从法律角度进行了解释，<b>桃乐丝</b>等群友也分享了现实处理经验。大家普遍认为，虽然归还是义务，但适当给予感谢费是合乎情理的，尤其考虑到手机内重要信息的价值。
                         </p>
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             捡到他人遗失物品，法律上存在归还义务。拾得人可要求失主支付保管等必要费用，但索要高额报酬可能涉及法律问题。现实中，失主应积极协商，适当感谢，避免财物进一步损失。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 出租车上如果是司机把你上一个乘客遗失的手机捡走了，这就不算盗窃，算侵占。如果是下一个乘客来把你捡的手机捡走了，这就是盗窃。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>飞扬大学生</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 宝宝们还停留在“这个世界不应该是这样的”，但是这个世界它确实就是这样的。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>桃乐丝</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 冲这大妈没扣卡没关机，就不是贼且还保管得挺好。要不是大妈，手机大概率真没了。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>高大壮太天真</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- 热点话题卡片 4 结束 -->
-            </div>
-        </section>
-        <!-- === 模块二：火花碰撞时刻・热点话题 结束 === -->
-
-        <!-- === 模块三：解惑一点通・有问必答 开始 === -->
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 热点话题卡片 4 结束 -->
+</div>
+</section>
+<!-- === 模块二：火花碰撞时刻・热点话题 结束 === -->
+<!-- === 模块三：解惑一点通・有问必答 开始 === -->
+<section class="w-full mb-12 anchor-target" id="section-qa">
+<h2 class="section-title">
                 三、解惑一点通・有问必答
             </h2>
-            <div class="space-y-8">
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
-                    <div class="mb-4">
-                        <h4 class="text-xl font-semibold text-black flex items-center">
-                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+<div class="space-y-8">
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<div class="mb-4">
+<h4 class="text-xl font-semibold text-black flex items-center">
+<i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
                             "我我我"的字源与含义是什么？
                         </h4>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             昍：这个想到一个段子……就是「我我我」
                         </p>
-                    </div>
-                    <div class="border-t border-gray-200 pt-4">
-                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
-                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+</div>
+<div class="border-t border-gray-200 pt-4">
+<h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+<i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
                             解答
                         </h5>
-                        <p class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
-                            <b>昍</b>分享了一个关于“我”字来源的段子：<b>“我”的本意是一种有三个齿的“戈”</b>。商军普遍用“我”杀敌，使“我”有了“杀人”的动词义。后因以“用我杀人”为荣，“我”引申出“我自己”的意思。因此，“我我我”可以戏解为<b>“是我用我杀了我”</b>。
+<p class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+<b>昍</b>分享了一个关于“我”字来源的段子：<b>“我”的本意是一种有三个齿的“戈”</b>。商军普遍用“我”杀敌，使“我”有了“杀人”的动词义。后因以“用我杀人”为荣，“我”引申出“我自己”的意思。因此，“我我我”可以戏解为<b>“是我用我杀了我”</b>。
                         </p>
-                    </div>
-                    <div class="mt-5 pt-4 border-t border-gray-200">
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">字源学</span>
-                            <span class="tag-item">汉字趣闻</span>
-                            <span class="tag-item">我字</span>
-                            <span class="tag-item">语言文化</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
-                    <div class="mb-4">
-                        <h4 class="text-xl font-semibold text-black flex items-center">
-                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+</div>
+<div class="mt-5 pt-4 border-t border-gray-200">
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">字源学</span>
+<span class="tag-item">汉字趣闻</span>
+<span class="tag-item">我字</span>
+<span class="tag-item">语言文化</span>
+</div>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<div class="mb-4">
+<h4 class="text-xl font-semibold text-black flex items-center">
+<i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
                             如何增强平凡故事（如道德模范宣讲稿）的感染力，AI如何辅助？
                         </h4>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             嘻嘻呀嘿：同志们，我是一名西部计划志愿者...想增强平凡故事的感染力...想问问大家有没有建议！
                         </p>
-                    </div>
-                    <div class="border-t border-gray-200 pt-4">
-                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
-                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+</div>
+<div class="border-t border-gray-200 pt-4">
+<h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+<i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
                             解答
                         </h5>
-                        <p class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
-                            群友们针对“嘻嘻呀嘿”提出的问题，给出了多方面建议：<br>1. <b>突出党性与核心价值</b>：如“高大壮”所言，在宣传党员事迹时，应强调其党员身份和党性光辉，使其行为超越个人情感（如愚孝），升华为“为人民服务”的体现。<br>2. <b>运用白描和细节</b>：“黄云”和“啊怿子 -”等建议多用动词、名词刻画具体场景和人物行为，减少空泛形容词，通过真实细节引发共鸣。例如，描写人物在困境中的具体动作、神态，而非简单陈述情感。<br>3. <b>增强叙事技巧</b>：可运用多视角叙事、设置情感高潮、内心活动描写等手法增强故事张力。避免平铺直叙，注重故事的起承转合和矛盾冲突。<br>4. <b>AI辅助的正确姿势</b>：“啊怿子 -”和“Yùlín”分享了与AI协作的经验，指出AI可以辅助润色、提供结构建议，但核心的情感挖掘和细节补充仍需人为完成。提问者需要学会向AI清晰地表达需求，并对AI生成内容进行批判性筛选和修改。<b>DS（DeepSeek）的AI回答示例也强调了从情感颗粒度、叙事节奏、感官唤醒等方面入手。</b><br>5. <b>实事求是与换位思考</b>：宣传内容要经得起推敲，预想可能的“翻车点”并提前布防。同时要换位思考，考虑受众的接受心理。
+<p class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+                            群友们针对“嘻嘻呀嘿”提出的问题，给出了多方面建议：<br/>1. <b>突出党性与核心价值</b>：如“高大壮”所言，在宣传党员事迹时，应强调其党员身份和党性光辉，使其行为超越个人情感（如愚孝），升华为“为人民服务”的体现。<br/>2. <b>运用白描和细节</b>：“黄云”和“啊怿子 -”等建议多用动词、名词刻画具体场景和人物行为，减少空泛形容词，通过真实细节引发共鸣。例如，描写人物在困境中的具体动作、神态，而非简单陈述情感。<br/>3. <b>增强叙事技巧</b>：可运用多视角叙事、设置情感高潮、内心活动描写等手法增强故事张力。避免平铺直叙，注重故事的起承转合和矛盾冲突。<br/>4. <b>AI辅助的正确姿势</b>：“啊怿子 -”和“Yùlín”分享了与AI协作的经验，指出AI可以辅助润色、提供结构建议，但核心的情感挖掘和细节补充仍需人为完成。提问者需要学会向AI清晰地表达需求，并对AI生成内容进行批判性筛选和修改。<b>DS（DeepSeek）的AI回答示例也强调了从情感颗粒度、叙事节奏、感官唤醒等方面入手。</b><br/>5. <b>实事求是与换位思考</b>：宣传内容要经得起推敲，预想可能的“翻车点”并提前布防。同时要换位思考，考虑受众的接受心理。
                         </p>
-                    </div>
-                    <div class="mt-5 pt-4 border-t border-gray-200">
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">写作技巧</span>
-                            <span class="tag-item">故事感染力</span>
-                            <span class="tag-item">AI辅助写作</span>
-                            <span class="tag-item">宣传报道</span>
-                            <span class="tag-item">白描手法</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- === 模块三：解惑一点通・有问必答 结束 === -->
-
-        <!-- === 模块四：智慧火花匣・每日精选 开始 === -->
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+</div>
+<div class="mt-5 pt-4 border-t border-gray-200">
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">写作技巧</span>
+<span class="tag-item">故事感染力</span>
+<span class="tag-item">AI辅助写作</span>
+<span class="tag-item">宣传报道</span>
+<span class="tag-item">白描手法</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- === 模块三：解惑一点通・有问必答 结束 === -->
+<!-- === 模块四：智慧火花匣・每日精选 开始 === -->
+<section class="w-full mb-12 anchor-target" id="section-daily-picks">
+<h2 class="section-title">
                 四、智慧火花匣・每日精选
             </h2>
-            <div class="space-y-8">
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
-                    <h4 class="text-xl font-semibold text-black mb-3">
+<div class="space-y-8">
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<h4 class="text-xl font-semibold text-black mb-3">
                         宣传稿件写作技巧及AI辅助应用讨论汇总
                     </h4>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             嘻嘻呀嘿：如何增强平凡故事的感染力及AI的辅助应用（以"黑曼稿子"为例）的汇总
                         </p>
-                    </div>
-                    <p class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+</div>
+<p class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
                         成员“嘻嘻呀嘿”整理并分享了群内关于“如何增强平凡故事的感染力及AI的辅助应用”的讨论，以“黑曼稿子”为例。内容涵盖了突出党性、运用白描手法、增加细节描写、利用AI进行润色和结构优化等多个方面。<b>昍</b>对该汇总表示赞赏并进行了备份。该讨论为提升宣传文稿质量提供了宝贵思路。
                     </p>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="tag-item">写作技巧</span>
-                        <span class="tag-item">宣传文案</span>
-                        <span class="tag-item">AI应用</span>
-                        <span class="tag-item">内容创作</span>
-                        <span class="tag-item">群聊智慧</span>
-                    </div>
-                    <div class="flex justify-end">
-                        <a href="https://bbs.lavayou.cn/t/topic/457" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-[#4D6BFE] hover:text-blue-700 hover:underline flex items-center">
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="tag-item">写作技巧</span>
+<span class="tag-item">宣传文案</span>
+<span class="tag-item">AI应用</span>
+<span class="tag-item">内容创作</span>
+<span class="tag-item">群聊智慧</span>
+</div>
+<div class="flex justify-end">
+<a class="text-sm font-medium text-[#4D6BFE] hover:text-blue-700 hover:underline flex items-center" href="https://bbs.lavayou.cn/t/topic/457" rel="noopener noreferrer" target="_blank">
                             查看篝火备份
                             <i class="fas fa-external-link-alt ml-1.5 text-xs"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
-                    <h4 class="text-xl font-semibold text-black mb-3">
+</a>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<h4 class="text-xl font-semibold text-black mb-3">
                         盗版游戏资源网站分享与讨论
                     </h4>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             Starlight：好奇问一句，盗版的怎么下载
                         </p>
-                    </div>
-                    <p class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+</div>
+<p class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
                         由Starlight的提问引发，群内成员分享了多个获取盗版游戏的网站，包括<b>昍</b>分享的 `byrutgame.org` (俄罗斯共产游戏网站)，<b>ᴾᴿᴮ🎶</b>分享的 `gamer520.com` (中文站)，以及<b>学前班校霸（男的）</b>和<b>Yùlín</b>提及的 `RuTracker.org`。讨论中还提及了“正版游戏受害者”问题和“先玩盗版，体验后再补票正版”的个人习惯。
                     </p>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="tag-item">游戏资源</span>
-                        <span class="tag-item">盗版游戏</span>
-                        <span class="tag-item">网站分享</span>
-                        <span class="tag-item">数字生活</span>
-                        <span class="tag-item">资源共享</span>
-                    </div>
-                </div>
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
-                    <h4 class="text-xl font-semibold text-black mb-3">
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">游戏资源</span>
+<span class="tag-item">盗版游戏</span>
+<span class="tag-item">网站分享</span>
+<span class="tag-item">数字生活</span>
+<span class="tag-item">资源共享</span>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<h4 class="text-xl font-semibold text-black mb-3">
                         微信读书批量导入群文件技巧
                     </h4>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             扶疏：插个题外话，有想找书的同志，如果有微信阅读，直接进它那个书架——导入，选择本群...
                         </p>
-                    </div>
-                    <p class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+</div>
+<p class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
                         成员“扶疏”分享了一个非常实用的微信读书使用技巧：用户可以通过微信读书APP内的“书架”找到“导入”功能，然后选择本微信群聊，即可浏览并选择群文件中分享过的电子书（如epub格式），实现批量导入。这一技巧大大方便了群友们整理和阅读群内分享的书籍资源。<b>昍</b>将此消息置顶，认为对大家有帮助。
                     </p>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="tag-item">微信读书</span>
-                        <span class="tag-item">阅读技巧</span>
-                        <span class="tag-item">文件管理</span>
-                        <span class="tag-item">效率工具</span>
-                        <span class="tag-item">实用技巧</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- === 模块四：智慧火花匣・每日精选 结束 === -->
-
-        <!-- === 文件底部 开始 === -->
-        <footer class="w-full mt-16">
-            <div class="bento-card p-8">
-                <div class="text-center text-gray-700 space-y-3">
-                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-base">
-                        <div class="flex items-center">
-                            <i class="fas fa-database mr-2 text-[#4D6BFE]"></i>
-                            <span>微信群聊记录</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-robot mr-2 text-[#4D6BFE]"></i>
-                            <span id="generation-time">2025-05-28 16:30:00</span>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-500 max-w-2xl mx-auto leading-relaxed">
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">微信读书</span>
+<span class="tag-item">阅读技巧</span>
+<span class="tag-item">文件管理</span>
+<span class="tag-item">效率工具</span>
+<span class="tag-item">实用技巧</span>
+</div>
+</div>
+</div>
+</section>
+<!-- === 模块四：智慧火花匣・每日精选 结束 === -->
+<!-- === 文件底部 开始 === -->
+<nav class="w-full mt-12 daily-nav">
+<div class="bento-card p-4">
+<div class="flex justify-between items-center">
+<button class="nav-button day-nav-prev" type="button">
+<i class="fas fa-chevron-left"></i>
+                        上一天
+                    </button>
+<div class="text-center">
+<span class="text-sm text-gray-600">日报导航</span>
+</div>
+<button class="nav-button day-nav-next" type="button">
+                        下一天
+                        <i class="fas fa-chevron-right"></i>
+</button>
+</div>
+</div>
+</nav><footer class="w-full mt-16">
+<div class="bento-card p-8">
+<div class="text-center text-gray-700 space-y-3">
+<div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-base">
+<div class="flex items-center">
+<i class="fas fa-database mr-2 text-[#4D6BFE]"></i>
+<span>微信群聊记录</span>
+</div>
+<div class="flex items-center">
+<i class="fas fa-robot mr-2 text-[#4D6BFE]"></i>
+<span id="generation-time">2025-05-28 16:30:00</span>
+</div>
+</div>
+<p class="text-sm text-gray-500 max-w-2xl mx-auto leading-relaxed">
                         本报告基于群聊数据自动生成，仅供参考。内容可能包含个人观点，不代表群组官方立场。数据处理过程中已尽量匿名化处理敏感信息。
                     </p>
-                </div>
-            </div>
-        </footer>
-        <!-- === 文件底部 结束 === -->
-    </div>
-
-    <script>
+</div>
+</div>
+</footer>
+<!-- === 文件底部 结束 === -->
+</div><div aria-label="页面快捷操作" class="floating-actions">
+<div class="directory-wrapper">
+<button aria-controls="directory-panel" aria-expanded="false" aria-label="打开内容导航" class="floating-button" id="directory-toggle" type="button">
+<i class="fas fa-list-ul"></i>
+</button>
+<div aria-hidden="true" aria-modal="false" class="directory-panel" id="directory-panel" role="dialog">
+<div class="directory-header">
+<span class="directory-title">内容导航</span>
+<button aria-label="关闭内容导航" class="directory-close" id="directory-close" type="button">
+<i class="fas fa-times"></i>
+</button>
+</div>
+<div class="directory-list" id="directory-list">
+<!-- HTML注释: 目录列表由脚本自动填充，确保多层级锚点保持同步 -->
+</div>
+</div>
+</div>
+<button aria-label="返回顶部" class="floating-button floating-button--hidden" id="scroll-top-btn" type="button">
+<i class="fas fa-arrow-up"></i>
+</button>
+</div>
+<script>
+        // 定义基础URL常量
+        const BASE_URL = 'https://xinjian-bot.github.io/-';
+        
         document.addEventListener('DOMContentLoaded', function() {
             // Bento card hover effect is handled by CSS :hover pseudo-class
 
@@ -803,12 +1079,6 @@
                 const finalValue = parseInt(finalValueText, 10);
 
                 if (isNaN(finalValue)) return;
-                
-                // If finalValue is 0, set it directly and skip animation
-                if (finalValue === 0) {
-                    element.textContent = '0';
-                    return;
-                }
 
                 let currentValue = 0;
                 const duration = 1500; // Animation duration in ms
@@ -829,22 +1099,21 @@
                     element.textContent = Math.floor(currentValue).toLocaleString('en-US');
                 }, frameRate);
             });
-            
-            // Update generation time
-            const generationTimeElement = document.getElementById('generation-time');
-            if (generationTimeElement) {
-                const now = new Date();
-                const year = now.getFullYear();
-                const month = String(now.getMonth() + 1).padStart(2, '0');
-                const day = String(now.getDate()).padStart(2, '0');
-                const hours = String(now.getHours()).padStart(2, '0');
-                const minutes = String(now.getMinutes()).padStart(2, '0');
-                const seconds = String(now.getSeconds()).padStart(2, '0');
-                generationTimeElement.textContent = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-            }
 
             // HTML注释: 初始化日报导航功能
             initDailyNavigation();
+
+            // HTML注释: 初始化展开功能
+            initExpandableContent();
+
+            // HTML注释: 初始化浮动按钮与目录互动
+            initFloatingActions();
+            
+            // 初始化历史汇总链接
+            const historyLink = document.getElementById('history-link');
+            if (historyLink) {
+                historyLink.href = BASE_URL + '/新茧历史日报汇总.html';
+            }
         });
 
         // HTML注释: 这个函数实现了日报间的导航功能，包括：
@@ -858,11 +1127,6 @@
                 const currentDate = getCurrentDateFromPage();
                 if (!currentDate) {
                     console.warn('无法从页面中提取日期信息');
-                    // Disable both buttons if date cannot be determined
-                    const prevButton = document.getElementById('prev-day');
-                    const nextButton = document.getElementById('next-day');
-                    if(prevButton) prevButton.disabled = true;
-                    if(nextButton) nextButton.disabled = true;
                     return;
                 }
 
@@ -881,73 +1145,44 @@
             const dateElement = document.getElementById('report-date');
             if (dateElement) {
                 const dateText = dateElement.textContent;
-                // Try YYYY年MM月DD日 format
-                let dateMatch = dateText.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
+                const dateMatch = dateText.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
                 if (dateMatch) {
                     const year = dateMatch[1];
                     const month = dateMatch[2].padStart(2, '0');
                     const day = dateMatch[3].padStart(2, '0');
                     return `${year}-${month}-${day}`;
                 }
-                // Try YYYY-MM-DD format
-                dateMatch = dateText.match(/(\d{4})-(\d{2})-(\d{2})/);
-                 if (dateMatch) {
-                    return dateText; // Already in YYYY-MM-DD
-                }
             }
 
             // HTML注释: 方法2：从URL文件名中提取日期
             const pathname = window.location.pathname;
-            // Regex to match 新茧群日报_YYYY-MM-DD.html or 新茧日报 YYYY-MM-DD.html
-            const filenameMatch = pathname.match(/新茧群日报[_-](\d{4}-\d{2}-\d{2})\.html/);
+            const filenameMatch = pathname.match(/新茧群日报_(\d{4}-\d{2}-\d{2})\.html/);
             if (filenameMatch) {
                 return filenameMatch[1];
             }
-            
+
             // HTML注释: 方法3：从页面标题中提取日期
-            // Regex to match 新茧日报 YYYY-MM-DD or similar patterns
             const titleMatch = document.title.match(/(\d{4}-\d{2}-\d{2})/);
             if (titleMatch) {
                 return titleMatch[1];
             }
-            
-            // Fallback for cases like "新茧日报-YYYYMMDD" or "新茧日报_YYYYMMDD"
-            const altFilenameMatch = pathname.match(/新茧群日报[_-](\d{4})(\d{2})(\d{2})\.html/);
-            if (altFilenameMatch) {
-                return `${altFilenameMatch[1]}-${altFilenameMatch[2]}-${altFilenameMatch[3]}`;
-            }
-            const altTitleMatch = document.title.match(/(\d{4})(\d{2})(\d{2})/);
-            if (altTitleMatch) {
-                 return `${altTitleMatch[1]}-${altTitleMatch[2]}-${altTitleMatch[3]}`;
-            }
 
-            console.warn("Could not extract date from report-date element, URL, or title.");
             return null;
         }
 
         // HTML注释: 设置导航按钮的状态和链接
          // HTML注释: 根据当前日期，检查前后日期的日报文件是否存在
-         async function setupNavigationButtons(currentDateString) {
-             const prevButton = document.getElementById('prev-day');
-             const nextButton = document.getElementById('next-day');
-             const navContainer = document.querySelector('nav');
+         async function setupNavigationButtons(currentDate) {
+             const prevButtons = document.querySelectorAll('.day-nav-prev');
+             const nextButtons = document.querySelectorAll('.day-nav-next');
+             const navContainers = document.querySelectorAll('.daily-nav');
 
-             if (!prevButton || !nextButton || !navContainer) {
-                console.error("Navigation buttons or container not found.");
-                return;
+             if (!prevButtons.length && !nextButtons.length) {
+                 return;
              }
              
              // HTML注释: 计算前一天和后一天的日期
-             const [year, month, day] = currentDateString.split('-').map(Number);
-             const currentDateObj = new Date(year, month - 1, day); // Month is 0-indexed in JS Date
-
-             if (isNaN(currentDateObj.getTime())) {
-                console.error("Invalid current date object:", currentDateString);
-                prevButton.disabled = true;
-                nextButton.disabled = true;
-                return;
-            }
-             
+             const currentDateObj = new Date(currentDate);
              const prevDateObj = new Date(currentDateObj);
              prevDateObj.setDate(prevDateObj.getDate() - 1);
              const nextDateObj = new Date(currentDateObj);
@@ -960,74 +1195,320 @@
              const prevExists = await checkReportExists(prevDate);
              const nextExists = await checkReportExists(nextDate);
              
-             // HTML注释: 如果前后日期的日报都不存在，隐藏整个导航栏容器
+             // HTML注释: 如果前后日期的日报都不存在，隐藏所有导航栏容器
              if (!prevExists && !nextExists) {
-                 navContainer.style.display = 'none';
+                 navContainers.forEach(container => {
+                     container.style.display = 'none';
+                 });
                  return;
              }
              
-             // HTML注释: 显示导航栏容器
-             navContainer.style.display = 'block';
+             // HTML注释: 显示所有导航栏容器
+             navContainers.forEach(container => {
+                 container.style.display = 'block';
+             });
              
              // HTML注释: 设置前一天按钮
-             if (prevExists) {
-                 prevButton.onclick = () => {
-                     window.location.href = `https://xinjian-bot.github.io/-/新茧群日报_${prevDate}.html`;
-                 };
-                 prevButton.disabled = false;
-             } else {
-                 prevButton.disabled = true;
-                 prevButton.onclick = null;
-             }
+             prevButtons.forEach(button => {
+                 if (prevExists) {
+                     button.disabled = false;
+                     button.onclick = () => {
+                         window.location.href = `${BASE_URL}/新茧群日报_${prevDate}.html`;
+                     };
+                 } else {
+                     button.disabled = true;
+                     button.onclick = null;
+                 }
+             });
 
              // HTML注释: 设置后一天按钮
-             if (nextExists) {
-                 nextButton.onclick = () => {
-                     window.location.href = `https://xinjian-bot.github.io/-/新茧群日报_${nextDate}.html`;
-                 };
-                 nextButton.disabled = false;
-             } else {
-                 // HTML注释: 后一天的日报不存在，禁用"下一天"按钮
-                 nextButton.disabled = true;
-                 nextButton.onclick = null;
-             }
+             nextButtons.forEach(button => {
+                 if (nextExists) {
+                     button.disabled = false;
+                     button.onclick = () => {
+                         window.location.href = `${BASE_URL}/新茧群日报_${nextDate}.html`;
+                     };
+                 } else {
+                     button.disabled = true;
+                     button.onclick = null;
+                 }
+             });
          }
 
         // HTML注释: 检查指定日期的日报文件是否存在
         async function checkReportExists(date) {
-            if (!date || typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-                console.error("Invalid date format for checkReportExists:", date);
-                return false;
-            }
             try {
-                // Check for primary naming convention: 新茧群日报_YYYY-MM-DD.html
-                let response = await fetch(`https://xinjian-bot.github.io/-/新茧群日报_${date}.html`, { method: 'HEAD' });
-                if (response.ok) return true;
-
-                // Check for alternative naming convention (older): 新茧日报 YYYY-MM-DD.html (space instead of underscore)
-                // This might require URL encoding for the space, or the server handles it.
-                // For simplicity, assuming the primary GitHub Pages deployment uses underscores or hyphens.
-                // If older files use spaces, this check might need adjustment or the server needs to correctly serve those.
-                // Given the template links, the underscore format is the target.
-
-                return false;
+                const response = await fetch(`${BASE_URL}/新茧群日报_${date}.html`, { method: 'HEAD' });
+                return response.ok;
             } catch (error) {
-                // console.warn(`Error checking for report ${date}:`, error); // Can be noisy
                 return false;
             }
         }
 
         // HTML注释: 格式化日期为YYYY-MM-DD格式
         function formatDate(date) {
-            if (!(date instanceof Date) || isNaN(date.getTime())) {
-                console.error("Invalid date object passed to formatDate:", date);
-                // Return a value that won't match typical date patterns to avoid errors
-                return "invalid-date"; 
-            }
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const day = String(date.getDate()).padStart(2, '0');
             return `${year}-${month}-${day}`;
+        }
+
+        // HTML注释: 初始化展开功能
+        function initExpandableContent() {
+            const expandableContents = document.querySelectorAll('.expandable-content');
+            
+            expandableContents.forEach(container => {
+                const charLimit = parseInt(container.getAttribute('data-char-limit')) || 200;
+                const contentPreview = container.querySelector('.content-preview');
+                const expandBtn = container.querySelector('.expand-btn');
+                
+                if (!contentPreview || !expandBtn) return;
+                
+                const fullContent = contentPreview.innerHTML;
+                const fullText = contentPreview.textContent || contentPreview.innerText;
+                
+                // HTML注释: 如果内容长度超过限制，则显示展开按钮
+                if (fullText.length > charLimit) {
+                    // HTML注释: 创建一个临时元素来正确截取HTML内容
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = fullContent;
+                    
+                    // HTML注释: 截取文本内容到指定长度
+                    const truncatedText = fullText.substring(0, charLimit);
+                    
+                    // HTML注释: 使用更简单可靠的方法截取内容
+                    let truncatedContent = '';
+                    let charCount = 0;
+                    
+                    // HTML注释: 逐字符遍历，保持简单的HTML结构
+                    const walker = document.createTreeWalker(
+                        tempDiv,
+                        NodeFilter.SHOW_TEXT,
+                        null,
+                        false
+                    );
+                    
+                    let node;
+                    const textNodes = [];
+                    while (node = walker.nextNode()) {
+                        textNodes.push(node);
+                    }
+                    
+                    // HTML注释: 计算需要保留的文本内容
+                    for (let textNode of textNodes) {
+                        const text = textNode.textContent;
+                        if (charCount + text.length <= charLimit) {
+                            charCount += text.length;
+                        } else {
+                            const remainingChars = charLimit - charCount;
+                            textNode.textContent = text.substring(0, remainingChars) + '...';
+                            charCount = charLimit;
+                            
+                            // HTML注释: 新的、更干净的移除后续所有节点的逻辑
+                            let currentNodeToClearAfter = textNode;
+                            while (currentNodeToClearAfter && currentNodeToClearAfter !== tempDiv) {
+                                let sibling = currentNodeToClearAfter.nextSibling;
+                                while (sibling) {
+                                    const nodeToRemove = sibling;
+                                    sibling = sibling.nextSibling;
+                                    nodeToRemove.remove();
+                                }
+                                currentNodeToClearAfter = currentNodeToClearAfter.parentElement;
+                            }
+                            break; // 完成截断和清理，跳出 textNodes 循环
+                        }
+                    }
+                    
+                    const previewContent = tempDiv.innerHTML;
+                    
+                    contentPreview.innerHTML = previewContent;
+                    contentPreview.classList.add('collapsed');
+                    expandBtn.style.display = 'flex';
+                    
+                    // HTML注释: 绑定展开/收起事件
+                    expandBtn.addEventListener('click', function() {
+                        const isExpanded = expandBtn.classList.contains('expanded');
+                        
+                        if (isExpanded) {
+                            // HTML注释: 收起内容
+                            contentPreview.innerHTML = previewContent;
+                            contentPreview.classList.add('collapsed');
+                            expandBtn.querySelector('.expand-text').textContent = '展开全文';
+                            expandBtn.classList.remove('expanded');
+                        } else {
+                            // HTML注释: 展开内容
+                            contentPreview.innerHTML = fullContent;
+                            contentPreview.classList.remove('collapsed');
+                            expandBtn.querySelector('.expand-text').textContent = '收起';
+                            expandBtn.classList.add('expanded');
+                        }
+                    });
+                } else {
+                    // HTML注释: 内容较短，隐藏展开按钮
+                    expandBtn.style.display = 'none';
+                }
+            });
+        }
+
+        // HTML注释: 构建目录，统一扫描模块及其子卡片生成锚点
+        function buildDirectory(panelElement) {
+            const listElement = panelElement.querySelector('#directory-list');
+            if (!listElement) {
+                return;
+            }
+
+            listElement.innerHTML = '';
+
+            const directoryConfigs = [
+                { id: 'section-overview', icon: 'fa-chart-column' },
+                { id: 'section-hot-topics', icon: 'fa-fire' },
+                { id: 'section-meeting', icon: 'fa-users' },
+                { id: 'section-qa', icon: 'fa-circle-question' },
+                { id: 'section-daily-picks', icon: 'fa-lightbulb' }
+            ];
+
+            directoryConfigs.forEach((config) => {
+                const sectionElement = document.getElementById(config.id);
+                if (!sectionElement) {
+                    return;
+                }
+
+                const sectionTitleElement = sectionElement.querySelector('.section-title');
+                const sectionTitle = sectionTitleElement ? sectionTitleElement.textContent.trim() : config.id;
+
+                const itemWrapper = document.createElement('div');
+                itemWrapper.className = 'directory-item';
+
+                const entryButton = document.createElement('button');
+                entryButton.type = 'button';
+                entryButton.className = 'directory-entry';
+                entryButton.setAttribute('data-target', config.id);
+                entryButton.innerHTML = `<span class="directory-icon"><i class="fas ${config.icon}"></i></span><span class="directory-text">${sectionTitle}</span>`;
+                itemWrapper.appendChild(entryButton);
+
+                const subHeadings = sectionElement.querySelectorAll('.bento-card h4');
+                if (subHeadings.length > 0) {
+                    const sublistElement = document.createElement('div');
+                    sublistElement.className = 'directory-sublist';
+
+                    subHeadings.forEach((heading, index) => {
+                        const cardElement = heading.closest('.bento-card');
+                        if (!cardElement) {
+                            return;
+                        }
+
+                        if (!cardElement.classList.contains('anchor-target')) {
+                            cardElement.classList.add('anchor-target');
+                        }
+
+                        if (!cardElement.id) {
+                            cardElement.id = `${config.id}-item-${index + 1}`;
+                        }
+
+                        const subButton = document.createElement('button');
+                        subButton.type = 'button';
+                        subButton.className = 'directory-subitem';
+                        subButton.setAttribute('data-target', cardElement.id);
+                        subButton.innerHTML = `<span class="directory-text">${heading.textContent.trim()}</span>`;
+                        sublistElement.appendChild(subButton);
+                    });
+
+                    itemWrapper.appendChild(sublistElement);
+                }
+
+                listElement.appendChild(itemWrapper);
+            });
+        }
+
+        // HTML注释: 初始化浮动按钮与目录交互
+        function initFloatingActions() {
+            const scrollTopBtn = document.getElementById('scroll-top-btn');
+            const directoryToggle = document.getElementById('directory-toggle');
+            const directoryPanel = document.getElementById('directory-panel');
+            const directoryClose = document.getElementById('directory-close');
+
+            if (scrollTopBtn) {
+                const toggleScrollButton = () => {
+                    if (window.scrollY > 240) {
+                        scrollTopBtn.classList.remove('floating-button--hidden');
+                    } else {
+                        scrollTopBtn.classList.add('floating-button--hidden');
+                    }
+                };
+
+                toggleScrollButton();
+                window.addEventListener('scroll', toggleScrollButton, { passive: true });
+
+                scrollTopBtn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+
+            if (!directoryPanel) {
+                return;
+            }
+
+            buildDirectory(directoryPanel);
+
+            if (!directoryToggle) {
+                return;
+            }
+
+            const closePanel = () => {
+                directoryPanel.classList.remove('open');
+                directoryToggle.setAttribute('aria-expanded', 'false');
+                directoryPanel.setAttribute('aria-hidden', 'true');
+            };
+
+            const openPanel = () => {
+                directoryPanel.classList.add('open');
+                directoryToggle.setAttribute('aria-expanded', 'true');
+                directoryPanel.setAttribute('aria-hidden', 'false');
+            };
+
+            const togglePanel = () => {
+                if (directoryPanel.classList.contains('open')) {
+                    closePanel();
+                } else {
+                    openPanel();
+                }
+            };
+
+            directoryToggle.addEventListener('click', (event) => {
+                event.stopPropagation();
+                togglePanel();
+            });
+
+            if (directoryClose) {
+                directoryClose.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    closePanel();
+                });
+            }
+
+            const directoryItems = directoryPanel.querySelectorAll('[data-target]');
+            directoryItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const targetId = item.getAttribute('data-target');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                    closePanel();
+                });
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!directoryPanel.contains(event.target) && !directoryToggle.contains(event.target)) {
+                    closePanel();
+                }
+            });
+
+            window.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closePanel();
+                }
+            });
         }
     </script>
 </body>

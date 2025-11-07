@@ -1,21 +1,22 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>新茧日报 2025-06-21</title>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6C9T7FPDT2"></script>
-    <script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>新茧日报 2024-06-21</title>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-6C9T7FPDT2"></script>
+<script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
       gtag('config', 'G-6C9T7FPDT2');
     </script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
         * {
@@ -25,6 +26,11 @@
         body {
             background-color: #ffffff;
             color: #000000;
+        }
+
+        :root {
+            --directory-main-font-size: clamp(0.85rem, 0.9vw + 0.6rem, 0.95rem);
+            --directory-sub-font-size: clamp(0.78rem, 0.75vw + 0.5rem, 0.88rem);
         }
 
         .bento-card {
@@ -129,14 +135,9 @@
             left: 0;
             right: 0;
             height: 30px;
-            background: linear-gradient(transparent, rgba(255, 255, 255, 0.9)); /* Adjusted for white background */
+            background: linear-gradient(transparent, rgba(248, 250, 252, 0.9));
             pointer-events: none;
         }
-        
-        body.dark .content-preview.collapsed::after { /* Dark mode specific gradient */
-             background: linear-gradient(transparent, rgba(17, 24, 39, 0.9)); /* bg-gray-900 equivalent */
-        }
-
 
         .expand-btn {
             transition: all 0.3s ease;
@@ -157,911 +158,1135 @@
         .expand-btn.expanded .expand-icon {
             transform: rotate(180deg);
         }
+
+        /* HTML注释: 目录锚点滚动偏移，避免标题被遮挡 */
+        .anchor-target {
+            scroll-margin-top: 120px;
+        }
+
+        .anchor-placeholder {
+            height: 0;
+        }
+
+        /* HTML注释: 右下角浮动快捷按钮区域样式 */
+        .floating-actions {
+            position: fixed;
+            right: 1.25rem;
+            bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            z-index: 50;
+        }
+
+        .floating-button {
+            background: linear-gradient(135deg, #4D6BFE 0%, #6B8BFF 100%);
+            color: #ffffff;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px -5px rgba(77, 107, 254, 0.35);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .floating-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -6px rgba(77, 107, 254, 0.45);
+        }
+
+        .floating-button:focus-visible {
+            outline: 2px solid rgba(77, 107, 254, 0.45);
+            outline-offset: 2px;
+        }
+
+        .floating-button--hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            pointer-events: none;
+        }
+
+        .directory-wrapper {
+            position: relative;
+        }
+
+        .directory-panel {
+            position: absolute;
+            right: 0;
+            bottom: 3.5rem;
+            width: 18rem;
+            background: #ffffff;
+            border: 1px solid rgba(77, 107, 254, 0.2);
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 40px -15px rgba(77, 107, 254, 0.35);
+            padding: 1rem;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            max-height: min(75vh, 30rem);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+
+        .directory-panel.open {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .directory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .directory-title {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: var(--directory-main-font-size);
+        }
+
+        .directory-close {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 9999px;
+           transition: color 0.2s ease;
+        }
+
+        .directory-close:hover {
+            color: #4D6BFE;
+        }
+
+        .directory-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .directory-list button {
+            width: 100%;
+            text-align: left;
+            background: rgba(77, 107, 254, 0.08);
+            color: #1f2937;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.55rem 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: var(--directory-main-font-size);
+        }
+
+        .directory-list button:hover {
+            background: rgba(77, 107, 254, 0.18);
+            color: #1d4ed8;
+        }
+
+        /* HTML注释: 二级导航容器样式，支持主模块与子模块层级展示 */
+        .directory-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .directory-entry {
+            background: rgba(77, 107, 254, 0.08);
+        }
+
+        .directory-sublist {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-left: 2.5rem;
+            padding-left: 0.75rem;
+            border-left: 1px solid rgba(77, 107, 254, 0.2);
+        }
+
+        .directory-subitem {
+            background: rgba(77, 107, 254, 0.04);
+            padding-top: 0.45rem;
+            padding-bottom: 0.45rem;
+            font-size: var(--directory-sub-font-size);
+        }
+
+        .directory-subitem:hover {
+            background: rgba(77, 107, 254, 0.14);
+        }
+
+        .directory-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 9999px;
+            background: rgba(77, 107, 254, 0.12);
+            color: #4D6BFE;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .directory-text {
+            flex: 1;
+            color: inherit;
+        }
+
+        @media (max-width: 640px) {
+            .floating-actions {
+                right: 0.75rem;
+                bottom: 1rem;
+            }
+
+            .directory-panel {
+                width: min(80vw, 15rem);
+                bottom: 3.25rem;
+                max-height: min(70vh, 20rem);
+            }
+            :root {
+                --directory-main-font-size: 0.8rem;
+                --directory-sub-font-size: 0.72rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-white text-black min-h-screen">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-
-        <header class="w-full mb-8">
-            <div class="bento-card p-8">
-                <div class="text-center">
-                    <h1 class="text-5xl font-black text-black mb-6">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+<header class="w-full mb-8">
+<div class="bento-card p-8">
+<div class="text-center">
+<h1 class="text-5xl font-black text-black mb-6">
                         新茧日报
                     </h1>
-                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-lg mb-4">
-                        <div class="flex items-center text-gray-700">
-                            <i class="fas fa-calendar-alt mr-2 text-[#4D6BFE]"></i>
-                            <span id="report-date">2025年06月21日</span>
-                        </div>
-                        <div class="flex items-center text-gray-700">
-                            <i class="fas fa-clock mr-2 text-[#4D6BFE]"></i>
-                            <span>03:00 - 03:00 (次日)</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-center">
-                        <a href="https://xinjian-bot.github.io/-/新茧历史日报汇总.html" class="history-link">
-                            <i class="fas fa-history"></i>
+<div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-lg mb-4">
+<div class="flex items-center text-gray-700">
+<i class="fas fa-calendar-alt mr-2 text-[#4D6BFE]"></i>
+<span id="report-date">2025年06月21日</span>
+</div>
+<div class="flex items-center text-gray-700">
+<i class="fas fa-clock mr-2 text-[#4D6BFE]"></i>
+<span>03:00 - 03:00 (次日)</span>
+</div>
+</div>
+<div class="flex justify-center">
+<a class="history-link" href="#" id="history-link">
+<i class="fas fa-history"></i>
                             新茧历史日报
                         </a>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <nav class="w-full mb-8">
-            <div class="bento-card p-4">
-                <div class="flex justify-between items-center">
-                    <button id="prev-day" class="nav-button">
-                        <i class="fas fa-chevron-left"></i>
+</div>
+</div>
+</div>
+</header>
+<nav class="w-full mb-8 daily-nav">
+<div class="bento-card p-4">
+<div class="flex justify-between items-center">
+<button class="nav-button day-nav-prev" type="button">
+<i class="fas fa-chevron-left"></i>
                         上一天
                     </button>
-                    
-                    <div class="text-center">
-                        <span class="text-sm text-gray-600">日报导航</span>
-                    </div>
-                    
-                    <button id="next-day" class="nav-button">
+<div class="text-center">
+<span class="text-sm text-gray-600">日报导航</span>
+</div>
+<button class="nav-button day-nav-next" type="button">
                         下一天
                         <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-        </nav>
-
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+</button>
+</div>
+</div>
+</nav>
+<section class="w-full mb-12 anchor-target" id="section-overview">
+<h2 class="section-title">
                 一、总消息概览
             </h2>
-            <div class="bento-card p-8 bg-gradient-to-br from-[#4D6BFE]/20 via-[#4D6BFE]/10 to-[#4D6BFE]/5 text-center rounded-2xl">
-                <div class="number-display text-[#4D6BFE]">
+<div class="bento-card p-8 bg-gradient-to-br from-[#4D6BFE]/20 via-[#4D6BFE]/10 to-[#4D6BFE]/5 text-center rounded-2xl">
+<div class="number-display text-[#4D6BFE]">
                     4362
                 </div>
-                <p class="text-xl font-semibold text-black mt-3">总消息数量</p>
-            </div>
-        </section>
-
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+<p class="text-xl font-semibold text-black mt-3">总消息数量</p>
+</div>
+</section>
+<section class="w-full mb-12 anchor-target" id="section-hot-topics">
+<h2 class="section-title">
                 二、火花碰撞时刻・热点话题
             </h2>
-            <div class="space-y-8">
-
-
-                <div class="bento-card p-6 rounded-xl">
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+<div class="space-y-8">
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             探讨改善睡眠习惯：早睡与早起的策略
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             08:21 - 09:15
                         </span>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             佳桐：「昨晚深夜群里聊好少，看来是大家都早睡了，好事啊」
                         </p>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">早睡</span>
-                            <span class="tag-item">早起</span>
-                            <span class="tag-item">睡眠习惯</span>
-                            <span class="tag-item">闹钟</span>
-                            <span class="tag-item">生物钟</span>
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、话题背景与起因</b><br><b>佳桐</b>观察到群内深夜聊天减少，认为是大家早睡的好现象，并希望大家能养成11点前睡觉的习惯。<br><br><b>二、主要观点与讨论详情</b><br><b>XTX</b>分享了个人经验，表示坚持一段时间11点前睡觉后，生物钟会自然调整，到了晚上十点半就会开始犯困，无需刻意强迫。<br><br><b>大京</b>提出了“早起倒逼早睡”的策略。他认为躺在床上强迫自己入睡反而可能更清醒，而通过设置多个闹钟（分布在不同地方，以防自己或影响他人）来强迫自己早起，持续几天后，晚上自然会提前感到困倦。<br><br><b>高大壮太天真</b>则对<b>大京</b>的策略提出了实践中的困难，他幽默地表示，这种方法在他家只会叫醒他的家人，自己尝试后反被家人责骂。<b>大京</b>风趣回应，家人打一顿后下次就能叫醒本人了。<br><br><b>四、结论与启发</b><br>讨论表明，培养早睡习惯有多种途径，包括固定入睡时间和早起倒逼，但个体差异和家庭环境可能影响策略的有效性。关键在于找到适合自己的方法并坚持。
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">早睡</span>
+<span class="tag-item">早起</span>
+<span class="tag-item">睡眠习惯</span>
+<span class="tag-item">闹钟</span>
+<span class="tag-item">生物钟</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、话题背景与起因</b><br/><b>佳桐</b>观察到群内深夜聊天减少，认为是大家早睡的好现象，并希望大家能养成11点前睡觉的习惯。<br/><br/><b>二、主要观点与讨论详情</b><br/><b>XTX</b>分享了个人经验，表示坚持一段时间11点前睡觉后，生物钟会自然调整，到了晚上十点半就会开始犯困，无需刻意强迫。<br/><br/><b>大京</b>提出了“早起倒逼早睡”的策略。他认为躺在床上强迫自己入睡反而可能更清醒，而通过设置多个闹钟（分布在不同地方，以防自己或影响他人）来强迫自己早起，持续几天后，晚上自然会提前感到困倦。<br/><br/><b>高大壮太天真</b>则对<b>大京</b>的策略提出了实践中的困难，他幽默地表示，这种方法在他家只会叫醒他的家人，自己尝试后反被家人责骂。<b>大京</b>风趣回应，家人打一顿后下次就能叫醒本人了。<br/><br/><b>四、结论与启发</b><br/>讨论表明，培养早睡习惯有多种途径，包括固定入睡时间和早起倒逼，但个体差异和家庭环境可能影响策略的有效性。关键在于找到适合自己的方法并坚持。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             培养早睡习惯可以通过坚持固定入睡时间形成自然生物钟，或通过强制早起来倒逼身体提前产生困意。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 坚持一阵子 11 点前睡觉的话，等到了十点半就开始哈欠连连了，不用刻意强迫自己早睡了哈哈
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>XTX</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 可以早起倒逼早睡。躺床上逼自己快睡着可能越来越清醒；但逼自己早起可以在不同的地方多放几个闹钟...早起几天之后，晚上犯困的就早
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>大京</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 闹钟只叫得醒我的家人
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>高大壮太天真</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bento-card p-6 rounded-xl">
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             地域对比：苏州的风景与广州的美食
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             10:47 - 10:58
                         </span>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             阿戒：「话说苏州好美啊，开始嫌弃广州了[苦涩]真的美到嗷嗷叫，怪不得下有苏杭！！！ 」
                         </p>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">苏州</span>
-                            <span class="tag-item">广州</span>
-                            <span class="tag-item">风景</span>
-                            <span class="tag-item">美食</span>
-                            <span class="tag-item">江南文化</span>
-                            <span class="tag-item">岭南文化</span>
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                   <b>一、话题背景与起因</b><br><b>阿戒</b>在群里盛赞苏州的风景之美，感叹“下有苏杭”名不虚传，并表示开始“嫌弃”广州。<br><br><b>二、主要观点与讨论详情</b><br><b>Honye</b>迅速回应，指出苏州虽然风景好，但却是“美食荒漠”，并以杭州为例，表示在杭州吃不到什么好吃的，甚至有助于减肥。<br><br><b>十二</b>表示认同<b>Honye</b>的观点，认为吃非常重要，从这点来说广州更好。她回忆在苏州吃过的面和甜口生煎包，表示不太习惯。她还点明了广州是岭南文化，苏州是江南文化，各有特色。<br><br><b>XTX</b>也认为下雨的苏州园林确实很美，并表示自己是苏州“半土著”，可以为大家推荐美食。他还提到上海目前处于梅雨季，闷热潮湿，更不适合去广州。并分享了苏州风景照。<br><br><b>阿戒</b>在听了<b>Honye</b>关于美食的说法后，幽默地表示那还是选择广州的肠粉、虾饺和白切鸡。<br><br><b>四、结论与启发</b><br>苏州以其秀丽的江南风景著称，尤其雨中园林更添意境。然而，在美食方面，部分群友认为其选择和口味可能不如以饮食闻名的广州。城市选择往往需要在风景、气候、饮食文化等多个维度间进行权衡。
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">苏州</span>
+<span class="tag-item">广州</span>
+<span class="tag-item">风景</span>
+<span class="tag-item">美食</span>
+<span class="tag-item">江南文化</span>
+<span class="tag-item">岭南文化</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、话题背景与起因</b><br/><b>阿戒</b>在群里盛赞苏州的风景之美，感叹“下有苏杭”名不虚传，并表示开始“嫌弃”广州。<br/><br/><b>二、主要观点与讨论详情</b><br/><b>Honye</b>迅速回应，指出苏州虽然风景好，但却是“美食荒漠”，并以杭州为例，表示在杭州吃不到什么好吃的，甚至有助于减肥。<br/><br/><b>十二</b>表示认同<b>Honye</b>的观点，认为吃非常重要，从这点来说广州更好。她回忆在苏州吃过的面和甜口生煎包，表示不太习惯。她还点明了广州是岭南文化，苏州是江南文化，各有特色。<br/><br/><b>XTX</b>也认为下雨的苏州园林确实很美，并表示自己是苏州“半土著”，可以为大家推荐美食。他还提到上海目前处于梅雨季，闷热潮湿，更不适合去广州。并分享了苏州风景照。<br/><br/><b>阿戒</b>在听了<b>Honye</b>关于美食的说法后，幽默地表示那还是选择广州的肠粉、虾饺和白切鸡。<br/><br/><b>四、结论与启发</b><br/>苏州以其秀丽的江南风景著称，尤其雨中园林更添意境。然而，在美食方面，部分群友认为其选择和口味可能不如以饮食闻名的广州。城市选择往往需要在风景、气候、饮食文化等多个维度间进行权衡。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             城市魅力各有侧重，苏州以风景见长，但在部分群友看来，其饮食文化的多样性和口味适应性可能不及广州。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 来了美食荒漠 饿你几天 你就受不了了 [裂开]
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>Honye</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 真的，吃非常重要这么说还是广州好
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>十二</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 在杭州唯一好处是 你不太会担心自己胖起来 因为真的难吃
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>Honye</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bento-card p-6 rounded-xl">
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             育儿经验谈：婴儿睡眠与作息规律培养
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             11:28 - 13:23
                         </span>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             🐼：「珍惜【心都化了】这个阶段。此阶段非常短暂，而后是漫长的【肺都炸了】阶段…」 (引子，实际讨论由小月半皮发起)
                         </p>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">育儿</span>
-                            <span class="tag-item">婴儿睡眠</span>
-                            <span class="tag-item">作息规律</span>
-                            <span class="tag-item">天使宝宝</span>
-                            <span class="tag-item">月嫂</span>
-                            <span class="tag-item">辅食</span>
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、话题背景与起因</b><br>由<b>🐼</b>的感慨作为引子，<b>小月半皮</b>分享了自家宝宝连续十几个小时不睡觉，导致家人（尤其是孩子父亲）精疲力尽的经历，引发了群内关于婴儿睡眠和作息问题的讨论。<br><br><b>二、主要观点与讨论详情</b><br><b>小月半皮</b>描述自家宝宝精力旺盛，白天不睡，晚上也要人陪玩，喂奶后也只能困几分钟，感觉宝宝觉太少，熬到后半夜才能睡。她提到月子里有月嫂时情况较好，可能当时主要消耗的是月嫂的精力。<br><br><b>高大壮太天真</b>则分享了自家宝宝“如意”相对好带的经验，如意睡眠较多，晚上能睡较长时间，他认为这可能得益于月嫂的专业照料，并对月嫂提供的“情绪价值”表示赞赏。他还提到朋友家的“天使宝宝”9个月大就能自主调整作息并干净进食。<br><br><b>nicoletoo</b>分享了自家孩子小时候睡眠更差的经历，并通过查阅资料，发现建立规律的“吃-玩-睡”作息周期非常有效。她建议<b>小月半皮</b>记录宝宝的作息时间，特别是犯困信号，并避免养成“吃睡”习惯。<br><br><b>宇世无争</b>也分享了自家两个孩子的差异，老大辅食难喂，老二则是什么都吃，7个月就能啃牛排，作息也较好。<br><br>群友们还讨论了婴儿哭闹的常见原因（饿、热、胀气、困等）和应对方法（如抱着转悠、虚假互动等）。<br><br><b>四、结论与启发</b><br>婴儿的睡眠模式和喂养需求个体差异巨大，没有一刀切的解决方案。建立规律的作息（如“吃-玩-睡”周期）对改善婴儿睡眠有积极作用。月嫂等专业人士的帮助以及家长给予的情绪价值对育儿过程也非常重要。家长们在育儿过程中会经历从“心都化了”到“肺都炸了”的阶段，需要耐心和智慧应对。
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">育儿</span>
+<span class="tag-item">婴儿睡眠</span>
+<span class="tag-item">作息规律</span>
+<span class="tag-item">天使宝宝</span>
+<span class="tag-item">月嫂</span>
+<span class="tag-item">辅食</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、话题背景与起因</b><br/>由<b>🐼</b>的感慨作为引子，<b>小月半皮</b>分享了自家宝宝连续十几个小时不睡觉，导致家人（尤其是孩子父亲）精疲力尽的经历，引发了群内关于婴儿睡眠和作息问题的讨论。<br/><br/><b>二、主要观点与讨论详情</b><br/><b>小月半皮</b>描述自家宝宝精力旺盛，白天不睡，晚上也要人陪玩，喂奶后也只能困几分钟，感觉宝宝觉太少，熬到后半夜才能睡。她提到月子里有月嫂时情况较好，可能当时主要消耗的是月嫂的精力。<br/><br/><b>高大壮太天真</b>则分享了自家宝宝“如意”相对好带的经验，如意睡眠较多，晚上能睡较长时间，他认为这可能得益于月嫂的专业照料，并对月嫂提供的“情绪价值”表示赞赏。他还提到朋友家的“天使宝宝”9个月大就能自主调整作息并干净进食。<br/><br/><b>nicoletoo</b>分享了自家孩子小时候睡眠更差的经历，并通过查阅资料，发现建立规律的“吃-玩-睡”作息周期非常有效。她建议<b>小月半皮</b>记录宝宝的作息时间，特别是犯困信号，并避免养成“吃睡”习惯。<br/><br/><b>宇世无争</b>也分享了自家两个孩子的差异，老大辅食难喂，老二则是什么都吃，7个月就能啃牛排，作息也较好。<br/><br/>群友们还讨论了婴儿哭闹的常见原因（饿、热、胀气、困等）和应对方法（如抱着转悠、虚假互动等）。<br/><br/><b>四、结论与启发</b><br/>婴儿的睡眠模式和喂养需求个体差异巨大，没有一刀切的解决方案。建立规律的作息（如“吃-玩-睡”周期）对改善婴儿睡眠有积极作用。月嫂等专业人士的帮助以及家长给予的情绪价值对育儿过程也非常重要。家长们在育儿过程中会经历从“心都化了”到“肺都炸了”的阶段，需要耐心和智慧应对。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             婴儿睡眠问题普遍存在，建立规律的“吃-玩-睡”作息周期是改善睡眠的关键策略之一。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 珍惜【心都化了】这个阶段。此阶段非常短暂，而后是漫长的【肺都炸了】阶段…
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>🐼</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 最后真有效的就是建立婴儿规律作息，“吃-玩-睡”建立好作息周期，做好小婴儿的作息规律，几天下来见效就很明显！
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>nicoletoo</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 月嫂太会给情绪价值了。我抱个娃也说我抱的好 我给娃洗个澡也说我洗的好
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>高大壮太天真</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             不同婴儿在睡眠时长、喂养频率及辅食接受度等方面表现出显著的个体差异，不存在统一的“天使宝宝”标准。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 如意吃完饭之后开始睡觉，睡了5个多小时才起来，醒来之后也没哭。我在那儿看着摄像头 极力想确认还活着
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>高大壮太天真</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 我家娃在肚子里面就喜欢晚上半夜开始蹦迪，出来也继续半夜蹦迪
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>小月半皮</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 老大当时我媳妇费半天劲做辅食，毛都不吃。老二就我们吃啥她吃啥，放盐之前盛出一勺给她
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>宇世无争</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bento-card p-6 rounded-xl">
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             AI工具对思维能力的影响及正确使用姿势
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             14:03 - 15:29
                         </span>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             四维空间的鱼：「[链接|MIT发了一篇争议很大的论文，主题是用多了ChatGPT（已经类似AI产品）会损伤大脑思维能力...]」
                         </p>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">AI</span>
-                            <span class="tag-item">ChatGPT</span>
-                            <span class="tag-item">思维能力</span>
-                            <span class="tag-item">学习工具</span>
-                            <span class="tag-item">生产力</span>
-                            <span class="tag-item">主动思考</span>
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、话题背景与起因</b><br><b>四维空间的鱼</b>分享了一篇MIT的论文，该论文指出过多使用ChatGPT等AI产品可能会损伤大脑思维能力，引发了群内关于AI工具使用的讨论。<br><br><b>二、主要观点与讨论详情</b><br><b>鱼皮</b>结合自身体会表示，如果在遇到疑惑时先<b>主动梳理逻辑</b>再求助于AI，记忆会更深刻；反之，若不加思考直接依赖AI，则效果甚微。他认为，是否愿意主动深入思考是关键，缺乏思考习惯的人即使没有AI也会依赖其他方式进行简单的信息搬运。<br><br><b>叽罗（请同志们鞭策我版）</b>认为这类研究容易制造焦虑，核心问题在于<b>“不用脑子会损伤大脑思维能力”</b>，而非AI工具本身。简单地生成、复制和提交任务，本身就缺乏思考过程。<br><br><b>Honye</b>对此表示赞同，并以看电影为例，指出不同人使用AI的场景和方式会导致思考深度的巨大差异。他认为，AI可以作为<b>拓展思考维度的生产力杠杆</b>，关键在于是否正确使用。<br><br><b>AA昍</b>对<b>Honye</b>的观点表示赞同，并补充道，这其实是<b>使用场景不同</b>，而非人的固定属性，同一个人在不同情境下对工具的使用方式也会不同，如同一个人既可以是行人也可以是司机。<br><br><b>四、结论与启发</b><br>群友普遍认为，AI工具本身是中性的，其对思维能力的影响主要取决于使用者的使用方式和思考习惯。主动思考、将AI作为辅助和拓展工具，而非完全依赖，是发挥其积极作用并避免潜在负面影响的关键。工具本身具有一定风险性，使用者能否识别和规避风险也是一种能力的体现。
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">AI</span>
+<span class="tag-item">ChatGPT</span>
+<span class="tag-item">思维能力</span>
+<span class="tag-item">学习工具</span>
+<span class="tag-item">生产力</span>
+<span class="tag-item">主动思考</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、话题背景与起因</b><br/><b>四维空间的鱼</b>分享了一篇MIT的论文，该论文指出过多使用ChatGPT等AI产品可能会损伤大脑思维能力，引发了群内关于AI工具使用的讨论。<br/><br/><b>二、主要观点与讨论详情</b><br/><b>鱼皮</b>结合自身体会表示，如果在遇到疑惑时先<b>主动梳理逻辑</b>再求助于AI，记忆会更深刻；反之，若不加思考直接依赖AI，则效果甚微。他认为，是否愿意主动深入思考是关键，缺乏思考习惯的人即使没有AI也会依赖其他方式进行简单的信息搬运。<br/><br/><b>叽罗（请同志们鞭策我版）</b>认为这类研究容易制造焦虑，核心问题在于<b>“不用脑子会损伤大脑思维能力”</b>，而非AI工具本身。简单地生成、复制和提交任务，本身就缺乏思考过程。<br/><br/><b>Honye</b>对此表示赞同，并以看电影为例，指出不同人使用AI的场景和方式会导致思考深度的巨大差异。他认为，AI可以作为<b>拓展思考维度的生产力杠杆</b>，关键在于是否正确使用。<br/><br/><b>AA昍</b>对<b>Honye</b>的观点表示赞同，并补充道，这其实是<b>使用场景不同</b>，而非人的固定属性，同一个人在不同情境下对工具的使用方式也会不同，如同一个人既可以是行人也可以是司机。<br/><br/><b>四、结论与启发</b><br/>群友普遍认为，AI工具本身是中性的，其对思维能力的影响主要取决于使用者的使用方式和思考习惯。主动思考、将AI作为辅助和拓展工具，而非完全依赖，是发挥其积极作用并避免潜在负面影响的关键。工具本身具有一定风险性，使用者能否识别和规避风险也是一种能力的体现。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             AI工具对思维能力的影响取决于使用者的主动思考和运用方式，而非工具本身。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 平常有什么疑惑的时候，如果先自己把逻辑捋一遍再去问AI，记忆就会很深；如果想都不想直接丢给AI的，看了也跟没看一样。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>鱼皮</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 这个研究完全可以把AI摘掉：「用多了ChatGPT（已经类似AI产品）会损伤大脑思维能力。」 X 「不用脑子会损伤大脑思维能力。」 √
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>叽罗（请同志们鞭策我版）</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 本质还是有没有把ai当生产力杠杆来正确使用。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>Honye</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                             <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             AI作为工具，其本身具有的特性和潜在风险需要使用者具备识别和规避的能力。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 工具是工具，关键还是看用的人。当然工具本身有危险性，使用者本身能不能识别和规避也是一种筛选。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>鱼皮</b>
-                                            </p>
-                                        </div>
-                                         <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                  哎，好哎！这个妙，是场景不同，而不是人——同一个人有时是行人，有时是司机嘛。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>AA昍</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bento-card p-6 rounded-xl">
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             恋爱攻略研讨：如何与有好感的异性建立关系
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             17:26 - 19:10
                         </span>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             AA昍：「想问下如何才能跟有好感的男生建立（恋爱）关系，这个问题不是很严肃，只是我没谈过恋爱，想知道类似的一些小技巧，你帮我问群里的大家也可以，但求一个匿名[握手]」
                         </p>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">恋爱技巧</span>
-                            <span class="tag-item">两性相处</span>
-                            <span class="tag-item">主动出击</span>
-                            <span class="tag-item">表白时机</span>
-                            <span class="tag-item">暧昧期</span>
-                            <span class="tag-item">关系推进</span>
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、话题背景与起因</b><br><b>AA昍</b>代一位匿名群友提问，咨询如何在没有恋爱经验的情况下，与有好感的男生建立恋爱关系，希望能获得一些实用小技巧。提问者表示问题不是很严肃，只是想了解一下。<br><br><b>二、主要观点与讨论详情</b><br>群友们围绕此问题展开了热烈且多角度的讨论：<br>1.  <b>主动出击派</b>：<b>翘臀胖保姆，旺夫，找公务员</b>认为“追男的太简单了”，并分享了自己主动约饭的聊天记录。<b>极品小学生（正经人）</b>也表示自己通常直接“A上去”，成功率较高。<b>Honye</b>强调主动A上去的效率，认为即使失败也能节省宝贵的青春时间。<br>2.  <b>谨慎观察派</b>：<b>土豆</b>提出要具体情况具体分析，判断对方是否也有好感，如果是相互喜欢则如捅破窗户纸，若对方不喜欢则可能徒劳。<b>Bazinga</b>认为多聊天接触就能感知对方态度。<b>黄云</b>建议微信聊天是为了约出来吃饭，聊天时态度可以比对方稍弱一点，并要懂得筛选。<br>3.  <b>技巧与策略派</b>：<b>卿缥缥</b>建议通过吹捧和诉苦给予男生满足感，再适时“晾一下”以吸引对方。<b>翘臀胖保姆，旺夫，找公务员</b>也提到可以针对不主动的男生，设置朋友圈“仅他可见”来展示生活。<br>4.  <b>关于“表白”的时机</b>：<b>学前班校霸（请同志们鞭策我版）</b>认为表白应是暧昧期后的一个形式。<b>AA昍</b>则从“共有知识”和“公共知识”的角度分析，认为在不确定对方会积极回应时，不宜公开宣告“我要追你”。<b>归舟</b>将表白比作送礼，是关系好了才能做的事。<br>5.  <b>享受过程派</b>：<b>桃乐丝</b>和<b>叽罗（请同志们鞭策我版）</b>都认为暧昧期是恋爱中最有趣的阶段，充满了打太极般的拉扯和猜测的乐趣。<br>6.  <b>反思与案例分享</b>：<b>mighty girl</b>分享了与相亲对象互动不积极的经历。<b>锋</b>分享了自己直接表白后，虽短暂在一起但最终因推进关系过快而分手的经历，并因此产生了“压力测试”的想法。他的经历引发了关于“速通”恋爱和真诚沟通的进一步讨论。<br><br><b>三、争议焦点（若有）</b><br>主要争议点在于“A上去”的适用性。<b>锋</b>的“压力测试”做法也受到了一些质疑，认为可能显得不真诚或急于求成。讨论中也体现了不同性别在恋爱观念和行为模式上可能存在的差异。<br><br><b>四、结论与启发</b><br>建立恋爱关系没有固定公式。<b>主动是前提</b>，但方式需灵活。了解对方、真诚沟通、把握时机非常重要。同时，<b>明确自己的恋爱目的</b>（享受过程、寻找生活伴侣等）有助于选择合适的策略。群内讨论也强调了<b>在不确定的情况下避免过度投入</b>，以及在互动中观察和感受对方真实态度的重要性。
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">恋爱技巧</span>
+<span class="tag-item">两性相处</span>
+<span class="tag-item">主动出击</span>
+<span class="tag-item">表白时机</span>
+<span class="tag-item">暧昧期</span>
+<span class="tag-item">关系推进</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、话题背景与起因</b><br/><b>AA昍</b>代一位匿名群友提问，咨询如何在没有恋爱经验的情况下，与有好感的男生建立恋爱关系，希望能获得一些实用小技巧。提问者表示问题不是很严肃，只是想了解一下。<br/><br/><b>二、主要观点与讨论详情</b><br/>群友们围绕此问题展开了热烈且多角度的讨论：<br/>1.  <b>主动出击派</b>：<b>翘臀胖保姆，旺夫，找公务员</b>认为“追男的太简单了”，并分享了自己主动约饭的聊天记录。<b>极品小学生（正经人）</b>也表示自己通常直接“A上去”，成功率较高。<b>Honye</b>强调主动A上去的效率，认为即使失败也能节省宝贵的青春时间。<br/>2.  <b>谨慎观察派</b>：<b>土豆</b>提出要具体情况具体分析，判断对方是否也有好感，如果是相互喜欢则如捅破窗户纸，若对方不喜欢则可能徒劳。<b>Bazinga</b>认为多聊天接触就能感知对方态度。<b>黄云</b>建议微信聊天是为了约出来吃饭，聊天时态度可以比对方稍弱一点，并要懂得筛选。<br/>3.  <b>技巧与策略派</b>：<b>卿缥缥</b>建议通过吹捧和诉苦给予男生满足感，再适时“晾一下”以吸引对方。<b>翘臀胖保姆，旺夫，找公务员</b>也提到可以针对不主动的男生，设置朋友圈“仅他可见”来展示生活。<br/>4.  <b>关于“表白”的时机</b>：<b>学前班校霸（请同志们鞭策我版）</b>认为表白应是暧昧期后的一个形式。<b>AA昍</b>则从“共有知识”和“公共知识”的角度分析，认为在不确定对方会积极回应时，不宜公开宣告“我要追你”。<b>归舟</b>将表白比作送礼，是关系好了才能做的事。<br/>5.  <b>享受过程派</b>：<b>桃乐丝</b>和<b>叽罗（请同志们鞭策我版）</b>都认为暧昧期是恋爱中最有趣的阶段，充满了打太极般的拉扯和猜测的乐趣。<br/>6.  <b>反思与案例分享</b>：<b>mighty girl</b>分享了与相亲对象互动不积极的经历。<b>锋</b>分享了自己直接表白后，虽短暂在一起但最终因推进关系过快而分手的经历，并因此产生了“压力测试”的想法。他的经历引发了关于“速通”恋爱和真诚沟通的进一步讨论。<br/><br/><b>三、争议焦点（若有）</b><br/>主要争议点在于“A上去”的适用性。<b>锋</b>的“压力测试”做法也受到了一些质疑，认为可能显得不真诚或急于求成。讨论中也体现了不同性别在恋爱观念和行为模式上可能存在的差异。<br/><br/><b>四、结论与启发</b><br/>建立恋爱关系没有固定公式。<b>主动是前提</b>，但方式需灵活。了解对方、真诚沟通、把握时机非常重要。同时，<b>明确自己的恋爱目的</b>（享受过程、寻找生活伴侣等）有助于选择合适的策略。群内讨论也强调了<b>在不确定的情况下避免过度投入</b>，以及在互动中观察和感受对方真实态度的重要性。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             主动出击是建立关系的第一步，但方式方法需因人而异，关键在于真诚沟通和相互尊重。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 直接a上去就行了 ，只有两个结果，a成了 在一起了，你获得了对象一个，a失败了，你节省了时间，对于女孩子来说 你的时间就是青春 ，这是你宝贵也最快速贬值的东西 时间比钱都重要
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>Honye</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 先不要想怎么有更好的技巧...首先就是要不犯错，不犯错，像个正常人...剩下的就是表达自己（不是表达自恋），就像孔雀开屏。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>黄云</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             “表白”应是关系发展到一定程度后的自然确认，而非初期试探或施加压力的手段。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 表白是已经暧昧期了，表白走个过场。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>学前班校霸（没吃过猪肉见过猪跑版）</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 当你不敢保证对方的回答一定是「难道你现在不就在追吗」的时候，就不要公开说「那我现在要追你了」因为共有知识...和公共知识...是完全两码事。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>AA昍</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 表白跟送礼一样，不是为了关系好才做，而是关系好才可以做。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>归舟</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                             <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             （来自AA昍）关系的目标决定过程：享受过程则过程越长越好；为双排则越短越好；为人生队友则终生皆是恋爱。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 如果恋爱的目的就是享受过程，那恋爱过程越长越好。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>AA昍</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                  如果恋爱的目的是为了双排，那恋爱过程越短越好，入正戏。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>AA昍</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 如果恋爱的目的是为了找队友，一起搞后续的人生大项目，那么搞项目的终生的过程，其实都是在谈恋爱。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>AA昍</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             （来自AA昍）好的关系状态：既可以「啥也不干，净聊一晚上」，又可以「啥也不聊，净干一晚上」。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                  对的，还有一种说法，好的关系：不管婚前婚后，都是 既可以「啥也不干，净聊一晚上」又可以「啥也不聊，净干一晚上」。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>AA昍</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="w-full mb-12 anchor-target" id="section-qa">
+<h2 class="section-title">
                 三、解惑一点通・有问必答
             </h2>
-            <div class="space-y-8">
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
-                    <div class="mb-4">
-                        <h4 class="text-xl font-semibold text-black flex items-center">
-                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+<div class="space-y-8">
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<div class="mb-4">
+<h4 class="text-xl font-semibold text-black flex items-center">
+<i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
                             婴儿胎发是否需要修剪？
                         </h4>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             啊怿子 -：「胎发要剪吗」
                         </p>
-                    </div>
-                    <div class="border-t border-gray-200 pt-4">
-                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
-                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+</div>
+<div class="border-t border-gray-200 pt-4">
+<h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+<i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
                             解答
                         </h5>
-                        <div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、问题背景</b><br><b>啊怿子 -</b> 提问关于婴儿胎发是否需要修剪的问题，并分享了一个婴儿自己抓头发的视频链接。<br><br><b>二、核心原因分析</b><br>婴儿可能会因为头发长而抓挠自己，导致哭闹。这属于婴儿发育过程中的常见行为。<br><br><b>三、解决方案与建议</b><br><b>小月半皮</b>分享了自家经验：她的宝宝没有剪胎发，也会出现自己抓头发把自己抓哭的情况。她提到，如果家长试图用手去拿开宝宝的手，宝宝可能会抓得更紧。她的处理方式是和宝宝“讲道理”，引导宝宝自己放手。这表明，即使宝宝年龄小，温和的沟通和引导也可能有效。是否剪胎发，家长可以根据具体情况和地方习俗自行决定，不剪胎发也并非一定会导致严重问题。
+<div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、问题背景</b><br/><b>啊怿子 -</b> 提问关于婴儿胎发是否需要修剪的问题，并分享了一个婴儿自己抓头发的视频链接。<br/><br/><b>二、核心原因分析</b><br/>婴儿可能会因为头发长而抓挠自己，导致哭闹。这属于婴儿发育过程中的常见行为。<br/><br/><b>三、解决方案与建议</b><br/><b>小月半皮</b>分享了自家经验：她的宝宝没有剪胎发，也会出现自己抓头发把自己抓哭的情况。她提到，如果家长试图用手去拿开宝宝的手，宝宝可能会抓得更紧。她的处理方式是和宝宝“讲道理”，引导宝宝自己放手。这表明，即使宝宝年龄小，温和的沟通和引导也可能有效。是否剪胎发，家长可以根据具体情况和地方习俗自行决定，不剪胎发也并非一定会导致严重问题。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-5 pt-4 border-t border-gray-200">
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">育儿</span>
-                            <span class="tag-item">胎发</span>
-                            <span class="tag-item">婴儿行为</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
-                    <div class="mb-4">
-                        <h4 class="text-xl font-semibold text-black flex items-center">
-                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-5 pt-4 border-t border-gray-200">
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">育儿</span>
+<span class="tag-item">胎发</span>
+<span class="tag-item">婴儿行为</span>
+</div>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<div class="mb-4">
+<h4 class="text-xl font-semibold text-black flex items-center">
+<i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
                             如何应对职场中潜在的骚扰风险？
                         </h4>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             AA昍：「【被董事长叫去陪客户，事后才反应过来是骚扰】」
                         </p>
-                    </div>
-                    <div class="border-t border-gray-200 pt-4">
-                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
-                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+</div>
+<div class="border-t border-gray-200 pt-4">
+<h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+<i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
                             解答
                         </h5>
-                        <div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、问题背景</b><br><b>AA昍</b>转述了一位群友的经历：被董事长叫去陪客户后才意识到可能涉及职场骚扰，事后董事长还发微信“关心”，群友进行了客套回复。<br><br><b>二、核心原因分析</b><br>该群友对职场骚扰的识别和应对意识不足，客套回复可能被骚扰者误解为默许或享受。领导利用职权进行试探或施压是此类情况常见原因。<br><br><b>三、解决方案与建议</b><br>由<b>AA昍</b>主导，给出了以下核心建议：<br>1.  <b>客套=同意</b>：在骚扰者视角，客套回复等同于同意。必须意识到这一点，避免发出错误信号。<b>不回复是较好的选择</b>。<br>2.  <b>明确态度</b>：即使是面对领导，也应表明自己的态度，不应因对方是董事长而一味顺从或客套。<br>3.  <b>警惕不必要的互动</b>：工作上多汇报呈现，平时没必要过于频繁地与领导打招呼。过于主动的非工作性互动，可能被领导误解为某种暗示。<br>4.  <b>正确利用群聊</b>：遇到此类困惑时，可以向群内可信的“陌生人”（即无利益冲突的群友）求助。家人们不会害你，可以提供客观建议。<br>5.  <b>保持警惕</b>：宁可想多，也要有防范意识，避免事情发展到无法挽回的地步。<br><br><b>AA昍</b>还强调，此次交流非常有价值，并将当事人因此事发的110元红包转到群里，希望同志们记住这个数字作为警示。多位群友表示记住了这个数字和相关提醒。
+<div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、问题背景</b><br/><b>AA昍</b>转述了一位群友的经历：被董事长叫去陪客户后才意识到可能涉及职场骚扰，事后董事长还发微信“关心”，群友进行了客套回复。<br/><br/><b>二、核心原因分析</b><br/>该群友对职场骚扰的识别和应对意识不足，客套回复可能被骚扰者误解为默许或享受。领导利用职权进行试探或施压是此类情况常见原因。<br/><br/><b>三、解决方案与建议</b><br/>由<b>AA昍</b>主导，给出了以下核心建议：<br/>1.  <b>客套=同意</b>：在骚扰者视角，客套回复等同于同意。必须意识到这一点，避免发出错误信号。<b>不回复是较好的选择</b>。<br/>2.  <b>明确态度</b>：即使是面对领导，也应表明自己的态度，不应因对方是董事长而一味顺从或客套。<br/>3.  <b>警惕不必要的互动</b>：工作上多汇报呈现，平时没必要过于频繁地与领导打招呼。过于主动的非工作性互动，可能被领导误解为某种暗示。<br/>4.  <b>正确利用群聊</b>：遇到此类困惑时，可以向群内可信的“陌生人”（即无利益冲突的群友）求助。家人们不会害你，可以提供客观建议。<br/>5.  <b>保持警惕</b>：宁可想多，也要有防范意识，避免事情发展到无法挽回的地步。<br/><br/><b>AA昍</b>还强调，此次交流非常有价值，并将当事人因此事发的110元红包转到群里，希望同志们记住这个数字作为警示。多位群友表示记住了这个数字和相关提醒。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-5 pt-4 border-t border-gray-200">
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">职场骚扰</span>
-                            <span class="tag-item">应对技巧</span>
-                            <span class="tag-item">安全意识</span>
-                            <span class="tag-item">求助</span>
-                            <span class="tag-item">110</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-5 pt-4 border-t border-gray-200">
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">职场骚扰</span>
+<span class="tag-item">应对技巧</span>
+<span class="tag-item">安全意识</span>
+<span class="tag-item">求助</span>
+<span class="tag-item">110</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="w-full mb-12 anchor-target" id="section-daily-picks">
+<h2 class="section-title">
                 四、智慧火花匣・每日精选
             </h2>
-            <div class="space-y-8">
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
-                    <h4 class="text-xl font-semibold text-black mb-3">
+<div class="space-y-8">
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<h4 class="text-xl font-semibold text-black mb-3">
                         《控制论与科学方法论》及相关读书与AI辅助方法
                     </h4>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             Honye：「开始今日看书打卡」
                         </p>
-                    </div>
-                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
-                        <div class="expandable-content" data-char-limit="200">
-                            <div class="content-preview">
-                                <b>一、推荐内容</b><br><b>Honye</b>分享了其正在阅读的书籍《控制论与科学方法论》（金观涛、华国凡著），并详细介绍了他结合A4纸笔记和GPT进行深度阅读与总结的方法。随后，<b>Limmer1</b>推荐了钱学森的《钱学森讲谈录：哲学、科学、艺术》作为相关阅读。<b>鱼皮</b>和<b>卿缥缥</b>也分享了《控制论与科学方法论》及钱学森著作的电子版资源。<br><br><b>二、核心价值与特点</b><br><b>Honye</b>的读书方法强调主动思考和多重总结：<br>1.  <b>纸质笔记</b>：阅读时遇到重点，手写在A4纸上。<br>2.  <b>GPT辅助理解</b>：遇到不懂的概念，立即询问GPT，让其用简单方式解释。<br>3.  <b>多重总结</b>：书本划重点、A4纸记录核心重点、GPT对话内容总结成文档，形成三份总结材料。<br>4.  <b>定期回顾</b>：间隔一段时间（如数月）回顾总结，加深理解。<br>这种方法能够将阅读、思考、记录和AI辅助有机结合，提升学习效率和效果。<br><br><b>AA昍</b>对<b>Honye</b>的读书方法表示赞赏，认为这属于“以身入局”才能体会到的高效学习方式，并建议<b>Honye</b>可以将GPT的回复整理后在社交媒体发布，作为读书号运营。<br><br><b>三、适用场景或补充信息</b><br>该读书方法适用于需要深度理解和吸收知识的场景，尤其适合阅读理论性较强或概念复杂的书籍。结合AI工具，可以有效克服理解障碍，并生成个性化的学习资料。
+</div>
+<div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、推荐内容</b><br/><b>Honye</b>分享了其正在阅读的书籍《控制论与科学方法论》（金观涛、华国凡著），并详细介绍了他结合A4纸笔记和GPT进行深度阅读与总结的方法。随后，<b>Limmer1</b>推荐了钱学森的《钱学森讲谈录：哲学、科学、艺术》作为相关阅读。<b>鱼皮</b>和<b>卿缥缥</b>也分享了《控制论与科学方法论》及钱学森著作的电子版资源。<br/><br/><b>二、核心价值与特点</b><br/><b>Honye</b>的读书方法强调主动思考和多重总结：<br/>1.  <b>纸质笔记</b>：阅读时遇到重点，手写在A4纸上。<br/>2.  <b>GPT辅助理解</b>：遇到不懂的概念，立即询问GPT，让其用简单方式解释。<br/>3.  <b>多重总结</b>：书本划重点、A4纸记录核心重点、GPT对话内容总结成文档，形成三份总结材料。<br/>4.  <b>定期回顾</b>：间隔一段时间（如数月）回顾总结，加深理解。<br/>这种方法能够将阅读、思考、记录和AI辅助有机结合，提升学习效率和效果。<br/><br/><b>AA昍</b>对<b>Honye</b>的读书方法表示赞赏，认为这属于“以身入局”才能体会到的高效学习方式，并建议<b>Honye</b>可以将GPT的回复整理后在社交媒体发布，作为读书号运营。<br/><br/><b>三、适用场景或补充信息</b><br/>该读书方法适用于需要深度理解和吸收知识的场景，尤其适合阅读理论性较强或概念复杂的书籍。结合AI工具，可以有效克服理解障碍，并生成个性化的学习资料。
                             </div>
-                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                <span class="expand-text">展开全文</span>
-                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="tag-item">控制论</span>
-                        <span class="tag-item">系统论</span>
-                        <span class="tag-item">读书方法</span>
-                        <span class="tag-item">GPT</span>
-                        <span class="tag-item">钱学森</span>
-                        <span class="tag-item">知识管理</span>
-                    </div>
-                    <div class="flex justify-end">
-                         <span class="text-sm text-gray-500 italic">多种电子书版本已在群内分享</span>
-                    </div>
-                </div>
-
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
-                    <h4 class="text-xl font-semibold text-black mb-3">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="tag-item">控制论</span>
+<span class="tag-item">系统论</span>
+<span class="tag-item">读书方法</span>
+<span class="tag-item">GPT</span>
+<span class="tag-item">钱学森</span>
+<span class="tag-item">知识管理</span>
+</div>
+<div class="flex justify-end">
+<span class="text-sm text-gray-500 italic">多种电子书版本已在群内分享</span>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<h4 class="text-xl font-semibold text-black mb-3">
                         《美国纽约摄影学院摄影教材》推荐与资源分享
                     </h4>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             Honye：「推荐这套书，也可以当做一本摄影画册看，看起来有收获 又不累」
                         </p>
-                    </div>
-                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
-                        <div class="expandable-content" data-char-limit="200">
-                            <div class="content-preview">
-                                <b>一、推荐内容</b><br><b>Honye</b>向群友推荐了《美国纽约摄影学院摄影教材》，认为这套书既可以作为学习资料，也可作为摄影画册欣赏，阅读体验轻松且有收获。<br><br><b>二、核心价值与特点</b><br>该教材是摄影领域的经典教程之一，系统性强，内容全面，适合摄影爱好者和初学者入门及提升。<b>Honye</b>的推荐侧重于其易读性和知识性并存的特点。<br><br><b>三、适用场景或补充信息</b><br><b>四维空间的鱼</b>在<b>Honye</b>推荐后，迅速在群内分享了该教材（上册）的Z-Library链接及PDF文件，方便群友获取和学习。<b>AA昍</b>也将此分享标记为#读书，肯定了其价值。
+</div>
+<div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、推荐内容</b><br/><b>Honye</b>向群友推荐了《美国纽约摄影学院摄影教材》，认为这套书既可以作为学习资料，也可作为摄影画册欣赏，阅读体验轻松且有收获。<br/><br/><b>二、核心价值与特点</b><br/>该教材是摄影领域的经典教程之一，系统性强，内容全面，适合摄影爱好者和初学者入门及提升。<b>Honye</b>的推荐侧重于其易读性和知识性并存的特点。<br/><br/><b>三、适用场景或补充信息</b><br/><b>四维空间的鱼</b>在<b>Honye</b>推荐后，迅速在群内分享了该教材（上册）的Z-Library链接及PDF文件，方便群友获取和学习。<b>AA昍</b>也将此分享标记为#读书，肯定了其价值。
                             </div>
-                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                <span class="expand-text">展开全文</span>
-                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="tag-item">摄影</span>
-                        <span class="tag-item">教材</span>
-                        <span class="tag-item">学习资源</span>
-                        <span class="tag-item">纽约摄影学院</span>
-                    </div>
-                     <div class="flex justify-end">
-                        <a href="https://zh.z-library.sk/book/16799468/cf7d96/%E7%BE%8E%E5%9B%BD%E7%BA%BD%E7%BA%A6%E6%91%84%E5%BD%B1%E5%AD%A6%E9%99%A2%E6%91%84%E5%BD%B1%E6%95%99%E6%9D%90%E4%B8%8A%E5%86%8C-%E6%9C%80%E6%96%B0%E4%BF%AE%E8%AE%A2%E7%89%88.html" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-[#4D6BFE] hover:text-blue-700 hover:underline flex items-center">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="tag-item">摄影</span>
+<span class="tag-item">教材</span>
+<span class="tag-item">学习资源</span>
+<span class="tag-item">纽约摄影学院</span>
+</div>
+<div class="flex justify-end">
+<a class="text-sm font-medium text-[#4D6BFE] hover:text-blue-700 hover:underline flex items-center" href="https://zh.z-library.sk/book/16799468/cf7d96/%E7%BE%8E%E5%9B%BD%E7%BA%BD%E7%BA%A6%E6%91%84%E5%BD%B1%E5%AD%A6%E9%99%A2%E6%91%84%E5%BD%B1%E6%95%99%E6%9D%90%E4%B8%8A%E5%86%8C-%E6%9C%80%E6%96%B0%E4%BF%AE%E8%AE%A2%E7%89%88.html" rel="noopener noreferrer" target="_blank">
                             查看Z-Library链接
                             <i class="fas fa-external-link-alt ml-1.5 text-xs"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
-                    <h4 class="text-xl font-semibold text-black mb-3">
+</a>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<h4 class="text-xl font-semibold text-black mb-3">
                         微信读书私信推书新模式观察与探讨
                     </h4>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             鱼皮：「卧槽 [图片]」 (展示收到推书私信截图)
                         </p>
-                    </div>
-                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
-                        <div class="expandable-content" data-char-limit="200">
-                            <div class="content-preview">
-                                <b>一、推荐内容</b><br><b>鱼皮</b>在群内分享了一个现象：他在微信读书上因订阅某本书后，收到了来自陌生账号的私信，对方主动赠送了该书的电子版。随后，<b>叽罗（请同志们鞭策我版）</b>、<b>桃乐丝</b>、<b>MIR🍈</b>等多位群友也表示遇到了类似情况，收到了不同ID但风格相似的推书信息。<br><br><b>二、核心价值与特点</b><br>这种现象揭示了一种<b>新型的图书推广或用户获取模式</b>。其特点可能包括：<br>1.  <b>自动化/程序化</b>：通过技术手段（如爬虫或AI Agent）抓取特定书籍的订阅者或关注者信息。<br>2.  <b>批量私信</b>：向目标用户批量发送私信，提供电子书资源，可能以此引导用户关注公众号、加入社群或购买其他服务。<br>3.  <b>多账号操作</b>：可能使用多个不同ID的账号进行推广，以规避平台限制或扩大覆盖面。<br>4.  <b>资源来源</b>：<b>鱼皮</b>提到收到的文件带有Z-Library后缀，暗示了电子书资源的可能来源。<br><br><b>三、适用场景或补充信息</b><br>群友讨论了这种模式的技术实现可能性，<b>学前班校霸（白嫖群主版）</b>认为可以通过AI Agent或MCP（多渠道网络营销平台）实现。<b>MIR🍈</b>提到小红书上也有关于此模式的讨论，认为可能是通过关注人进行推荐。<b>叽罗（请同志们鞭策我版）</b>推测这种做法的获客效率可能不高，或者运营者此前未想到此方法。<b>AA昍</b>对此表示关注，认为这是一个值得研究的自动化获客渠道。
+</div>
+<div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、推荐内容</b><br/><b>鱼皮</b>在群内分享了一个现象：他在微信读书上因订阅某本书后，收到了来自陌生账号的私信，对方主动赠送了该书的电子版。随后，<b>叽罗（请同志们鞭策我版）</b>、<b>桃乐丝</b>、<b>MIR🍈</b>等多位群友也表示遇到了类似情况，收到了不同ID但风格相似的推书信息。<br/><br/><b>二、核心价值与特点</b><br/>这种现象揭示了一种<b>新型的图书推广或用户获取模式</b>。其特点可能包括：<br/>1.  <b>自动化/程序化</b>：通过技术手段（如爬虫或AI Agent）抓取特定书籍的订阅者或关注者信息。<br/>2.  <b>批量私信</b>：向目标用户批量发送私信，提供电子书资源，可能以此引导用户关注公众号、加入社群或购买其他服务。<br/>3.  <b>多账号操作</b>：可能使用多个不同ID的账号进行推广，以规避平台限制或扩大覆盖面。<br/>4.  <b>资源来源</b>：<b>鱼皮</b>提到收到的文件带有Z-Library后缀，暗示了电子书资源的可能来源。<br/><br/><b>三、适用场景或补充信息</b><br/>群友讨论了这种模式的技术实现可能性，<b>学前班校霸（白嫖群主版）</b>认为可以通过AI Agent或MCP（多渠道网络营销平台）实现。<b>MIR🍈</b>提到小红书上也有关于此模式的讨论，认为可能是通过关注人进行推荐。<b>叽罗（请同志们鞭策我版）</b>推测这种做法的获客效率可能不高，或者运营者此前未想到此方法。<b>AA昍</b>对此表示关注，认为这是一个值得研究的自动化获客渠道。
                             </div>
-                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                <span class="expand-text">展开全文</span>
-                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="tag-item">微信读书</span>
-                        <span class="tag-item">图书推广</span>
-                        <span class="tag-item">自动化营销</span>
-                        <span class="tag-item">用户增长</span>
-                        <span class="tag-item">AI应用</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <footer class="w-full mt-16">
-            <div class="bento-card p-8">
-                <div class="text-center text-gray-700 space-y-3">
-                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-base">
-                        <div class="flex items-center">
-                            <i class="fas fa-database mr-2 text-[#4D6BFE]"></i>
-                            <span>微信群聊记录</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-robot mr-2 text-[#4D6BFE]"></i>
-                            <span id="generation-time">2025-06-22 03:00:00</span>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-500 max-w-2xl mx-auto leading-relaxed">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="tag-item">微信读书</span>
+<span class="tag-item">图书推广</span>
+<span class="tag-item">自动化营销</span>
+<span class="tag-item">用户增长</span>
+<span class="tag-item">AI应用</span>
+</div>
+</div>
+</div>
+</section>
+<nav class="w-full mt-12 daily-nav">
+<div class="bento-card p-4">
+<div class="flex justify-between items-center">
+<button class="nav-button day-nav-prev" type="button">
+<i class="fas fa-chevron-left"></i>
+                        上一天
+                    </button>
+<div class="text-center">
+<span class="text-sm text-gray-600">日报导航</span>
+</div>
+<button class="nav-button day-nav-next" type="button">
+                        下一天
+                        <i class="fas fa-chevron-right"></i>
+</button>
+</div>
+</div>
+</nav><footer class="w-full mt-16">
+<div class="bento-card p-8">
+<div class="text-center text-gray-700 space-y-3">
+<div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-base">
+<div class="flex items-center">
+<i class="fas fa-database mr-2 text-[#4D6BFE]"></i>
+<span>微信群聊记录</span>
+</div>
+<div class="flex items-center">
+<i class="fas fa-robot mr-2 text-[#4D6BFE]"></i>
+<span id="generation-time">2025-06-22 03:00:00</span>
+</div>
+</div>
+<p class="text-sm text-gray-500 max-w-2xl mx-auto leading-relaxed">
                         本报告基于群聊数据自动生成，仅供参考。内容可能包含个人观点，不代表群组官方立场。数据处理过程中已尽量匿名化处理敏感信息。
                     </p>
-                </div>
-            </div>
-        </footer>
-    </div>
-
-    <script>
+</div>
+</div>
+</footer>
+</div><div aria-label="页面快捷操作" class="floating-actions">
+<div class="directory-wrapper">
+<button aria-controls="directory-panel" aria-expanded="false" aria-label="打开内容导航" class="floating-button" id="directory-toggle" type="button">
+<i class="fas fa-list-ul"></i>
+</button>
+<div aria-hidden="true" aria-modal="false" class="directory-panel" id="directory-panel" role="dialog">
+<div class="directory-header">
+<span class="directory-title">内容导航</span>
+<button aria-label="关闭内容导航" class="directory-close" id="directory-close" type="button">
+<i class="fas fa-times"></i>
+</button>
+</div>
+<div class="directory-list" id="directory-list">
+<!-- HTML注释: 目录列表由脚本自动填充，确保多层级锚点保持同步 -->
+</div>
+</div>
+</div>
+<button aria-label="返回顶部" class="floating-button floating-button--hidden" id="scroll-top-btn" type="button">
+<i class="fas fa-arrow-up"></i>
+</button>
+</div>
+<script>
+        // 定义基础URL常量
+        const BASE_URL = 'https://xinjian-bot.github.io/-';
+        
         document.addEventListener('DOMContentLoaded', function() {
             // Bento card hover effect is handled by CSS :hover pseudo-class
-    
+
             // Number animation effect
             const numberElements = document.querySelectorAll('.number-display');
             numberElements.forEach(element => {
                 const finalValueText = element.textContent.replace(/,/g, '');
                 const finalValue = parseInt(finalValueText, 10);
-    
+
                 if (isNaN(finalValue)) return;
-    
+
                 let currentValue = 0;
                 const duration = 1500; // Animation duration in ms
                 const frameRate = 1000 / 60; // 60fps
                 const totalFrames = Math.round(duration / frameRate);
                 const increment = finalValue / totalFrames;
-    
+
                 let currentFrame = 0;
                 const timer = setInterval(() => {
                     currentFrame++;
                     currentValue += increment;
-    
+
                     if (currentFrame >= totalFrames) {
                         currentValue = finalValue;
                         clearInterval(timer);
@@ -1070,14 +1295,23 @@
                     element.textContent = Math.floor(currentValue).toLocaleString('en-US');
                 }, frameRate);
             });
-    
+
             // HTML注释: 初始化日报导航功能
             initDailyNavigation();
-    
+
             // HTML注释: 初始化展开功能
             initExpandableContent();
+
+            // HTML注释: 初始化浮动按钮与目录互动
+            initFloatingActions();
+            
+            // 初始化历史汇总链接
+            const historyLink = document.getElementById('history-link');
+            if (historyLink) {
+                historyLink.href = BASE_URL + '/新茧历史日报汇总.html';
+            }
         });
-    
+
         // HTML注释: 这个函数实现了日报间的导航功能，包括：
         // 1. 从当前页面URL或内容中提取日期
         // 2. 检查前后日期的日报文件是否存在
@@ -1091,15 +1325,15 @@
                     console.warn('无法从页面中提取日期信息');
                     return;
                 }
-    
+
                 // HTML注释: 设置导航按钮
                 await setupNavigationButtons(currentDate);
-    
+
             } catch (error) {
                 console.error('初始化日报导航时出错:', error);
             }
         }
-    
+
         // HTML注释: 从页面中提取当前日期
         // HTML注释: 支持多种方式提取日期：优先从页面元素、URL文件名或页面标题
         function getCurrentDateFromPage() {
@@ -1115,29 +1349,33 @@
                     return `${year}-${month}-${day}`;
                 }
             }
-    
+
             // HTML注释: 方法2：从URL文件名中提取日期
             const pathname = window.location.pathname;
             const filenameMatch = pathname.match(/新茧群日报_(\d{4}-\d{2}-\d{2})\.html/);
             if (filenameMatch) {
                 return filenameMatch[1];
             }
-    
+
             // HTML注释: 方法3：从页面标题中提取日期
             const titleMatch = document.title.match(/(\d{4}-\d{2}-\d{2})/);
             if (titleMatch) {
                 return titleMatch[1];
             }
-    
+
             return null;
         }
-    
+
         // HTML注释: 设置导航按钮的状态和链接
          // HTML注释: 根据当前日期，检查前后日期的日报文件是否存在
          async function setupNavigationButtons(currentDate) {
-             const prevButton = document.getElementById('prev-day');
-             const nextButton = document.getElementById('next-day');
-             const navContainer = document.querySelector('nav');
+             const prevButtons = document.querySelectorAll('.day-nav-prev');
+             const nextButtons = document.querySelectorAll('.day-nav-next');
+             const navContainers = document.querySelectorAll('.daily-nav');
+
+             if (!prevButtons.length && !nextButtons.length) {
+                 return;
+             }
              
              // HTML注释: 计算前一天和后一天的日期
              const currentDateObj = new Date(currentDate);
@@ -1153,49 +1391,56 @@
              const prevExists = await checkReportExists(prevDate);
              const nextExists = await checkReportExists(nextDate);
              
-             // HTML注释: 如果前后日期的日报都不存在，隐藏整个导航栏容器
+             // HTML注释: 如果前后日期的日报都不存在，隐藏所有导航栏容器
              if (!prevExists && !nextExists) {
-                 navContainer.style.display = 'none';
+                 navContainers.forEach(container => {
+                     container.style.display = 'none';
+                 });
                  return;
              }
              
-             // HTML注释: 显示导航栏容器
-             navContainer.style.display = 'block';
+             // HTML注释: 显示所有导航栏容器
+             navContainers.forEach(container => {
+                 container.style.display = 'block';
+             });
              
              // HTML注释: 设置前一天按钮
-             if (prevExists) {
-                 prevButton.onclick = () => {
-                     window.location.href = `https://xinjian-bot.github.io/-/新茧群日报_${prevDate}.html`;
-                 };
-                 prevButton.disabled = false;
-             } else {
-                 prevButton.disabled = true;
-                 prevButton.onclick = null;
-             }
-    
+             prevButtons.forEach(button => {
+                 if (prevExists) {
+                     button.disabled = false;
+                     button.onclick = () => {
+                         window.location.href = `${BASE_URL}/新茧群日报_${prevDate}.html`;
+                     };
+                 } else {
+                     button.disabled = true;
+                     button.onclick = null;
+                 }
+             });
+
              // HTML注释: 设置后一天按钮
-             if (nextExists) {
-                 nextButton.onclick = () => {
-                     window.location.href = `https://xinjian-bot.github.io/-/新茧群日报_${nextDate}.html`;
-                 };
-                 nextButton.disabled = false;
-             } else {
-                 // HTML注释: 后一天的日报不存在，禁用"下一天"按钮
-                 nextButton.disabled = true;
-                 nextButton.onclick = null;
-             }
+             nextButtons.forEach(button => {
+                 if (nextExists) {
+                     button.disabled = false;
+                     button.onclick = () => {
+                         window.location.href = `${BASE_URL}/新茧群日报_${nextDate}.html`;
+                     };
+                 } else {
+                     button.disabled = true;
+                     button.onclick = null;
+                 }
+             });
          }
-    
+
         // HTML注释: 检查指定日期的日报文件是否存在
         async function checkReportExists(date) {
             try {
-                const response = await fetch(`https://xinjian-bot.github.io/-/新茧群日报_${date}.html`, { method: 'HEAD' });
+                const response = await fetch(`${BASE_URL}/新茧群日报_${date}.html`, { method: 'HEAD' });
                 return response.ok;
             } catch (error) {
                 return false;
             }
         }
-    
+
         // HTML注释: 格式化日期为YYYY-MM-DD格式
         function formatDate(date) {
             const year = date.getFullYear();
@@ -1203,7 +1448,7 @@
             const day = String(date.getDate()).padStart(2, '0');
             return `${year}-${month}-${day}`;
         }
-    
+
         // HTML注释: 初始化展开功能
         function initExpandableContent() {
             const expandableContents = document.querySelectorAll('.expandable-content');
@@ -1300,6 +1545,167 @@
                 }
             });
         }
+
+        // HTML注释: 构建目录，统一扫描模块及其子卡片生成锚点
+        function buildDirectory(panelElement) {
+            const listElement = panelElement.querySelector('#directory-list');
+            if (!listElement) {
+                return;
+            }
+
+            listElement.innerHTML = '';
+
+            const directoryConfigs = [
+                { id: 'section-overview', icon: 'fa-chart-column' },
+                { id: 'section-hot-topics', icon: 'fa-fire' },
+                { id: 'section-meeting', icon: 'fa-users' },
+                { id: 'section-qa', icon: 'fa-circle-question' },
+                { id: 'section-daily-picks', icon: 'fa-lightbulb' }
+            ];
+
+            directoryConfigs.forEach((config) => {
+                const sectionElement = document.getElementById(config.id);
+                if (!sectionElement) {
+                    return;
+                }
+
+                const sectionTitleElement = sectionElement.querySelector('.section-title');
+                const sectionTitle = sectionTitleElement ? sectionTitleElement.textContent.trim() : config.id;
+
+                const itemWrapper = document.createElement('div');
+                itemWrapper.className = 'directory-item';
+
+                const entryButton = document.createElement('button');
+                entryButton.type = 'button';
+                entryButton.className = 'directory-entry';
+                entryButton.setAttribute('data-target', config.id);
+                entryButton.innerHTML = `<span class="directory-icon"><i class="fas ${config.icon}"></i></span><span class="directory-text">${sectionTitle}</span>`;
+                itemWrapper.appendChild(entryButton);
+
+                const subHeadings = sectionElement.querySelectorAll('.bento-card h4');
+                if (subHeadings.length > 0) {
+                    const sublistElement = document.createElement('div');
+                    sublistElement.className = 'directory-sublist';
+
+                    subHeadings.forEach((heading, index) => {
+                        const cardElement = heading.closest('.bento-card');
+                        if (!cardElement) {
+                            return;
+                        }
+
+                        if (!cardElement.classList.contains('anchor-target')) {
+                            cardElement.classList.add('anchor-target');
+                        }
+
+                        if (!cardElement.id) {
+                            cardElement.id = `${config.id}-item-${index + 1}`;
+                        }
+
+                        const subButton = document.createElement('button');
+                        subButton.type = 'button';
+                        subButton.className = 'directory-subitem';
+                        subButton.setAttribute('data-target', cardElement.id);
+                        subButton.innerHTML = `<span class="directory-text">${heading.textContent.trim()}</span>`;
+                        sublistElement.appendChild(subButton);
+                    });
+
+                    itemWrapper.appendChild(sublistElement);
+                }
+
+                listElement.appendChild(itemWrapper);
+            });
+        }
+
+        // HTML注释: 初始化浮动按钮与目录交互
+        function initFloatingActions() {
+            const scrollTopBtn = document.getElementById('scroll-top-btn');
+            const directoryToggle = document.getElementById('directory-toggle');
+            const directoryPanel = document.getElementById('directory-panel');
+            const directoryClose = document.getElementById('directory-close');
+
+            if (scrollTopBtn) {
+                const toggleScrollButton = () => {
+                    if (window.scrollY > 240) {
+                        scrollTopBtn.classList.remove('floating-button--hidden');
+                    } else {
+                        scrollTopBtn.classList.add('floating-button--hidden');
+                    }
+                };
+
+                toggleScrollButton();
+                window.addEventListener('scroll', toggleScrollButton, { passive: true });
+
+                scrollTopBtn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+
+            if (!directoryPanel) {
+                return;
+            }
+
+            buildDirectory(directoryPanel);
+
+            if (!directoryToggle) {
+                return;
+            }
+
+            const closePanel = () => {
+                directoryPanel.classList.remove('open');
+                directoryToggle.setAttribute('aria-expanded', 'false');
+                directoryPanel.setAttribute('aria-hidden', 'true');
+            };
+
+            const openPanel = () => {
+                directoryPanel.classList.add('open');
+                directoryToggle.setAttribute('aria-expanded', 'true');
+                directoryPanel.setAttribute('aria-hidden', 'false');
+            };
+
+            const togglePanel = () => {
+                if (directoryPanel.classList.contains('open')) {
+                    closePanel();
+                } else {
+                    openPanel();
+                }
+            };
+
+            directoryToggle.addEventListener('click', (event) => {
+                event.stopPropagation();
+                togglePanel();
+            });
+
+            if (directoryClose) {
+                directoryClose.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    closePanel();
+                });
+            }
+
+            const directoryItems = directoryPanel.querySelectorAll('[data-target]');
+            directoryItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const targetId = item.getAttribute('data-target');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                    closePanel();
+                });
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!directoryPanel.contains(event.target) && !directoryToggle.contains(event.target)) {
+                    closePanel();
+                }
+            });
+
+            window.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closePanel();
+                }
+            });
+        }
     </script>
-    </body>
-    </html>
+</body>
+</html>

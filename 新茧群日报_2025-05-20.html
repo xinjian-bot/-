@@ -1,13 +1,14 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>新茧日报 2025-05-20</title>
-    <!-- 正常标题格式应为：新茧日报 yyyy-mm-dd，以便外部链接查看时了解日报日期 -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>新茧日报 2025-05-20</title>
+<!-- 正常标题格式应为：新茧日报 yyyy-mm-dd，以便外部链接查看时了解日报日期 -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
         * {
@@ -17,6 +18,11 @@
         body {
             background-color: #ffffff;
             color: #000000;
+        }
+
+        :root {
+            --directory-main-font-size: clamp(0.85rem, 0.9vw + 0.6rem, 0.95rem);
+            --directory-sub-font-size: clamp(0.78rem, 0.75vw + 0.5rem, 0.88rem);
         }
 
         .bento-card {
@@ -103,778 +109,1023 @@
             background: rgba(77, 107, 254, 0.15);
             transform: translateY(-1px);
         }
+
+        /* HTML注释: 展开功能相关样式 */
+        .expandable-content {
+            position: relative;
+        }
+
+        .content-preview.collapsed {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .content-preview.collapsed::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(transparent, rgba(248, 250, 252, 0.9));
+            pointer-events: none;
+        }
+
+        .expand-btn {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0;
+        }
+
+        .expand-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .expand-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .expand-btn.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        /* HTML注释: 目录锚点滚动偏移，避免标题被遮挡 */
+        .anchor-target {
+            scroll-margin-top: 120px;
+        }
+
+        .anchor-placeholder {
+            height: 0;
+        }
+
+        /* HTML注释: 右下角浮动快捷按钮区域样式 */
+        .floating-actions {
+            position: fixed;
+            right: 1.25rem;
+            bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            z-index: 50;
+        }
+
+        .floating-button {
+            background: linear-gradient(135deg, #4D6BFE 0%, #6B8BFF 100%);
+            color: #ffffff;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px -5px rgba(77, 107, 254, 0.35);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .floating-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -6px rgba(77, 107, 254, 0.45);
+        }
+
+        .floating-button:focus-visible {
+            outline: 2px solid rgba(77, 107, 254, 0.45);
+            outline-offset: 2px;
+        }
+
+        .floating-button--hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            pointer-events: none;
+        }
+
+        .directory-wrapper {
+            position: relative;
+        }
+
+        .directory-panel {
+            position: absolute;
+            right: 0;
+            bottom: 3.5rem;
+            width: 18rem;
+            background: #ffffff;
+            border: 1px solid rgba(77, 107, 254, 0.2);
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 40px -15px rgba(77, 107, 254, 0.35);
+            padding: 1rem;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            max-height: min(75vh, 30rem);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+
+        .directory-panel.open {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .directory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .directory-title {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: var(--directory-main-font-size);
+        }
+
+        .directory-close {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 9999px;
+           transition: color 0.2s ease;
+        }
+
+        .directory-close:hover {
+            color: #4D6BFE;
+        }
+
+        .directory-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .directory-list button {
+            width: 100%;
+            text-align: left;
+            background: rgba(77, 107, 254, 0.08);
+            color: #1f2937;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.55rem 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: var(--directory-main-font-size);
+        }
+
+        .directory-list button:hover {
+            background: rgba(77, 107, 254, 0.18);
+            color: #1d4ed8;
+        }
+
+        /* HTML注释: 二级导航容器样式，支持主模块与子模块层级展示 */
+        .directory-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .directory-entry {
+            background: rgba(77, 107, 254, 0.08);
+        }
+
+        .directory-sublist {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-left: 2.5rem;
+            padding-left: 0.75rem;
+            border-left: 1px solid rgba(77, 107, 254, 0.2);
+        }
+
+        .directory-subitem {
+            background: rgba(77, 107, 254, 0.04);
+            padding-top: 0.45rem;
+            padding-bottom: 0.45rem;
+            font-size: var(--directory-sub-font-size);
+        }
+
+        .directory-subitem:hover {
+            background: rgba(77, 107, 254, 0.14);
+        }
+
+        .directory-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 9999px;
+            background: rgba(77, 107, 254, 0.12);
+            color: #4D6BFE;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .directory-text {
+            flex: 1;
+            color: inherit;
+        }
+
+        @media (max-width: 640px) {
+            .floating-actions {
+                right: 0.75rem;
+                bottom: 1rem;
+            }
+
+            .directory-panel {
+                width: min(80vw, 15rem);
+                bottom: 3.25rem;
+                max-height: min(70vh, 20rem);
+            }
+            :root {
+                --directory-main-font-size: 0.8rem;
+                --directory-sub-font-size: 0.72rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-white text-black min-h-screen">
-    <!-- HTML注释: 整体宽度通过 max-w-4xl 控制，实现日报宽度调小并保持响应式。-->
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-
-        <!-- === "新茧日报" 文件头区域 开始 === -->
-        <!-- HTML注释: 此模块作为单独一行，占据整行宽度。包含日报主标题、报告日期和时间范围。 -->
-        <!-- HTML注释: 新增了"新茧历史日报"链接，样式与整体设计保持统一协调 -->
-        <header class="w-full mb-8">
-            <div class="bento-card p-8">
-                <div class="text-center">
-                    <h1 class="text-5xl font-black text-black mb-6">
+<!-- HTML注释: 整体宽度通过 max-w-4xl 控制，实现日报宽度调小并保持响应式。-->
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+<!-- === "新茧日报" 文件头区域 开始 === -->
+<!-- HTML注释: 此模块作为单独一行，占据整行宽度。包含日报主标题、报告日期和时间范围。 -->
+<!-- HTML注释: 新增了"新茧历史日报"链接，样式与整体设计保持统一协调 -->
+<header class="w-full mb-8">
+<div class="bento-card p-8">
+<div class="text-center">
+<h1 class="text-5xl font-black text-black mb-6">
                         新茧日报
                     </h1>
-                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-lg mb-4">
-                        <div class="flex items-center text-gray-700">
-                            <i class="fas fa-calendar-alt mr-2 text-[#4D6BFE]"></i>
-                            <span id="report-date">2025年05月20日</span>
-                        </div>
-                        <div class="flex items-center text-gray-700">
-                            <i class="fas fa-clock mr-2 text-[#4D6BFE]"></i>
-                            <span>01:50 - 02:00 (次日)</span>
-                        </div>
-                    </div>
-                    <!-- HTML注释: 新增历史日报链接，位置合理且样式协调 -->
-                    <div class="flex justify-center">
-                        <a href="https://xinjian-bot.github.io/-/新茧历史日报汇总.html" class="history-link">
-                            <i class="fas fa-history"></i>
+<div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-lg mb-4">
+<div class="flex items-center text-gray-700">
+<i class="fas fa-calendar-alt mr-2 text-[#4D6BFE]"></i>
+<span id="report-date">2025年05月20日</span>
+</div>
+<div class="flex items-center text-gray-700">
+<i class="fas fa-clock mr-2 text-[#4D6BFE]"></i>
+<span>01:50 - 02:00 (次日)</span>
+</div>
+</div>
+<!-- HTML注释: 新增历史日报链接，位置合理且样式协调 -->
+<div class="flex justify-center">
+<a class="history-link" href="#" id="history-link">
+<i class="fas fa-history"></i>
                             新茧历史日报
                         </a>
-                    </div>
-                </div>
-            </div>
-        </header>
-        <!-- === "新茧日报" 文件头区域 结束 === -->
-
-        <!-- HTML注释: 新增导航区域，包含"上一天"和"下一天"按钮 -->
-        <!-- HTML注释: 导航逻辑说明：
+</div>
+</div>
+</div>
+</header>
+<!-- === "新茧日报" 文件头区域 结束 === -->
+<!-- HTML注释: 新增导航区域，包含"上一天"和"下一天"按钮 -->
+<!-- HTML注释: 导航逻辑说明：
              1. 通过JavaScript检查前后日期的日报文件是否存在
              2. 根据当前页面日期确定前后日期
              3. "下一天"按钮动态显示逻辑：仅当不是最新日报时显示
              4. 兼容处理历史日报文件命名格式
         -->
-        <nav class="w-full mb-8">
-            <div class="bento-card p-4">
-                <div class="flex justify-between items-center">
-                    <button id="prev-day" class="nav-button">
-                        <i class="fas fa-chevron-left"></i>
+<nav class="w-full mb-8 daily-nav">
+<div class="bento-card p-4">
+<div class="flex justify-between items-center">
+<button class="nav-button day-nav-prev" type="button">
+<i class="fas fa-chevron-left"></i>
                         上一天
                     </button>
-                    
-                    <div class="text-center">
-                        <span class="text-sm text-gray-600">日报导航</span>
-                    </div>
-                    
-                    <button id="next-day" class="nav-button">
+<div class="text-center">
+<span class="text-sm text-gray-600">日报导航</span>
+</div>
+<button class="nav-button day-nav-next" type="button">
                         下一天
                         <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-        </nav>
-
-        <!-- === 模块一：总消息概览 开始 === -->
-        <!-- HTML注释: 此模块作为单独一行，占据整行宽度。显示当日群聊总消息数量。 -->
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+</button>
+</div>
+</div>
+</nav>
+<!-- === 模块一：总消息概览 开始 === -->
+<!-- HTML注释: 此模块作为单独一行，占据整行宽度。显示当日群聊总消息数量。 -->
+<section class="w-full mb-12 anchor-target" id="section-overview">
+<h2 class="section-title">
                 一、总消息概览
             </h2>
-            <div class="bento-card p-8 bg-gradient-to-br from-[#4D6BFE]/20 via-[#4D6BFE]/10 to-[#4D6BFE]/5 text-center rounded-2xl">
-                <div class="number-display text-[#4D6BFE]">
+<div class="bento-card p-8 bg-gradient-to-br from-[#4D6BFE]/20 via-[#4D6BFE]/10 to-[#4D6BFE]/5 text-center rounded-2xl">
+<div class="number-display text-[#4D6BFE]">
                     5814
                 </div>
-                <p class="text-xl font-semibold text-black mt-3">总消息数量</p>
-            </div>
-        </section>
-        <!-- === 模块一：总消息概览 结束 === -->
-
-        <!-- === 模块二：火花碰撞时刻・热点话题 开始 === -->
-        <!-- HTML注释: 此模块作为单独一行，占据整行宽度。用于展示群内讨论的热点话题。 -->
-        <!-- HTML注释: 模块二内容结构说明: -->
-        <!-- 1. 话题: 作为卡片的主标题 -->
-        <!-- 2. 关键结论: 每个话题下可以包含多个关键结论 (模板结构示例展示支持最多3个关键结论，如需更多可复制结构)；关键结论应按照话题讨论的时间线来编写。 -->
-        <!-- 3. **金句时刻**: 每个关键结论下对应约3个**金句时刻**。 -->
-        <!-- HTML注释: "爬楼关键词"说明: 每个话题卡片中包含爬楼关键词区域，用于用户快速定位到群聊记录中的对应讨论位置。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。 -->
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+<p class="text-xl font-semibold text-black mt-3">总消息数量</p>
+</div>
+</section>
+<!-- === 模块一：总消息概览 结束 === -->
+<!-- === 模块二：火花碰撞时刻・热点话题 开始 === -->
+<!-- HTML注释: 此模块作为单独一行，占据整行宽度。用于展示群内讨论的热点话题。 -->
+<!-- HTML注释: 模块二内容结构说明: -->
+<!-- 1. 话题: 作为卡片的主标题 -->
+<!-- 2. 关键结论: 每个话题下可以包含多个关键结论 (模板结构示例展示支持最多3个关键结论，如需更多可复制结构)；关键结论应按照话题讨论的时间线来编写。 -->
+<!-- 3. **金句时刻**: 每个关键结论下对应约3个**金句时刻**。 -->
+<!-- HTML注释: "爬楼关键词"说明: 每个话题卡片中包含爬楼关键词区域，用于用户快速定位到群聊记录中的对应讨论位置。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。 -->
+<section class="w-full mb-12 anchor-target" id="section-hot-topics">
+<h2 class="section-title">
                 二、火花碰撞时刻・热点话题
             </h2>
-            <!-- 列表容器: 讨论话题 -->
-            <div class="space-y-8">
-                
-                <div class="bento-card p-6 rounded-xl"> 
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+<!-- 列表容器: 讨论话题 -->
+<div class="space-y-8">
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             纹身段子与谎言探讨
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             01:50 - 01:54
                         </span>
-                    </div>
-
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             ᴾᴿᴮ🎶：![图片](...) (首条纹身图片)
                         </p>
-                    </div>
-
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">纹身</span>
-                            <span class="tag-item">段子</span>
-                            <span class="tag-item">搞笑</span>
-                            <span class="tag-item">谎言</span>
-                            <span class="tag-item">个人选择</span>
-                        </div>
-                    </div>
-
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <p class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">纹身</span>
+<span class="tag-item">段子</span>
+<span class="tag-item">搞笑</span>
+<span class="tag-item">谎言</span>
+<span class="tag-item">个人选择</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<p class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
                             群友分享了两张关于纹身的图片，引发了关于纹身选择和效果的讨论。<b>紫盈</b>分享了古早纹身段子，如将“Loong”纹成扑克“一条龙”，并提到用搞笑纹身（如“手表回收”）作为战斗策略。<b>🦏（思维跳脱版</b>表示自己绝不会纹身。<b>ling</b>则借机探讨了说谎的技巧和谎言的好坏判断标准。
                         </p>
-                    </div>
-
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             纹身相关的幽默段子和奇葩选择能带来欢乐，甚至被构想为一种独特的“战斗策略”。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 我想到古早段子，有人说要纹一条龙「Loong」，谁知道师傅纹了扑克的一条龙。哈哈哈哈哈
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>紫盈(Purple_Lana)</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 你别说，他真纹「手表回收」，干架的时候衣服一脱！把对面的笑死争取时间进攻/撤退是一个好策略！
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>紫盈(Purple_Lana)</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             个人对纹身的接受度和对说谎的看法各不相同，反映了价值观的多样性。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 这辈子也不会文身
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>🦏（思维跳脱版(linbessi)</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 我不怎么说谎。不过我不怎么说谎的主要原因是我不聪明到不知道怎么表情自然/语气自然地去说不被人当场识破的谎。所以我还挺羡慕能很自然就说谎的人。谎言不一定都是不好的，只要带来的结果是好的，那就是好的。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>ling(wxid_dggrbxxdxw5912)</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bento-card p-6 rounded-xl"> 
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             深夜美食：打蚊子经验与泡面情怀
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             02:05 - 02:19
                         </span>
-                    </div>
-
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             🦏（思维跳脱版：分享一个打蚊子经验。
                         </p>
-                    </div>
-
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">打蚊子</span>
-                            <span class="tag-item">生活技巧</span>
-                            <span class="tag-item">深夜食堂</span>
-                            <span class="tag-item">泡面</span>
-                            <span class="tag-item">美食偏好</span>
-                        </div>
-                    </div>
-
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <p class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
-                            <b>🦏（思维跳脱版</b>分享了其与蚊子斗智斗勇并成功将其击毙的经验，随后话题转向了深夜美食。成员们热议起红烧牛肉面，特别是关于鸡蛋和火腿肠的加料偏好，如鸡蛋要半流心、火腿肠的种类和切法等，展现了大家对速食美味的独特追求。
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">打蚊子</span>
+<span class="tag-item">生活技巧</span>
+<span class="tag-item">深夜食堂</span>
+<span class="tag-item">泡面</span>
+<span class="tag-item">美食偏好</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<p class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+<b>🦏（思维跳脱版</b>分享了其与蚊子斗智斗勇并成功将其击毙的经验，随后话题转向了深夜美食。成员们热议起红烧牛肉面，特别是关于鸡蛋和火腿肠的加料偏好，如鸡蛋要半流心、火腿肠的种类和切法等，展现了大家对速食美味的独特追求。
                         </p>
-                    </div>
-
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             面对生活中的小烦恼（如蚊子），耐心和策略性的思考往往能带来意想不到的“战果”。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 下一次它出现的时候，要冷静，屏住呼吸，要看着它在身边盘旋直到失去警惕，缓缓落到你的身上...就在它尽情吸血之时，快准狠，啪！打死了。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>🦏（思维跳脱版(linbessi)</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 还以为是吸血时候肌肉使劲把吸管夹住
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>ᴾᴿᴮ🎶(korangaresitown)</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             深夜对泡面等速食的渴望普遍存在，且个人对配料和做法有细致的讲究。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 我现在想吃红烧牛肉面加鸡蛋和火腿肠，煮的那种
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>🦏（思维跳脱版(linbessi)</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 鸡蛋一定要最后 30 秒到一分钟加，放在面上一起，半流心，用筷子戳破流到面上，特好吃
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>黄云(yw1084255a)</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 泡面伴侣那种我喜欢整根
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>黄云(yw1084255a)</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bento-card p-6 rounded-xl"> 
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             地域饮食与消费观：粤菜之贵与快餐之争
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             02:19 - 02:33
                         </span>
-                    </div>
-
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             黄云：听说过广东的美食地图没有，虽然有夸张成分。我找找
                         </p>
-                    </div>
-
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">粤菜</span>
-                            <span class="tag-item">米其林</span>
-                            <span class="tag-item">快餐文化</span>
-                            <span class="tag-item">消费观念</span>
-                            <span class="tag-item">地域差异</span>
-                        </div>
-                    </div>
-
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <p class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">粤菜</span>
+<span class="tag-item">米其林</span>
+<span class="tag-item">快餐文化</span>
+<span class="tag-item">消费观念</span>
+<span class="tag-item">地域差异</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<p class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
                             群友从广东美食地图的分享展开，对比了深圳与北京的餐饮水平，<b>🦏（思维跳脱版</b>表示深圳随便一家猪脚饭都胜过北京。进而聊到一次在北京误入人均500+的高级粤菜馆的经历，感叹“粤菜不配”如此高价。<b>黄云</b>则从快餐品牌的座次（麦当劳优先于肯德基）谈到中国米其林餐厅中粤菜占比高，认为这可能源于评审团多为港粤厨师，从而塑造了粤菜昂贵的印象。
                         </p>
-                    </div>
-
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             粤菜在部分食客心中性价比不高，尤其是在北京等外地遭遇高价时，认为其“不配”高消费。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 你随便点个外卖猪脚饭也比北京的垃圾好吃
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>🦏（思维跳脱版(linbessi)</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 不是吃不起，是感觉粤菜不配
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>🦏（思维跳脱版(linbessi)</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             快餐品牌间的竞争激烈，麦当劳凭借新品（如麦麦脆汁鸡）等，在部分消费者心中已超越肯德基。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 不分先后也应该麦当劳在前面
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>ᴾᴿᴮ🎶(korangaresitown)</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 现在特别赞同，以前因为有原味鸡我觉得超越不了，后来吃了麦麦脆汁鸡，麦就是前面了。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>黄云(yw1084255a)</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             中国米其林餐厅评选中粤菜占多数，可能因评审团构成导致，这在一定程度上促成了“粤菜等于贵”的印象。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 中国的米其林餐厅评定，裁判大部分由港粤厨师组成，所以会发现中国的米其林餐厅粤菜餐厅占了多数，某种程度促成了粤菜等于贵的印象。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>黄云(yw1084255a)</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bento-card p-6 rounded-xl"> 
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             对罗大佑音乐作品的政治解读
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             02:50
                         </span>
-                    </div>
-
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             黄云：最讽刺的是，他这首歌同名专辑里的另一首歌《东方之珠》...
                         </p>
-                    </div>
-
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">罗大佑</span>
-                            <span class="tag-item">东方之珠</span>
-                            <span class="tag-item">皇后大道东</span>
-                            <span class="tag-item">政治隐喻</span>
-                            <span class="tag-item">文艺公知</span>
-                        </div>
-                    </div>
-
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <p class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
-                            <b>黄云</b>对罗大佑的歌曲《东方之珠》和《皇后大道东》进行了政治解读。指出《东方之珠》虽被评为优秀歌曲，但歌词中“守着沧海桑田变幻的诺言”被罗大佑本人解释为对香港割让和回归承诺的“阴阳怪气”。同时，《皇后大道东》被列为禁曲，进一步佐证了其作品的敏感性。<b>黄云</b>认为罗大佑暗藏政治立场，批评其“一边要反一边还想着赚爱国钱”的行为，并对这种“文艺公知面孔”表示反感。
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">罗大佑</span>
+<span class="tag-item">东方之珠</span>
+<span class="tag-item">皇后大道东</span>
+<span class="tag-item">政治隐喻</span>
+<span class="tag-item">文艺公知</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<p class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+<b>黄云</b>对罗大佑的歌曲《东方之珠》和《皇后大道东》进行了政治解读。指出《东方之珠》虽被评为优秀歌曲，但歌词中“守着沧海桑田变幻的诺言”被罗大佑本人解释为对香港割让和回归承诺的“阴阳怪气”。同时，《皇后大道东》被列为禁曲，进一步佐证了其作品的敏感性。<b>黄云</b>认为罗大佑暗藏政治立场，批评其“一边要反一边还想着赚爱国钱”的行为，并对这种“文艺公知面孔”表示反感。
                         </p>
-                    </div>
-
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             罗大佑的部分歌曲，如《东方之珠》，虽受官方表彰，但其歌词及作者解读被认为含有对政治现实的隐晦批评和“阴阳怪气”。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 最可笑的是《东方之珠》里面那句“守着沧海桑田变幻的诺言”，罗大佑还在阴阳怪气说诺言解释是，“香港是一百五十年前被割出去的，交給繼母領養，那時有一紙承諾。然後今天說時間到了，要拿回去，於是又有新的承諾。”
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>黄云(yw1084255a)</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             对于公众人物在作品中暗藏政治隐喻同时又接受官方荣誉的行为，部分群友表示强烈反感，认为其虚伪且意图不良。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 所以看见这人暗戳戳还要装很有文化的样子，就恶心死这种文艺公知面孔。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>黄云(yw1084255a)</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 所以说，这种人就是纯粹地坏，一边要反一边还想着赚爱国钱。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>黄云(yw1084255a)</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-        <!-- === 模块二：火花碰撞时刻・热点话题 结束 === -->
-
-        <!-- === 模块三：解惑一点通・有问必答 开始 === -->
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- === 模块二：火花碰撞时刻・热点话题 结束 === -->
+<!-- === 模块三：解惑一点通・有问必答 开始 === -->
+<section class="w-full mb-12 anchor-target" id="section-qa">
+<h2 class="section-title">
                 三、解惑一点通・有问必答
             </h2>
-            <div class="space-y-8">
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]"> 
-                    <div class="mb-4">
-                        <h4 class="text-xl font-semibold text-black flex items-center">
-                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+<div class="space-y-8">
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<div class="mb-4">
+<h4 class="text-xl font-semibold text-black flex items-center">
+<i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
                             青少年“叛逆期”是否存在性别差异？
                         </h4>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             啊怿子 -：个体定义 叛逆期 执拗期 #520A (引用昍的观点)
                         </p>
-                    </div>
-                    <div class="border-t border-gray-200 pt-4">
-                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
-                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+</div>
+<div class="border-t border-gray-200 pt-4">
+<h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+<i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
                             解答
                         </h5>
-                        <p class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
-                            <b>昍</b>认为：青少年时期的“叛逆”行为，与幼儿约5岁时出现的“执拗期”相似，其生理基础是<b>大脑发育尚不完善但自我意识已开始萌发</b>。幼儿执拗期表现为争夺自主权却能力不足，是因为他们刚意识到“我”的存在，但未区分“我”与“世界”。青少年也经历类似阶段。尽管男女青春期时间不同，但这种行为背后的生理机制并无本质性别差异。
+<p class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+<b>昍</b>认为：青少年时期的“叛逆”行为，与幼儿约5岁时出现的“执拗期”相似，其生理基础是<b>大脑发育尚不完善但自我意识已开始萌发</b>。幼儿执拗期表现为争夺自主权却能力不足，是因为他们刚意识到“我”的存在，但未区分“我”与“世界”。青少年也经历类似阶段。尽管男女青春期时间不同，但这种行为背后的生理机制并无本质性别差异。
                         </p>
-                    </div>
-                    <div class="mt-5 pt-4 border-t border-gray-200">
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">青少年心理</span>
-                            <span class="tag-item">叛逆期</span>
-                            <span class="tag-item">执拗期</span>
-                            <span class="tag-item">生理发展</span>
-                            <span class="tag-item">育儿</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]"> 
-                    <div class="mb-4">
-                        <h4 class="text-xl font-semibold text-black flex items-center">
-                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+</div>
+<div class="mt-5 pt-4 border-t border-gray-200">
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">青少年心理</span>
+<span class="tag-item">叛逆期</span>
+<span class="tag-item">执拗期</span>
+<span class="tag-item">生理发展</span>
+<span class="tag-item">育儿</span>
+</div>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<div class="mb-4">
+<h4 class="text-xl font-semibold text-black flex items-center">
+<i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
                             如何看待“抱着功利心做好事”？
                         </h4>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             昍：#提问 抱着功利心做好事，好不好？ (引用与光之咸鱼小玖💤的对话)
                         </p>
-                    </div>
-                    <div class="border-t border-gray-200 pt-4">
-                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
-                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+</div>
+<div class="border-t border-gray-200 pt-4">
+<h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+<i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
                             解答
                         </h5>
-                        <p class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
-                            <b>昍</b>与<b>光之咸鱼小玖💤</b>探讨了做好事的动机。<b>昍</b>认为，即使做好事的动机包含“证明自己是好人”或获得满足感，只要行为本身是好的，其价值就不应被否定。深层原因是，当人选择做“本可以不做”的好事时，充分证明了其主观意愿，这种外部确信能鼓舞自己。做好事本身就是有价值的，好人有权通过行动证明自己。即使他人试图以更高尚的动机做好事来“审判”你，客观上也增加了社会的好事总量，反而提升了最初行善者的“功德值”。<b>策策</b>和<b>mighty girl</b>等群友也认同，关键在于行为本身的结果。
+<p class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+<b>昍</b>与<b>光之咸鱼小玖💤</b>探讨了做好事的动机。<b>昍</b>认为，即使做好事的动机包含“证明自己是好人”或获得满足感，只要行为本身是好的，其价值就不应被否定。深层原因是，当人选择做“本可以不做”的好事时，充分证明了其主观意愿，这种外部确信能鼓舞自己。做好事本身就是有价值的，好人有权通过行动证明自己。即使他人试图以更高尚的动机做好事来“审判”你，客观上也增加了社会的好事总量，反而提升了最初行善者的“功德值”。<b>策策</b>和<b>mighty girl</b>等群友也认同，关键在于行为本身的结果。
                         </p>
-                    </div>
-                    <div class="mt-5 pt-4 border-t border-gray-200">
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">道德哲学</span>
-                            <span class="tag-item">利他行为</span>
-                            <span class="tag-item">功利心</span>
-                            <span class="tag-item">自我认知</span>
-                            <span class="tag-item">善行</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]"> 
-                    <div class="mb-4">
-                        <h4 class="text-xl font-semibold text-black flex items-center">
-                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+</div>
+<div class="mt-5 pt-4 border-t border-gray-200">
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">道德哲学</span>
+<span class="tag-item">利他行为</span>
+<span class="tag-item">功利心</span>
+<span class="tag-item">自我认知</span>
+<span class="tag-item">善行</span>
+</div>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<div class="mb-4">
+<h4 class="text-xl font-semibold text-black flex items-center">
+<i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
                             如何看待对“成色不太好”的爱国品牌持警惕态度？
                         </h4>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             昍：#提问 对某些成色不太好的爱国品牌，太警惕了，是不是不好？ (引用与Duuu的对话)
                         </p>
-                    </div>
-                    <div class="border-t border-gray-200 pt-4">
-                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
-                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+</div>
+<div class="border-t border-gray-200 pt-4">
+<h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+<i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
                             解答
                         </h5>
-                        <p class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
-                            <b>昍</b>与<b>Duuu</b>探讨了对“爱国品牌”复杂情感的问题。<b>昍</b>指出，核心在于分清主要矛盾和次要矛盾。例如，在外部竞争激烈时（如“鬼子来了”），团结内部力量（如“KMT”）一致对外是主要矛盾。品牌自身的“黑历史”或“德不配位”等问题，在此时是次要矛盾。警惕之心可以有，但公开表达时需考虑大局。<b>国家的主人是我们，民族资产阶级是被统战的对象</b>，应是我方专政他们，而非他们团结我方。<b>mighty girl</b>和<b>策策</b>也表示，现阶段会优先支持国产品牌，但警惕心是必要的，选择基于安全和实用。
+<p class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+<b>昍</b>与<b>Duuu</b>探讨了对“爱国品牌”复杂情感的问题。<b>昍</b>指出，核心在于分清主要矛盾和次要矛盾。例如，在外部竞争激烈时（如“鬼子来了”），团结内部力量（如“KMT”）一致对外是主要矛盾。品牌自身的“黑历史”或“德不配位”等问题，在此时是次要矛盾。警惕之心可以有，但公开表达时需考虑大局。<b>国家的主人是我们，民族资产阶级是被统战的对象</b>，应是我方专政他们，而非他们团结我方。<b>mighty girl</b>和<b>策策</b>也表示，现阶段会优先支持国产品牌，但警惕心是必要的，选择基于安全和实用。
                         </p>
-                    </div>
-                    <div class="mt-5 pt-4 border-t border-gray-200">
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">民族品牌</span>
-                            <span class="tag-item">爱国消费</span>
-                            <span class="tag-item">主要矛盾</span>
-                            <span class="tag-item">统战价值</span>
-                            <span class="tag-item">批判性思维</span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-        <!-- === 模块三：解惑一点通・有问必答 结束 === -->
-
-        <!-- === 模块四：智慧火花匣・每日精选 开始 === -->
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+</div>
+<div class="mt-5 pt-4 border-t border-gray-200">
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">民族品牌</span>
+<span class="tag-item">爱国消费</span>
+<span class="tag-item">主要矛盾</span>
+<span class="tag-item">统战价值</span>
+<span class="tag-item">批判性思维</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- === 模块三：解惑一点通・有问必答 结束 === -->
+<!-- === 模块四：智慧火花匣・每日精选 开始 === -->
+<section class="w-full mb-12 anchor-target" id="section-daily-picks">
+<h2 class="section-title">
                 四、智慧火花匣・每日精选
             </h2>
-            <div class="space-y-8">
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]"> 
-                    <h4 class="text-xl font-semibold text-black mb-3">
+<div class="space-y-8">
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<h4 class="text-xl font-semibold text-black mb-3">
                         理解历史叙事：警惕“借古讽今”的隐议程
                     </h4>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             啊怿子 -：现代文人 历史细节 汉武帝#520A (引用昍的观点)
                         </p>
-                    </div>
-                    <p class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
-                        <b>昍</b>指出，在解读历史人物（如李广）时，需警惕历史博主可能存在的“借古讽今”意图，即通过赞扬历史人物来含沙射影地批评当代。例如，夸赞李广可能意在批评汉武帝，而汉武帝又常被用作当代领导人的隐喻。要理解历史，需关注人物的阶级属性（李广是军事贵族，非平民出身）和当时的政治背景（汉武帝为巩固权力，需扶植外戚势力，可能涉及党争）。因此，对历史叙事的解读应具备批判性思维，识别其背后可能隐藏的政治立场和议程。
+</div>
+<p class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+<b>昍</b>指出，在解读历史人物（如李广）时，需警惕历史博主可能存在的“借古讽今”意图，即通过赞扬历史人物来含沙射影地批评当代。例如，夸赞李广可能意在批评汉武帝，而汉武帝又常被用作当代领导人的隐喻。要理解历史，需关注人物的阶级属性（李广是军事贵族，非平民出身）和当时的政治背景（汉武帝为巩固权力，需扶植外戚势力，可能涉及党争）。因此，对历史叙事的解读应具备批判性思维，识别其背后可能隐藏的政治立场和议程。
                     </p>
-                    <div class="flex flex-wrap gap-2 mb-4"> 
-                        <span class="tag-item">历史解读</span>
-                        <span class="tag-item">批判性思维</span>
-                        <span class="tag-item">汉武帝</span>
-                        <span class="tag-item">李广</span>
-                        <span class="tag-item">政治隐喻</span>
-                    </div>
-                </div>
-                
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]"> 
-                    <h4 class="text-xl font-semibold text-black mb-3">
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="tag-item">历史解读</span>
+<span class="tag-item">批判性思维</span>
+<span class="tag-item">汉武帝</span>
+<span class="tag-item">李广</span>
+<span class="tag-item">政治隐喻</span>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<h4 class="text-xl font-semibold text-black mb-3">
                         佛教中的“善巧方便”：并非绝对禁止“谎言”
                     </h4>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             啊怿子 -：佛家 辩经 教育 说谎 #520A (引用昍的观点)
                         </p>
-                    </div>
-                    <p class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+</div>
+<p class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
                         针对“佛教徒从不撒谎”的说法，<b>昍</b>引用了<b>#火宅三车喻</b>（《法华经》中的譬喻）来说明佛教中“善意的谎言”或“善巧方便”（upāya）的必要性。在此譬喻中，长者为救耽溺玩乐于火宅中的孩子们，许诺给予他们羊车、鹿车、牛车等玩具，待孩子们逃出火宅后，则给予他们更珍贵的大白牛车。这说明为达更高目标（如救度众生），有时需要采取灵活变通、不拘泥于表面真实的言语和行为。因此，认为佛教绝对禁止任何形式的“谎言”是对佛法精义的误解。
                     </p>
-                    <div class="flex flex-wrap gap-2 mb-4"> 
-                        <span class="tag-item">佛教</span>
-                        <span class="tag-item">善巧方便</span>
-                        <span class="tag-item">火宅三车喻</span>
-                        <span class="tag-item">谎言</span>
-                        <span class="tag-item">伦理</span>
-                    </div>
-                </div>
-
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]"> 
-                    <h4 class="text-xl font-semibold text-black mb-3">
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="tag-item">佛教</span>
+<span class="tag-item">善巧方便</span>
+<span class="tag-item">火宅三车喻</span>
+<span class="tag-item">谎言</span>
+<span class="tag-item">伦理</span>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<h4 class="text-xl font-semibold text-black mb-3">
                         毛泽东论革命乐观主义：从“四句话”看发展观
                     </h4>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             桃乐丝：讲到乐观，昨天看毛传读到这一段，主席也是在讲乐观主义
                         </p>
-                    </div>
-                    <p class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
-                        <b>桃乐丝</b>分享了毛泽东在1957年整风座谈会上对张奚若提出的“好大喜功，急功近利，轻视过去，迷信将来”四句批评的正面解读。毛泽东认为，<b>革命派需要“好大喜功”和“急功近利”</b>（指合乎实际的、革命的目标和效率），<b>“轻视过去”是进化和进步的必要</b>（人类历史总体向前发展），而<b>“迷信将来”则代表了人类对未来的希望</b>。这“四句话”被他视为正确的革命精神和发展观，体现了其革命乐观主义。
+</div>
+<p class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+<b>桃乐丝</b>分享了毛泽东在1957年整风座谈会上对张奚若提出的“好大喜功，急功近利，轻视过去，迷信将来”四句批评的正面解读。毛泽东认为，<b>革命派需要“好大喜功”和“急功近利”</b>（指合乎实际的、革命的目标和效率），<b>“轻视过去”是进化和进步的必要</b>（人类历史总体向前发展），而<b>“迷信将来”则代表了人类对未来的希望</b>。这“四句话”被他视为正确的革命精神和发展观，体现了其革命乐观主义。
                     </p>
-                    <div class="flex flex-wrap gap-2 mb-4"> 
-                        <span class="tag-item">毛泽东思想</span>
-                        <span class="tag-item">革命乐观主义</span>
-                        <span class="tag-item">发展观</span>
-                        <span class="tag-item">历史观</span>
-                        <span class="tag-item">信仰充值</span>
-                    </div>
-                </div>
-                
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]"> 
-                    <h4 class="text-xl font-semibold text-black mb-3">
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="tag-item">毛泽东思想</span>
+<span class="tag-item">革命乐观主义</span>
+<span class="tag-item">发展观</span>
+<span class="tag-item">历史观</span>
+<span class="tag-item">信仰充值</span>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<h4 class="text-xl font-semibold text-black mb-3">
                         有效提问的要义：具体、真实、深思
                     </h4>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             昍：#如何学会提问 (群主直接发起的相关讨论)
                         </p>
-                    </div>
-                    <p class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+</div>
+<p class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
                         在群内发起“提问挑战”后，<b>昍</b>就如何提出“真正的问题”给出了指导。他强调，<b>好的问题应源于真实生活和工作中的困惑，而非空泛的、百度即能得到答案的客观问题</b>。提问时应<b>越清楚越好，多举例，避免抽象、归纳和总结</b>，以日常交流的方式呈现，促进有效沟通。例如，“改变一个人的想法可能吗？”不是好问题，而“我有个朋友[具体情况]，我尝试[具体做法]改变其[具体想法]未果，该怎么办？”则是真实问题。他还指出，查资料后若产生更多不懂的知识点，说明方向对了，类似游戏中遇敌越多越接近目标。
                     </p>
-                    <div class="flex flex-wrap gap-2 mb-4"> 
-                        <span class="tag-item">提问技巧</span>
-                        <span class="tag-item">有效沟通</span>
-                        <span class="tag-item">问题解决</span>
-                        <span class="tag-item">学习方法</span>
-                        <span class="tag-item">批判性思维</span>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-        <!-- === 模块四：智慧火花匣・每日精选 结束 === -->
-
-        <!-- === 文件底部 开始 === -->
-        <!-- HTML注释: 此模块作为文件底部，包含数据来源、报告生成时间及免责声明。 -->
-        <footer class="w-full mt-16">
-            <div class="bento-card p-8">
-                <div class="text-center text-gray-700 space-y-3">
-                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-base">
-                        <div class="flex items-center">
-                            <i class="fas fa-database mr-2 text-[#4D6BFE]"></i>
-                            <span>微信群聊记录</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-robot mr-2 text-[#4D6BFE]"></i>
-                            <span id="generation-time">2024-05-21 03:00:00</span>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-500 max-w-2xl mx-auto leading-relaxed">
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="tag-item">提问技巧</span>
+<span class="tag-item">有效沟通</span>
+<span class="tag-item">问题解决</span>
+<span class="tag-item">学习方法</span>
+<span class="tag-item">批判性思维</span>
+</div>
+</div>
+</div>
+</section>
+<!-- === 模块四：智慧火花匣・每日精选 结束 === -->
+<!-- === 文件底部 开始 === -->
+<!-- HTML注释: 此模块作为文件底部，包含数据来源、报告生成时间及免责声明。 -->
+<nav class="w-full mt-12 daily-nav">
+<div class="bento-card p-4">
+<div class="flex justify-between items-center">
+<button class="nav-button day-nav-prev" type="button">
+<i class="fas fa-chevron-left"></i>
+                        上一天
+                    </button>
+<div class="text-center">
+<span class="text-sm text-gray-600">日报导航</span>
+</div>
+<button class="nav-button day-nav-next" type="button">
+                        下一天
+                        <i class="fas fa-chevron-right"></i>
+</button>
+</div>
+</div>
+</nav><footer class="w-full mt-16">
+<div class="bento-card p-8">
+<div class="text-center text-gray-700 space-y-3">
+<div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-base">
+<div class="flex items-center">
+<i class="fas fa-database mr-2 text-[#4D6BFE]"></i>
+<span>微信群聊记录</span>
+</div>
+<div class="flex items-center">
+<i class="fas fa-robot mr-2 text-[#4D6BFE]"></i>
+<span id="generation-time">2024-05-21 03:00:00</span>
+</div>
+</div>
+<p class="text-sm text-gray-500 max-w-2xl mx-auto leading-relaxed">
                         本报告基于群聊数据自动生成，仅供参考。内容可能包含个人观点，不代表群组官方立场。数据处理过程中已尽量匿名化处理敏感信息。
                     </p>
-                </div>
-            </div>
-        </footer>
-        <!-- === 文件底部 结束 === -->
-    </div>
-
-    <script>
+</div>
+</div>
+</footer>
+<!-- === 文件底部 结束 === -->
+</div><div aria-label="页面快捷操作" class="floating-actions">
+<div class="directory-wrapper">
+<button aria-controls="directory-panel" aria-expanded="false" aria-label="打开内容导航" class="floating-button" id="directory-toggle" type="button">
+<i class="fas fa-list-ul"></i>
+</button>
+<div aria-hidden="true" aria-modal="false" class="directory-panel" id="directory-panel" role="dialog">
+<div class="directory-header">
+<span class="directory-title">内容导航</span>
+<button aria-label="关闭内容导航" class="directory-close" id="directory-close" type="button">
+<i class="fas fa-times"></i>
+</button>
+</div>
+<div class="directory-list" id="directory-list">
+<!-- HTML注释: 目录列表由脚本自动填充，确保多层级锚点保持同步 -->
+</div>
+</div>
+</div>
+<button aria-label="返回顶部" class="floating-button floating-button--hidden" id="scroll-top-btn" type="button">
+<i class="fas fa-arrow-up"></i>
+</button>
+</div>
+<script>
+        // 定义基础URL常量
+        const BASE_URL = 'https://xinjian-bot.github.io/-';
+        
         document.addEventListener('DOMContentLoaded', function() {
             // Bento card hover effect is handled by CSS :hover pseudo-class
 
@@ -908,6 +1159,18 @@
 
             // HTML注释: 初始化日报导航功能
             initDailyNavigation();
+
+            // HTML注释: 初始化展开功能
+            initExpandableContent();
+
+            // HTML注释: 初始化浮动按钮与目录互动
+            initFloatingActions();
+            
+            // 初始化历史汇总链接
+            const historyLink = document.getElementById('history-link');
+            if (historyLink) {
+                historyLink.href = BASE_URL + '/新茧历史日报汇总.html';
+            }
         });
 
         // HTML注释: 这个函数实现了日报间的导航功能，包括：
@@ -920,36 +1183,18 @@
                 // HTML注释: 获取当前页面的日期
                 const currentDate = getCurrentDateFromPage();
                 if (!currentDate) {
-                    // console.warn('无法从页面中提取日期信息，导航功能可能受限。');
-                     // 尝试从generation-time元素获取更精确的日期作为后备
-                    const genTimeElement = document.getElementById('generation-time');
-                    if (genTimeElement && genTimeElement.textContent.includes(" ")) {
-                        const genDate = genTimeElement.textContent.split(" ")[0];
-                        if (genDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
-                             // console.log('使用生成时间日期:', genDate);
-                            await setupNavigationButtons(genDate);
-                            return;
-                        }
-                    }
-                    // 如果还是无法获取日期，则禁用导航按钮
-                    const prevButton = document.getElementById('prev-day');
-                    const nextButton = document.getElementById('next-day');
-                    if (prevButton) prevButton.disabled = true;
-                    if (nextButton) nextButton.disabled = true;
+                    console.warn('无法从页面中提取日期信息');
                     return;
                 }
+
                 // HTML注释: 设置导航按钮
                 await setupNavigationButtons(currentDate);
 
             } catch (error) {
                 console.error('初始化日报导航时出错:', error);
-                const prevButton = document.getElementById('prev-day');
-                const nextButton = document.getElementById('next-day');
-                if (prevButton) prevButton.disabled = true;
-                if (nextButton) nextButton.disabled = true;
             }
         }
-        
+
         // HTML注释: 从页面中提取当前日期
         // HTML注释: 支持多种方式提取日期：优先从页面元素、URL文件名或页面标题
         function getCurrentDateFromPage() {
@@ -966,15 +1211,15 @@
                 }
             }
 
-            // HTML注释: 方法2：从URL文件名中提取日期 (适配 "新茧群日报_YYYY-MM-DD.html" 和 "新茧日报 YYYY-MM-DD.html")
+            // HTML注释: 方法2：从URL文件名中提取日期
             const pathname = window.location.pathname;
-            const filenameMatch = pathname.match(/新茧群日报[_-](\d{4}-\d{2}-\d{2})\.html/);
+            const filenameMatch = pathname.match(/新茧群日报_(\d{4}-\d{2}-\d{2})\.html/);
             if (filenameMatch) {
                 return filenameMatch[1];
             }
-            
-            // HTML注释: 方法3：从页面标题中提取日期 (适配 "新茧日报 YYYY-MM-DD")
-            const titleMatch = document.title.match(/新茧日报 (\d{4}-\d{2}-\d{2})/);
+
+            // HTML注释: 方法3：从页面标题中提取日期
+            const titleMatch = document.title.match(/(\d{4}-\d{2}-\d{2})/);
             if (titleMatch) {
                 return titleMatch[1];
             }
@@ -985,16 +1230,20 @@
         // HTML注释: 设置导航按钮的状态和链接
          // HTML注释: 根据当前日期，检查前后日期的日报文件是否存在
          async function setupNavigationButtons(currentDate) {
-             const prevButton = document.getElementById('prev-day');
-             const nextButton = document.getElementById('next-day');
-             const navContainer = document.querySelector('nav');
+             const prevButtons = document.querySelectorAll('.day-nav-prev');
+             const nextButtons = document.querySelectorAll('.day-nav-next');
+             const navContainers = document.querySelectorAll('.daily-nav');
+
+             if (!prevButtons.length && !nextButtons.length) {
+                 return;
+             }
              
              // HTML注释: 计算前一天和后一天的日期
-             const currentDateObj = new Date(currentDate + "T00:00:00Z"); // Ensure it's treated as UTC to avoid timezone shifts
+             const currentDateObj = new Date(currentDate);
              const prevDateObj = new Date(currentDateObj);
-             prevDateObj.setUTCDate(prevDateObj.getUTCDate() - 1);
+             prevDateObj.setDate(prevDateObj.getDate() - 1);
              const nextDateObj = new Date(currentDateObj);
-             nextDateObj.setUTCDate(nextDateObj.getUTCDate() + 1);
+             nextDateObj.setDate(nextDateObj.getDate() + 1);
              
              const prevDate = formatDate(prevDateObj);
              const nextDate = formatDate(nextDateObj);
@@ -1003,71 +1252,320 @@
              const prevExists = await checkReportExists(prevDate);
              const nextExists = await checkReportExists(nextDate);
              
-             // HTML注释: 如果前后日期的日报都不存在，隐藏整个导航栏容器
+             // HTML注释: 如果前后日期的日报都不存在，隐藏所有导航栏容器
              if (!prevExists && !nextExists) {
-                 if (navContainer) navContainer.style.display = 'none';
+                 navContainers.forEach(container => {
+                     container.style.display = 'none';
+                 });
                  return;
              }
              
-             // HTML注释: 显示导航栏容器
-             if (navContainer) navContainer.style.display = 'block';
+             // HTML注释: 显示所有导航栏容器
+             navContainers.forEach(container => {
+                 container.style.display = 'block';
+             });
              
              // HTML注释: 设置前一天按钮
-             if (prevButton) {
+             prevButtons.forEach(button => {
                  if (prevExists) {
-                     prevButton.onclick = () => {
-                         window.location.href = `https://xinjian-bot.github.io/-/新茧群日报_${prevDate}.html`;
+                     button.disabled = false;
+                     button.onclick = () => {
+                         window.location.href = `${BASE_URL}/新茧群日报_${prevDate}.html`;
                      };
-                     prevButton.disabled = false;
                  } else {
-                     prevButton.disabled = true;
-                     prevButton.onclick = null;
+                     button.disabled = true;
+                     button.onclick = null;
                  }
-             }
+             });
 
              // HTML注释: 设置后一天按钮
-             if (nextButton) {
+             nextButtons.forEach(button => {
                  if (nextExists) {
-                     nextButton.onclick = () => {
-                         window.location.href = `https://xinjian-bot.github.io/-/新茧群日报_${nextDate}.html`;
+                     button.disabled = false;
+                     button.onclick = () => {
+                         window.location.href = `${BASE_URL}/新茧群日报_${nextDate}.html`;
                      };
-                     nextButton.disabled = false;
-                     nextButton.style.display = 'inline-flex'; 
                  } else {
-                     // HTML注释: 后一天的日报不存在，隐藏"下一天"按钮
-                     nextButton.style.display = 'none';
+                     button.disabled = true;
+                     button.onclick = null;
                  }
-             }
+             });
          }
 
         // HTML注释: 检查指定日期的日报文件是否存在
         async function checkReportExists(date) {
-            // 检查标准命名格式
-            let reportExists = await fetchReport(`https://xinjian-bot.github.io/-/新茧群日报_${date}.html`);
-            // 如果标准格式不存在，检查可能的历史命名格式 (带空格)
-            if (!reportExists) {
-                reportExists = await fetchReport(`https://xinjian-bot.github.io/-/新茧群日报 ${date}.html`);
-            }
-            return reportExists;
-        }
-
-        // HTML注释: 实际的 fetch 操作
-        async function fetchReport(url) {
             try {
-                const response = await fetch(url, { method: 'HEAD' });
+                const response = await fetch(`${BASE_URL}/新茧群日报_${date}.html`, { method: 'HEAD' });
                 return response.ok;
             } catch (error) {
-                // console.error('Error checking report existence for:', url, error);
                 return false;
             }
         }
 
         // HTML注释: 格式化日期为YYYY-MM-DD格式
         function formatDate(date) {
-            const year = date.getUTCFullYear();
-            const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-            const day = String(date.getUTCDate()).padStart(2, '0');
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
             return `${year}-${month}-${day}`;
+        }
+
+        // HTML注释: 初始化展开功能
+        function initExpandableContent() {
+            const expandableContents = document.querySelectorAll('.expandable-content');
+            
+            expandableContents.forEach(container => {
+                const charLimit = parseInt(container.getAttribute('data-char-limit')) || 200;
+                const contentPreview = container.querySelector('.content-preview');
+                const expandBtn = container.querySelector('.expand-btn');
+                
+                if (!contentPreview || !expandBtn) return;
+                
+                const fullContent = contentPreview.innerHTML;
+                const fullText = contentPreview.textContent || contentPreview.innerText;
+                
+                // HTML注释: 如果内容长度超过限制，则显示展开按钮
+                if (fullText.length > charLimit) {
+                    // HTML注释: 创建一个临时元素来正确截取HTML内容
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = fullContent;
+                    
+                    // HTML注释: 截取文本内容到指定长度
+                    const truncatedText = fullText.substring(0, charLimit);
+                    
+                    // HTML注释: 使用更简单可靠的方法截取内容
+                    let truncatedContent = '';
+                    let charCount = 0;
+                    
+                    // HTML注释: 逐字符遍历，保持简单的HTML结构
+                    const walker = document.createTreeWalker(
+                        tempDiv,
+                        NodeFilter.SHOW_TEXT,
+                        null,
+                        false
+                    );
+                    
+                    let node;
+                    const textNodes = [];
+                    while (node = walker.nextNode()) {
+                        textNodes.push(node);
+                    }
+                    
+                    // HTML注释: 计算需要保留的文本内容
+                    for (let textNode of textNodes) {
+                        const text = textNode.textContent;
+                        if (charCount + text.length <= charLimit) {
+                            charCount += text.length;
+                        } else {
+                            const remainingChars = charLimit - charCount;
+                            textNode.textContent = text.substring(0, remainingChars) + '...';
+                            charCount = charLimit;
+                            
+                            // HTML注释: 新的、更干净的移除后续所有节点的逻辑
+                            let currentNodeToClearAfter = textNode;
+                            while (currentNodeToClearAfter && currentNodeToClearAfter !== tempDiv) {
+                                let sibling = currentNodeToClearAfter.nextSibling;
+                                while (sibling) {
+                                    const nodeToRemove = sibling;
+                                    sibling = sibling.nextSibling;
+                                    nodeToRemove.remove();
+                                }
+                                currentNodeToClearAfter = currentNodeToClearAfter.parentElement;
+                            }
+                            break; // 完成截断和清理，跳出 textNodes 循环
+                        }
+                    }
+                    
+                    const previewContent = tempDiv.innerHTML;
+                    
+                    contentPreview.innerHTML = previewContent;
+                    contentPreview.classList.add('collapsed');
+                    expandBtn.style.display = 'flex';
+                    
+                    // HTML注释: 绑定展开/收起事件
+                    expandBtn.addEventListener('click', function() {
+                        const isExpanded = expandBtn.classList.contains('expanded');
+                        
+                        if (isExpanded) {
+                            // HTML注释: 收起内容
+                            contentPreview.innerHTML = previewContent;
+                            contentPreview.classList.add('collapsed');
+                            expandBtn.querySelector('.expand-text').textContent = '展开全文';
+                            expandBtn.classList.remove('expanded');
+                        } else {
+                            // HTML注释: 展开内容
+                            contentPreview.innerHTML = fullContent;
+                            contentPreview.classList.remove('collapsed');
+                            expandBtn.querySelector('.expand-text').textContent = '收起';
+                            expandBtn.classList.add('expanded');
+                        }
+                    });
+                } else {
+                    // HTML注释: 内容较短，隐藏展开按钮
+                    expandBtn.style.display = 'none';
+                }
+            });
+        }
+
+        // HTML注释: 构建目录，统一扫描模块及其子卡片生成锚点
+        function buildDirectory(panelElement) {
+            const listElement = panelElement.querySelector('#directory-list');
+            if (!listElement) {
+                return;
+            }
+
+            listElement.innerHTML = '';
+
+            const directoryConfigs = [
+                { id: 'section-overview', icon: 'fa-chart-column' },
+                { id: 'section-hot-topics', icon: 'fa-fire' },
+                { id: 'section-meeting', icon: 'fa-users' },
+                { id: 'section-qa', icon: 'fa-circle-question' },
+                { id: 'section-daily-picks', icon: 'fa-lightbulb' }
+            ];
+
+            directoryConfigs.forEach((config) => {
+                const sectionElement = document.getElementById(config.id);
+                if (!sectionElement) {
+                    return;
+                }
+
+                const sectionTitleElement = sectionElement.querySelector('.section-title');
+                const sectionTitle = sectionTitleElement ? sectionTitleElement.textContent.trim() : config.id;
+
+                const itemWrapper = document.createElement('div');
+                itemWrapper.className = 'directory-item';
+
+                const entryButton = document.createElement('button');
+                entryButton.type = 'button';
+                entryButton.className = 'directory-entry';
+                entryButton.setAttribute('data-target', config.id);
+                entryButton.innerHTML = `<span class="directory-icon"><i class="fas ${config.icon}"></i></span><span class="directory-text">${sectionTitle}</span>`;
+                itemWrapper.appendChild(entryButton);
+
+                const subHeadings = sectionElement.querySelectorAll('.bento-card h4');
+                if (subHeadings.length > 0) {
+                    const sublistElement = document.createElement('div');
+                    sublistElement.className = 'directory-sublist';
+
+                    subHeadings.forEach((heading, index) => {
+                        const cardElement = heading.closest('.bento-card');
+                        if (!cardElement) {
+                            return;
+                        }
+
+                        if (!cardElement.classList.contains('anchor-target')) {
+                            cardElement.classList.add('anchor-target');
+                        }
+
+                        if (!cardElement.id) {
+                            cardElement.id = `${config.id}-item-${index + 1}`;
+                        }
+
+                        const subButton = document.createElement('button');
+                        subButton.type = 'button';
+                        subButton.className = 'directory-subitem';
+                        subButton.setAttribute('data-target', cardElement.id);
+                        subButton.innerHTML = `<span class="directory-text">${heading.textContent.trim()}</span>`;
+                        sublistElement.appendChild(subButton);
+                    });
+
+                    itemWrapper.appendChild(sublistElement);
+                }
+
+                listElement.appendChild(itemWrapper);
+            });
+        }
+
+        // HTML注释: 初始化浮动按钮与目录交互
+        function initFloatingActions() {
+            const scrollTopBtn = document.getElementById('scroll-top-btn');
+            const directoryToggle = document.getElementById('directory-toggle');
+            const directoryPanel = document.getElementById('directory-panel');
+            const directoryClose = document.getElementById('directory-close');
+
+            if (scrollTopBtn) {
+                const toggleScrollButton = () => {
+                    if (window.scrollY > 240) {
+                        scrollTopBtn.classList.remove('floating-button--hidden');
+                    } else {
+                        scrollTopBtn.classList.add('floating-button--hidden');
+                    }
+                };
+
+                toggleScrollButton();
+                window.addEventListener('scroll', toggleScrollButton, { passive: true });
+
+                scrollTopBtn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+
+            if (!directoryPanel) {
+                return;
+            }
+
+            buildDirectory(directoryPanel);
+
+            if (!directoryToggle) {
+                return;
+            }
+
+            const closePanel = () => {
+                directoryPanel.classList.remove('open');
+                directoryToggle.setAttribute('aria-expanded', 'false');
+                directoryPanel.setAttribute('aria-hidden', 'true');
+            };
+
+            const openPanel = () => {
+                directoryPanel.classList.add('open');
+                directoryToggle.setAttribute('aria-expanded', 'true');
+                directoryPanel.setAttribute('aria-hidden', 'false');
+            };
+
+            const togglePanel = () => {
+                if (directoryPanel.classList.contains('open')) {
+                    closePanel();
+                } else {
+                    openPanel();
+                }
+            };
+
+            directoryToggle.addEventListener('click', (event) => {
+                event.stopPropagation();
+                togglePanel();
+            });
+
+            if (directoryClose) {
+                directoryClose.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    closePanel();
+                });
+            }
+
+            const directoryItems = directoryPanel.querySelectorAll('[data-target]');
+            directoryItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const targetId = item.getAttribute('data-target');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                    closePanel();
+                });
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!directoryPanel.contains(event.target) && !directoryToggle.contains(event.target)) {
+                    closePanel();
+                }
+            });
+
+            window.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closePanel();
+                }
+            });
         }
     </script>
 </body>

@@ -1,21 +1,22 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>新茧日报 2025-06-18</title>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6C9T7FPDT2"></script>
-    <script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>新茧日报 2025-06-18</title>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-6C9T7FPDT2"></script>
+<script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
       gtag('config', 'G-6C9T7FPDT2');
     </script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
         * {
@@ -25,6 +26,11 @@
         body {
             background-color: #ffffff;
             color: #000000;
+        }
+
+        :root {
+            --directory-main-font-size: clamp(0.85rem, 0.9vw + 0.6rem, 0.95rem);
+            --directory-sub-font-size: clamp(0.78rem, 0.75vw + 0.5rem, 0.88rem);
         }
 
         .bento-card {
@@ -63,6 +69,7 @@
             font-weight: 500; /* medium */
         }
 
+        /* HTML注释: 新增导航按钮样式，与现有设计保持一致 */
         .nav-button {
             background: linear-gradient(135deg, #4D6BFE 0%, #6B8BFF 100%);
             color: white;
@@ -111,6 +118,7 @@
             transform: translateY(-1px);
         }
 
+        /* HTML注释: 展开功能相关样式 */
         .expandable-content {
             position: relative;
         }
@@ -127,7 +135,7 @@
             left: 0;
             right: 0;
             height: 30px;
-            background: linear-gradient(transparent, rgba(255, 255, 255, 0.9)); /* Adjusted for white background */
+            background: linear-gradient(transparent, rgba(248, 250, 252, 0.9));
             pointer-events: none;
         }
 
@@ -150,1149 +158,1365 @@
         .expand-btn.expanded .expand-icon {
             transform: rotate(180deg);
         }
+
+        /* HTML注释: 目录锚点滚动偏移，避免标题被遮挡 */
+        .anchor-target {
+            scroll-margin-top: 120px;
+        }
+
+        /* HTML注释: 右下角浮动快捷按钮区域样式 */
+        .floating-actions {
+            position: fixed;
+            right: 1.25rem;
+            bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            z-index: 50;
+        }
+
+        .floating-button {
+            background: linear-gradient(135deg, #4D6BFE 0%, #6B8BFF 100%);
+            color: #ffffff;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px -5px rgba(77, 107, 254, 0.35);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .floating-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -6px rgba(77, 107, 254, 0.45);
+        }
+
+        .floating-button:focus-visible {
+            outline: 2px solid rgba(77, 107, 254, 0.45);
+            outline-offset: 2px;
+        }
+
+        .floating-button--hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            pointer-events: none;
+        }
+
+        .directory-wrapper {
+            position: relative;
+        }
+
+        .directory-panel {
+            position: absolute;
+            right: 0;
+            bottom: 3.5rem;
+            width: 18rem;
+            background: #ffffff;
+            border: 1px solid rgba(77, 107, 254, 0.2);
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 40px -15px rgba(77, 107, 254, 0.35);
+            padding: 1rem;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            max-height: min(75vh, 30rem);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+
+        .directory-panel.open {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .directory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .directory-title {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: var(--directory-main-font-size);
+        }
+
+        .directory-close {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 9999px;
+            transition: color 0.2s ease;
+        }
+
+        .directory-close:hover {
+            color: #4D6BFE;
+        }
+
+        .directory-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .directory-list button {
+            width: 100%;
+            text-align: left;
+            background: rgba(77, 107, 254, 0.08);
+            color: #1f2937;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.55rem 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: var(--directory-main-font-size);
+        }
+
+        .directory-list button:hover {
+            background: rgba(77, 107, 254, 0.18);
+            color: #1d4ed8;
+        }
+
+        /* HTML注释: 二级导航容器与按钮样式，支持多层级显示 */
+        .directory-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .directory-entry {
+            background: rgba(77, 107, 254, 0.08);
+        }
+
+        .directory-sublist {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-left: 2.5rem;
+            padding-left: 0.75rem;
+            border-left: 1px solid rgba(77, 107, 254, 0.2);
+        }
+
+        .directory-subitem {
+            background: rgba(77, 107, 254, 0.04);
+            padding-top: 0.45rem;
+            padding-bottom: 0.45rem;
+            font-size: var(--directory-sub-font-size);
+        }
+
+        .directory-subitem:hover {
+            background: rgba(77, 107, 254, 0.14);
+        }
+
+        .directory-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 9999px;
+            background: rgba(77, 107, 254, 0.12);
+            color: #4D6BFE;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .directory-text {
+            flex: 1;
+            color: inherit;
+        }
+
+        @media (max-width: 640px) {
+            .floating-actions {
+                right: 0.75rem;
+                bottom: 1rem;
+            }
+
+            .directory-panel {
+                width: min(80vw, 15rem);
+                bottom: 3.25rem;
+                max-height: min(70vh, 20rem);
+            }
+            :root {
+                --directory-main-font-size: 0.8rem;
+                --directory-sub-font-size: 0.72rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-white text-black min-h-screen">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-
-        <header class="w-full mb-8">
-            <div class="bento-card p-8">
-                <div class="text-center">
-                    <h1 class="text-5xl font-black text-black mb-6">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+<header class="w-full mb-8">
+<div class="bento-card p-8">
+<div class="text-center">
+<h1 class="text-5xl font-black text-black mb-6">
                         新茧日报
                     </h1>
-                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-lg mb-4">
-                        <div class="flex items-center text-gray-700">
-                            <i class="fas fa-calendar-alt mr-2 text-[#4D6BFE]"></i>
-                            <span id="report-date">2025年06月18日</span>
-                        </div>
-                        <div class="flex items-center text-gray-700">
-                            <i class="fas fa-clock mr-2 text-[#4D6BFE]"></i>
-                            <span>03:00  - 03:00 (次日)</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-center">
-                        <a href="https://xinjian-bot.github.io/-/新茧历史日报汇总.html" class="history-link">
-                            <i class="fas fa-history"></i>
+<div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-lg mb-4">
+<div class="flex items-center text-gray-700">
+<i class="fas fa-calendar-alt mr-2 text-[#4D6BFE]"></i>
+<span id="report-date">2025年06月18日</span>
+</div>
+<div class="flex items-center text-gray-700">
+<i class="fas fa-clock mr-2 text-[#4D6BFE]"></i>
+<span>03:00  - 03:00 (次日)</span>
+</div>
+</div>
+<div class="flex justify-center">
+<a class="history-link" href="#" id="history-link">
+<i class="fas fa-history"></i>
                             新茧历史日报
                         </a>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <nav class="w-full mb-8">
-            <div class="bento-card p-4">
-                <div class="flex justify-between items-center">
-                    <button id="prev-day" class="nav-button">
-                        <i class="fas fa-chevron-left"></i>
+</div>
+</div>
+</div>
+</header>
+<nav class="w-full mb-8 daily-nav">
+<div class="bento-card p-4">
+<div class="flex justify-between items-center">
+<button class="nav-button day-nav-prev" type="button">
+<i class="fas fa-chevron-left"></i>
                         上一天
                     </button>
-                    
-                    <div class="text-center">
-                        <span class="text-sm text-gray-600">日报导航</span>
-                    </div>
-                    
-                    <button id="next-day" class="nav-button">
+<div class="text-center">
+<span class="text-sm text-gray-600">日报导航</span>
+</div>
+<button class="nav-button day-nav-next" type="button">
                         下一天
                         <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-        </nav>
-
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+</button>
+</div>
+</div>
+</nav>
+<section class="w-full mb-12 anchor-target" id="section-overview">
+<h2 class="section-title">
                 一、总消息概览
             </h2>
-            <div class="bento-card p-8 bg-gradient-to-br from-[#4D6BFE]/20 via-[#4D6BFE]/10 to-[#4D6BFE]/5 text-center rounded-2xl">
-                <div class="number-display text-[#4D6BFE]">
+<div class="bento-card p-8 bg-gradient-to-br from-[#4D6BFE]/20 via-[#4D6BFE]/10 to-[#4D6BFE]/5 text-center rounded-2xl">
+<div class="number-display text-[#4D6BFE]">
                     4330
                 </div>
-                <p class="text-xl font-semibold text-black mt-3">总消息数量</p>
-            </div>
-        </section>
-
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+<p class="text-xl font-semibold text-black mt-3">总消息数量</p>
+</div>
+</section>
+<section class="w-full mb-12 anchor-target" id="section-hot-topics">
+<h2 class="section-title">
                 二、火花碰撞时刻・热点话题
             </h2>
-            <div class="space-y-8">
-
-                
-                <div class="bento-card p-6 rounded-xl">
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+<div class="space-y-8">
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             疫情防控与个人防护策略
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             07:30 - 09:50
                         </span>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             极品小学生（伽梨版）: "打了个拼车...这人去医院没戴口罩🤯"
                         </p>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">新冠防护</span>
-                            <span class="tag-item">鼻喷</span>
-                            <span class="tag-item">口罩</span>
-                            <span class="tag-item">家庭防护</span>
-                            <span class="tag-item">疫情意识</span>
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、话题背景与起因</b><br>
-                                    <b>极品小学生（伽梨版）</b>分享了自己拼车遇到去医院的同乘者未戴口罩的经历，引发了群内关于新冠防护的讨论。这一生活中的小插曲，触动了大家对日常防护重要性的思考。<br><br>
-                                    <b>二、主要观点与讨论详情</b><br>
-                                    <b>个人防护措施：</b><br>
-                                    - <b>口罩与鼻喷：</b> <b>随机抽取一名群友来复读</b>提到，在工位斜对面同事阳性的情况下，通过全程戴口罩加鼻喷成功防护。<b>啊怿子 -</b>详细解释了鼻喷的作用原理（一种与病毒结合的抗体，使病毒失活），并分享了小红书上关于两种鼻喷（黏住病毒型和结合病毒型）的讨论链接，提到自己出门会口罩加鼻喷双重防护。<b>学前班校霸（白嫖群主版）</b>则表示自己选择“层层加码”，鼻喷加“肺宝”。<b>苏朵真（十一点不睡挨大嘴巴子抽）</b>提到群内之前讨论过鼻喷可以叠加使用。<br>
-                                    - <b>对“感冒”的认知：</b> <b>查理</b>提出现在默认“感冒就是阳了，咳嗽就是新冠”，采取“精准一刀切”的防护态度，获得了<b>学前班校霸（白嫖群主版）</b>和<b>啊怿子 -</b>的认同。<b>Starlight</b>也分享了母亲“小感冒”导致自己扁桃体发炎的经历，提醒大家不能轻信他人口中的“小感冒没事”。<br><br>
-                                    <b>家庭防护与观念差异：</b><br>
-                                    - <b>家人防护意识：</b> <b>学前班校霸（白嫖群主版）</b>提到父母出游仅戴外科口罩，虽携带了鼻喷，但使用情况未知。<b>随机抽取一名群友来复读</b>表示给家人买了800多元的鼻喷却没人用，半月前除自己外全家感冒。<b>查理</b>认为家人能戴口罩已属不易。<b>啊怿子 -</b>则感慨自家老人连敷衍都不愿意，给他们用鼻喷如同喷农药。<br>
-                                    - <b>沟通困境：</b> <b>Starlight</b>提到母亲坚持要来看望自己，结果带来病毒，反映出与长辈在防护认知上的沟通难题。<b>啊怿子 -</b>也表示父母对自己劝说防护的敷衍态度，反而体现了他们对自己的爱。<br><br>
-                                    <b>三、结论与启发</b><br>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">新冠防护</span>
+<span class="tag-item">鼻喷</span>
+<span class="tag-item">口罩</span>
+<span class="tag-item">家庭防护</span>
+<span class="tag-item">疫情意识</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、话题背景与起因</b><br/>
+<b>极品小学生（伽梨版）</b>分享了自己拼车遇到去医院的同乘者未戴口罩的经历，引发了群内关于新冠防护的讨论。这一生活中的小插曲，触动了大家对日常防护重要性的思考。<br/><br/>
+<b>二、主要观点与讨论详情</b><br/>
+<b>个人防护措施：</b><br/>
+                                    - <b>口罩与鼻喷：</b> <b>随机抽取一名群友来复读</b>提到，在工位斜对面同事阳性的情况下，通过全程戴口罩加鼻喷成功防护。<b>啊怿子 -</b>详细解释了鼻喷的作用原理（一种与病毒结合的抗体，使病毒失活），并分享了小红书上关于两种鼻喷（黏住病毒型和结合病毒型）的讨论链接，提到自己出门会口罩加鼻喷双重防护。<b>学前班校霸（白嫖群主版）</b>则表示自己选择“层层加码”，鼻喷加“肺宝”。<b>苏朵真（十一点不睡挨大嘴巴子抽）</b>提到群内之前讨论过鼻喷可以叠加使用。<br/>
+                                    - <b>对“感冒”的认知：</b> <b>查理</b>提出现在默认“感冒就是阳了，咳嗽就是新冠”，采取“精准一刀切”的防护态度，获得了<b>学前班校霸（白嫖群主版）</b>和<b>啊怿子 -</b>的认同。<b>Starlight</b>也分享了母亲“小感冒”导致自己扁桃体发炎的经历，提醒大家不能轻信他人口中的“小感冒没事”。<br/><br/>
+<b>家庭防护与观念差异：</b><br/>
+                                    - <b>家人防护意识：</b> <b>学前班校霸（白嫖群主版）</b>提到父母出游仅戴外科口罩，虽携带了鼻喷，但使用情况未知。<b>随机抽取一名群友来复读</b>表示给家人买了800多元的鼻喷却没人用，半月前除自己外全家感冒。<b>查理</b>认为家人能戴口罩已属不易。<b>啊怿子 -</b>则感慨自家老人连敷衍都不愿意，给他们用鼻喷如同喷农药。<br/>
+                                    - <b>沟通困境：</b> <b>Starlight</b>提到母亲坚持要来看望自己，结果带来病毒，反映出与长辈在防护认知上的沟通难题。<b>啊怿子 -</b>也表示父母对自己劝说防护的敷衍态度，反而体现了他们对自己的爱。<br/><br/>
+<b>三、结论与启发</b><br/>
                                     尽管疫情高峰已过，但群友们对个人防护的重视程度依然较高，特别是对于口罩、鼻喷等工具的使用和对“感冒”症状的警惕性。家庭成员间的防护观念差异和沟通挑战是普遍存在的问题。讨论中也体现出，面对风险，科学防护手段的运用和对病毒传播规律的正确认知至关重要。同时，如何与家人有效沟通防护理念，也是一个值得思考的社会性议题。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             日常防护中，口罩和鼻喷是有效的防护手段，尤其是在高风险环境下，可以考虑叠加使用。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 病毒吸入后会先落在鼻毛、鼻腔和呼吸道上皮细胞上。鼻喷就是一种可以和病毒结合的抗体，用了之后，就到上面提到的那些地方跟你吸入的病毒结合，让病毒失活无法继续复制。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>啊怿子 -</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 现在出门的话除了戴口罩，也就用这两款，万一口罩有漏气自己没发现，吸入少量气溶胶，鼻喷可以救一下。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>啊怿子 -</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 我选择层层加码，鼻喷+肺保
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>学前班校霸（白嫖群主版）</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             对于“感冒”症状应保持警惕，不轻信他人的“小感冒没事”之说；家庭成员间的防护观念存在差异，有效沟通是难点。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 现在我都默认感冒就是阳了...咳嗽就是新冠...精准一刀切
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>查理</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 不能相信别人口里的小感冒没事
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>Starlight</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 他们还愿意敷衍你，他们好爱你
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>啊怿子 -</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bento-card p-6 rounded-xl">
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             国际局势与地缘政治浅析
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             07:52 - 08:30
                         </span>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
-                            啊八有一个理想: "> AA昍... 贸易战最近停了我的想法就是..."
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
+                            啊八有一个理想: "&gt; AA昍... 贸易战最近停了我的想法就是..."
                         </p>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">中美关系</span>
-                            <span class="tag-item">贸易战</span>
-                            <span class="tag-item">伊朗局势</span>
-                            <span class="tag-item">一带一路</span>
-                            <span class="tag-item">地缘政治</span>
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、话题背景与起因</b><br>
-                                    <b>啊八有一个理想</b>引用了<b>AA昍</b>关于贸易战的观点，并提出美国向中国示弱妥协贸易战可能是为了腾出手处理伊朗问题的猜测，由此展开了对当前国际局势的讨论。<br><br>
-                                    <b>二、主要观点与讨论详情</b><br>
-                                    <b>美国战略意图分析：</b><br>
-                                    - <b>啊八有一个理想</b>认为美国可能因忌惮双线作战而暂时缓和对华贸易战，以便集中精力对付伊朗，同时台湾问题也相对平静。<br>
-                                    - <b>高大壮太天真</b>则认为，美国示弱是因为关税大棒已不奏效。他推测美国原计划是一边用关税压制中国，一边腾出手打伊朗，以削减中国在中东（后更正为中亚）影响力，但第一步棋未走好。<br>
-                                    - <b>苏朵真（十一点不睡挨大嘴巴子抽）</b>和<b>啊八有一个理想</b>都表示，从中国立场看，乐见美国亲自下场处理冲突，但认为美国未必能打得动，可能难以下场。<br><br>
-                                    <b>中国角色与一带一路：</b><br>
-                                    - <b>啊怿子 -</b>认为，无论冲突发生在何处，只要是世界冲突，中国都可以借机展示实力，百姓层面可能看不清，但国家层面已有动作（如几次全国手机表扬）。<br>
-                                    - <b>高大壮太天真</b>指出“一带一路”是覆盖整个亚欧大陆的倡议，中东和中亚国家都是其理想的深度参与者。<br><br>
-                                    <b>伊朗及地区局势：</b><br>
-                                    - <b>高大壮太天真</b>提到伊朗自苏莱曼尼被刺杀后一蹶不振，已被渗透成筛子。当前伊以冲突与巴勒斯坦问题紧密相关，伊朗想当地区老大，不能坐视巴勒斯坦灭亡。<br>
-                                    - <b>某只柿子🍅</b>指出伊朗长期被美国欺负却又妄想得到美国扶持。<br>
-                                    - <b>啊八有一个理想</b>和<b>苏朵真（十一点不睡挨大嘴巴子抽）</b>认为伊朗若能采取“拖字诀”，以色列在体量上不占优势。<br><br>
-                                    <b>三、结论与启发</b><br>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">中美关系</span>
+<span class="tag-item">贸易战</span>
+<span class="tag-item">伊朗局势</span>
+<span class="tag-item">一带一路</span>
+<span class="tag-item">地缘政治</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、话题背景与起因</b><br/>
+<b>啊八有一个理想</b>引用了<b>AA昍</b>关于贸易战的观点，并提出美国向中国示弱妥协贸易战可能是为了腾出手处理伊朗问题的猜测，由此展开了对当前国际局势的讨论。<br/><br/>
+<b>二、主要观点与讨论详情</b><br/>
+<b>美国战略意图分析：</b><br/>
+                                    - <b>啊八有一个理想</b>认为美国可能因忌惮双线作战而暂时缓和对华贸易战，以便集中精力对付伊朗，同时台湾问题也相对平静。<br/>
+                                    - <b>高大壮太天真</b>则认为，美国示弱是因为关税大棒已不奏效。他推测美国原计划是一边用关税压制中国，一边腾出手打伊朗，以削减中国在中东（后更正为中亚）影响力，但第一步棋未走好。<br/>
+                                    - <b>苏朵真（十一点不睡挨大嘴巴子抽）</b>和<b>啊八有一个理想</b>都表示，从中国立场看，乐见美国亲自下场处理冲突，但认为美国未必能打得动，可能难以下场。<br/><br/>
+<b>中国角色与一带一路：</b><br/>
+                                    - <b>啊怿子 -</b>认为，无论冲突发生在何处，只要是世界冲突，中国都可以借机展示实力，百姓层面可能看不清，但国家层面已有动作（如几次全国手机表扬）。<br/>
+                                    - <b>高大壮太天真</b>指出“一带一路”是覆盖整个亚欧大陆的倡议，中东和中亚国家都是其理想的深度参与者。<br/><br/>
+<b>伊朗及地区局势：</b><br/>
+                                    - <b>高大壮太天真</b>提到伊朗自苏莱曼尼被刺杀后一蹶不振，已被渗透成筛子。当前伊以冲突与巴勒斯坦问题紧密相关，伊朗想当地区老大，不能坐视巴勒斯坦灭亡。<br/>
+                                    - <b>某只柿子🍅</b>指出伊朗长期被美国欺负却又妄想得到美国扶持。<br/>
+                                    - <b>啊八有一个理想</b>和<b>苏朵真（十一点不睡挨大嘴巴子抽）</b>认为伊朗若能采取“拖字诀”，以色列在体量上不占优势。<br/><br/>
+<b>三、结论与启发</b><br/>
                                     群友们对当前国际局势的复杂性有普遍认知，认为大国博弈涉及多方面因素。对于美国策略，存在不同解读，但普遍认为其面临挑战。中国在国际冲突中并非被动旁观者，而是有能力和意愿维护自身利益并展示影响力。“一带一路”被视为中国扩展影响力的重要战略。伊朗问题则被看作是地区权力平衡和外部势力干涉的复杂交织。整体而言，讨论展现了群友们对国际政治的关注和独立思考。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             美国在贸易战上对华示弱，可能与其中东/中亚战略调整有关，试图避免双线作战或因关税政策未达预期效果。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 示弱是因为不奏效了，如果关税大棒有用，不示弱打伊朗更顺手呀。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>高大壮太天真</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 美国原先的计划是一方面用关税压制中国，另一方面腾出手顺手打伊朗——二者结合削减中国在中东的影响力...只不过第一步棋走不好。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>高大壮太天真</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             国际冲突为中国提供了展示影响力的机会，“一带一路”是重要的战略布局；伊朗局势复杂，其在中东地区的角色和未来走向充满不确定性。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 只要是世界冲突，我们都可以秀肌肉，双不双线，在哪里都是战线，只是百姓层面上看得不清楚。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>啊怿子 -</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 伊朗都已经被渗透成筛子了，从苏莱曼尼被艹开始，一点儿起色都没有。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>高大壮太天真</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bento-card p-6 rounded-xl">
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             金融借贷的讨论：信用卡、网贷与市场乱象
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             11:47 - 12:14
                         </span>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             羚一: "最近在听戒社，好多借网贷的搞得破产的案例..."
                         </p>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">网贷</span>
-                            <span class="tag-item">信用卡</span>
-                            <span class="tag-item">金融创新</span>
-                            <span class="tag-item">消费信贷</span>
-                            <span class="tag-item">金融监管</span>
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、话题背景与起因</b><br>
-                                    <b>羚一</b>分享了听“戒社”了解到许多网贷导致破产的案例，并对自己坐飞机时被推销信用卡的经历表示不解，引发了群内对金融借贷产品及其宣传方式的讨论。<br><br>
-                                    <b>二、主要观点与讨论详情</b><br>
-                                    <b>信用卡与网贷的区别及风险：</b><br>
-                                    - <b>学前班校霸（白嫖群主版）</b>指出信用卡与网贷不同，网贷利率高，存在套路贷，并提及这与“某个金融创新的瘟神”有关。他还揭示了手机分期平台的套路：用户支付首期后拿到手机，平台合作方现金回收手机（如1万手机，用户付500，回收方给9000，但用户需向平台还款2万）。<br>
-                                    - <b>SR</b>提到国内信用卡被消费信贷打压，本质在于国内外金融模式和支付模式的差异，国内银行带有公益性质。<br><br>
-                                    <b>金融监管与市场环境：</b><br>
-                                    - <b>苏朵真（十一点不睡挨大嘴巴子抽）</b>认为金融借贷的宣传是行业行为，且金融界常嫌国内管控严，但实际上环境已相当宽松。她还提到对象在银行工作，身边“殖人”多。<br>
-                                    - <b>学前班校霸（白嫖群主版）</b>反问为何资本能如此宣传，民间金融牌照的来源值得深思，并指出网贷平台能做生意是因为有牌照，无牌照搞网贷是违法行为。他认为银行在足够监管下问题不大，但各大电商平台（京东、美团、抖音、拼多多）都在搞网贷，令人担忧。<br>
-                                    - <b>MIR🍈</b>评论资本逐利本性，认为其不知足是常态。<br><br>
-                                    <b>三、结论与启发</b><br>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">网贷</span>
+<span class="tag-item">信用卡</span>
+<span class="tag-item">金融创新</span>
+<span class="tag-item">消费信贷</span>
+<span class="tag-item">金融监管</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、话题背景与起因</b><br/>
+<b>羚一</b>分享了听“戒社”了解到许多网贷导致破产的案例，并对自己坐飞机时被推销信用卡的经历表示不解，引发了群内对金融借贷产品及其宣传方式的讨论。<br/><br/>
+<b>二、主要观点与讨论详情</b><br/>
+<b>信用卡与网贷的区别及风险：</b><br/>
+                                    - <b>学前班校霸（白嫖群主版）</b>指出信用卡与网贷不同，网贷利率高，存在套路贷，并提及这与“某个金融创新的瘟神”有关。他还揭示了手机分期平台的套路：用户支付首期后拿到手机，平台合作方现金回收手机（如1万手机，用户付500，回收方给9000，但用户需向平台还款2万）。<br/>
+                                    - <b>SR</b>提到国内信用卡被消费信贷打压，本质在于国内外金融模式和支付模式的差异，国内银行带有公益性质。<br/><br/>
+<b>金融监管与市场环境：</b><br/>
+                                    - <b>苏朵真（十一点不睡挨大嘴巴子抽）</b>认为金融借贷的宣传是行业行为，且金融界常嫌国内管控严，但实际上环境已相当宽松。她还提到对象在银行工作，身边“殖人”多。<br/>
+                                    - <b>学前班校霸（白嫖群主版）</b>反问为何资本能如此宣传，民间金融牌照的来源值得深思，并指出网贷平台能做生意是因为有牌照，无牌照搞网贷是违法行为。他认为银行在足够监管下问题不大，但各大电商平台（京东、美团、抖音、拼多多）都在搞网贷，令人担忧。<br/>
+                                    - <b>MIR🍈</b>评论资本逐利本性，认为其不知足是常态。<br/><br/>
+<b>三、结论与启发</b><br/>
                                     讨论揭示了当前金融借贷市场的一些乱象和风险，特别是网贷和某些分期平台的高利率和套路。群友们对金融监管的力度和资本的逐利性表达了关切。信用卡在国内的商业模式与国外不同，其盈利点也受到讨论。总体而言，群友们对金融借贷持谨慎态度，并对市场监管和消费者权益保护有所思考。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             网贷与信用卡存在本质区别，网贷利率高、风险大，可能涉及套路贷；金融借贷的过度宣传与资本逐利本性及金融牌照的发放有关。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 信用卡和网贷还不一样，网贷利率很高的，还有套路贷。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>学前班校霸（白嫖群主版）</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 资本如果能知足，就不会追求增值了，那也就不是资本了。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>MIR🍈</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             国内金融监管环境虽被业内认为严格，但实际上已相对宽松，网贷平台的运作依赖于金融牌照。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 就这金融界还成天嫌国内管控严呢...就是说环境太宽松了，然而业内并不知足。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>苏朵真（十一点不睡挨大嘴巴子抽）</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 网贷平台能做生意本质不是有需求，而是因为有牌照。因为没牌照的去搞网贷都得进去。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>学前班校霸（白嫖群主版）</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bento-card p-6 rounded-xl">
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             关于“上火”与身体调理的讨论
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             14:17 - 14:35
                         </span>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             本人阿喵，可喵喵，寻喵喵喵喵喵: "请问大家，自己炖羊肉的话，为了防止上火..."
                         </p>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">上火</span>
-                            <span class="tag-item">中医</span>
-                            <span class="tag-item">饮食调理</span>
-                            <span class="tag-item">口腔卫生</span>
-                            <span class="tag-item">末梢循环</span>
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、话题背景与起因</b><br>
-                                    <b>本人阿喵，可喵喵，寻喵喵喵喵喵</b>提问炖羊肉时如何防止“上火”，引发了群内对“上火”概念及其科学解释的讨论。<b>宇世无争</b>和<b>AA昍</b>等群友从现代医学和生活经验角度给出了分析。<br><br>
-                                    <b>二、主要观点与讨论详情</b><br>
-                                    <b>“上火”的本质：</b><br>
-                                    - <b>宇世无争</b>和<b>桃乐丝</b>均认为“上火”是伪命题。<b>宇世无争</b>解释，所谓的“上火”症状，如口腔问题，多与高渗透压食物（如荔枝、浓咸汤）、过热食物或坚硬食物（如炸鸡）导致的口腔黏膜受损、细菌滋生引发炎症有关。他建议通过漱口、喝水、用漱口水等方式清洁口腔，创建无菌修复环境。<br>
-                                    - <b>AA昍</b>补充了“上火”的常见原因，包括小伤口感染、烫伤感染、糖分过多、红肉（促炎、消耗水分、塞牙）等，核心在于<b>口腔卫生</b>。他还提到，羊肉易“上火”可能因为它是红肉、纤维多易塞牙，且冬季食用时人们不爱喝水导致口腔缺水增加炎症风险。<br>
-                                    - <b>桃乐丝</b>的外公作为中医，从不跟病人提“上火”，也印证了这一概念在专业层面可能并非主流。<br><br>
-                                    <b>身体“寒热”与末梢循环：</b><br>
-                                    - <b>本人阿喵，可喵喵，寻喵喵喵喵喵</b>提到自己冬天手脚冰凉、夏天手脚发烫的困扰。<b>宇世无争</b>解释这与末梢循环发育有关，若从小脚部保暖过度，身体会认为该处无需过多毛细血管保温，导致毛细血管发育不足。毛细血管多则产热散热均快。他建议孩子多光脚、适度“冻一冻”。<br>
-                                    - <b>AA昍</b>指出，体寒是运动过少的表现。女性天生体脂高、肌肉量低，天气冷时产热慢，通过跑步等有氧运动可改善血液循环，缓解体寒甚至痛经。他还批判了现代审美鼓励骨感细腿，认为这不利于血液循环，大腿练粗才健康。<br>
-                                    - <b>桃乐丝</b>则从自身经验出发，认为自己不怕冷是因为“肉多”，<b>64年，今年61，属龙(linbessi)</b>也表示认同。<br><br>
-                                    <b>三、结论与启发</b><br>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">上火</span>
+<span class="tag-item">中医</span>
+<span class="tag-item">饮食调理</span>
+<span class="tag-item">口腔卫生</span>
+<span class="tag-item">末梢循环</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、话题背景与起因</b><br/>
+<b>本人阿喵，可喵喵，寻喵喵喵喵喵</b>提问炖羊肉时如何防止“上火”，引发了群内对“上火”概念及其科学解释的讨论。<b>宇世无争</b>和<b>AA昍</b>等群友从现代医学和生活经验角度给出了分析。<br/><br/>
+<b>二、主要观点与讨论详情</b><br/>
+<b>“上火”的本质：</b><br/>
+                                    - <b>宇世无争</b>和<b>桃乐丝</b>均认为“上火”是伪命题。<b>宇世无争</b>解释，所谓的“上火”症状，如口腔问题，多与高渗透压食物（如荔枝、浓咸汤）、过热食物或坚硬食物（如炸鸡）导致的口腔黏膜受损、细菌滋生引发炎症有关。他建议通过漱口、喝水、用漱口水等方式清洁口腔，创建无菌修复环境。<br/>
+                                    - <b>AA昍</b>补充了“上火”的常见原因，包括小伤口感染、烫伤感染、糖分过多、红肉（促炎、消耗水分、塞牙）等，核心在于<b>口腔卫生</b>。他还提到，羊肉易“上火”可能因为它是红肉、纤维多易塞牙，且冬季食用时人们不爱喝水导致口腔缺水增加炎症风险。<br/>
+                                    - <b>桃乐丝</b>的外公作为中医，从不跟病人提“上火”，也印证了这一概念在专业层面可能并非主流。<br/><br/>
+<b>身体“寒热”与末梢循环：</b><br/>
+                                    - <b>本人阿喵，可喵喵，寻喵喵喵喵喵</b>提到自己冬天手脚冰凉、夏天手脚发烫的困扰。<b>宇世无争</b>解释这与末梢循环发育有关，若从小脚部保暖过度，身体会认为该处无需过多毛细血管保温，导致毛细血管发育不足。毛细血管多则产热散热均快。他建议孩子多光脚、适度“冻一冻”。<br/>
+                                    - <b>AA昍</b>指出，体寒是运动过少的表现。女性天生体脂高、肌肉量低，天气冷时产热慢，通过跑步等有氧运动可改善血液循环，缓解体寒甚至痛经。他还批判了现代审美鼓励骨感细腿，认为这不利于血液循环，大腿练粗才健康。<br/>
+                                    - <b>桃乐丝</b>则从自身经验出发，认为自己不怕冷是因为“肉多”，<b>64年，今年61，属龙(linbessi)</b>也表示认同。<br/><br/>
+<b>三、结论与启发</b><br/>
                                     讨论将传统观念中的“上火”解构为具体的生理现象和卫生习惯问题，强调了口腔卫生的重要性。对于手脚冰凉等“体寒”现象，则从末梢循环、运动量、肌肉量和体脂等多个角度进行了解释。群友们通过分享经验和科学知识，提供了一种更理性的视角来看待和调理身体，鼓励通过改善生活习惯（如加强运动、注意口腔清洁）来促进健康，而非盲从传统说法。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             “上火”是伪命题，其症状多与口腔黏膜受损、细菌滋生或高渗透压食物有关，保持口腔卫生是关键。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 油炸上火，是因为口腔内壁有划痕，细菌滋生导致的炎症反应。创建尽量无菌的修复环境就行。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>宇世无争</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 只要注意口腔卫生（任何时候吃了东西，牙线剔一下），就不存在上火了。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>AA昍</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             手脚冰凉等“体寒”现象与末梢循环发育、运动量不足、肌肉量偏低有关，增加运动、特别是练粗大腿有助于改善。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 （手脚冰凉）是末梢循环发育问题，小时候光脚太少...从小就被家长裹起来了，那么脚就会认为，这个地方没有保温需求，毛细血管就少长点吧。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>宇世无争</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 体寒也一样，就是运动太少了...现代审美下的女性体型很惨，都鼓励骨感、细腿，那基本上血液循环不可能好，肢体末端肯定会冷。大腿练粗了才健康...
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>AA昍</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-        
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="w-full mb-12 anchor-target" id="section-meeting">
+<h2 class="section-title">
                 三、秉烛共谈录・小会精粹
             </h2>
-            <div class="space-y-8">
-                <div class="bento-card p-6 rounded-xl">
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+<div class="space-y-8">
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             医生的困境：如何在患者、同事与职业操守间平衡？
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-users mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-users mr-1.5 text-gray-500"></i>
                             20:48 - 22:26
                         </span>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             匿名提问人: "提问：我之前接了一个吃华法林的患者..." (由AA昍转发)
                         </p>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">医患关系</span>
-                            <span class="tag-item">职业道德</span>
-                            <span class="tag-item">风险规避</span>
-                            <span class="tag-item">医疗伦理</span>
-                            <span class="tag-item">牙周炎治疗</span>
-                            <span class="tag-item">华法林</span>
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、问题提出与背景补充</b><br>
-                                    本次小会的核心议题由一位匿名医生（下称“题主”）提出，通过<b>AA昍</b>转发。题主曾成功治疗一位服用华法林（抗凝药）的牙周炎患者，该患者因凝血功能差在当地求医无门。两年后患者复发，再次求助题主。但题主目前休假学习，其他同事因风险或嫌麻烦不愿接诊。患者不解为何同样情况下，只有题主愿意治疗。这引出了两个核心问题：<br>
-                                    1.  如何向患者解释而不引发医患矛盾或给同事造成麻烦？<br>
-                                    2.  医生是否应更倾向于规避风险，不接高风险患者？<br><br>
-                                    题主补充了大量背景信息：<br>
-                                    -   <b>个人特质：</b>心软，易因患者可怜而接诊，治疗成功后有成就感。<br>
-                                    -   <b>对患者解释：</b>曾用“华法林吃久了风险变大”来解释，但担心被深究。<br>
-                                    -   <b>对同事理解：</b>认同同事规避风险的做法，理解医生培养周期长、医疗环境对医生保护不足等现实。<br>
-                                    -   <b>自我反思：</b>承认自己可能因自负而显得与众不同，对同事拒诊的猜测可能主观。<br>
-                                    -   <b>患者病情：</b>牙周炎严重，影响生活质量，不治疗会恶化。治疗（龈下刮治）创面大、出血多。<br>
-                                    -   <b>患者情况更新：</b>患者因心脏病需长期服用华法林，无法调整。题主所在医院已是当地最高级别，无上级医院可转诊。题主有能力独当一面，曾接诊过HIV患者但被主任劝阻勿再接。患者两年未复查是因觉得不便且短期无出血。<br><br>
-                                    后续题主心态变化：问题核心从“如何对患者说”转向“<b>我是否应该继续这种高风险、低回报（相比常规治疗的同事）的行医方式</b>”。<br><br>
-                                    <b>二、核心焦点与深层议题挖掘</b><br>
-                                    <b>职业道德 vs. 现实风险：</b> 医生救死扶伤的天职与医疗纠纷频发、制度保护不足的现实之间的尖锐矛盾。<br>
-                                    <b>个体选择 vs. 群体规则：</b> 题主突破常规接诊高风险患者，可能被视为“搅屎棍”（<b>飞扬大学生</b>语），破坏了同事间的默契和潜在的行业规则。<br>
-                                    <b>患者责任 vs. 医生担当：</b> 患者两年未复查导致复发，其作为“第一责任人”的意识是否到位？医生是否应无限兜底？<br>
-                                    <b>理想主义 vs. 可持续性：</b> 题主的善良和理想主义值得尊敬，但这种高耗能、高风险的模式是否可持续？如何平衡初心与现实压力？<br>
-                                    <b>信息不对称与沟通策略：</b> 如何在不损害同事关系的前提下，向患者解释复杂的医疗决策和风险评估差异。<br><br>
-                                    <b>三、多方观点流派与方案探讨</b><br>
-                                    <b>1. 患者沟通与风险转移派：</b><br>
-                                    -   <b>鱼皮</b>、<b>卿缥缥</b>、<b>扶疏</b>、<b>学前班校霸（白嫖群主版）</b>等建议向更高级别或专业性更强的医院（如华西口腔医院）转诊。<b>AA昍</b>指出，即使华西号难挂，给患者一个奔头也是好的，题主后补充自己是华西毕业，可理直气壮推荐。<br>
-                                    -   <b>64年，今年61，属龙(linbessi)</b>建议用专业术语向患者解释，强调是“病情变化导致不适合手术”，而非医生不愿治。<b>啊怿子 -</b>也认为此法可行，可借同事拒诊佐证。<br>
-                                    -   <b>幼儿园文体委员(q477936163)</b>建议教给患者一套“求医话术”，强调自己既往治疗成功经验和配合意愿，以增加其他医生接诊信心。<b>AA昍</b>对此表示“哈哈哈哈哈哈”，但认为有其道理。<br><br>
-                                    <b>2. 自我保护与心态调整派：</b><br>
-                                    -   <b>子蟹</b>、<b>17（宕机版）</b>、<b>波多野杰伊</b>、<b>阿戒</b>、<b>木已成舟</b>、<b>事不关猫己</b>、<b>Starlight</b>、<b>佳桐</b>、<b>鱼皮</b>、<b>mighty girl</b>、<b>芬达(monkey527)</b>等多位群友强调题主应<b>优先保护自己</b>，留得青山在，才能帮助更多人。指出医疗行业风险高，医生不应承担所有责任，程序正义也是一种保护。<br>
-                                    -   <b>啊怿子 -</b>直言题主可能未充分意识到风险，担心其因过于正直善良而遭遇不测，导致一个好医生就此消失。<br>
-                                    -   <b>卿缥缥</b>建议题主给自己设定界限，适当“情感隔离”，拒绝部分高风险病例，以保证职业生涯的可持续性。<br><br>
-                                    <b>3. 理想主义与现实平衡派：</b><br>
-                                    -   <b>AA昍</b>提出“<b>共产主义者有义务发财</b>”和“<b>每收治1个苦难病人，就允许自己再收治10个有钱病人</b>”的KPI平衡法，认为理想主义者在资本主义世界中需要物质基础来支撑理想，并实现可持续发展。<br>
-                                    -   <b>鱼皮</b>担忧普通人的尊敬和崇拜会将理想主义者架上高台。<b>AA昍</b>回应，理想主义者本就是“耗材”，烧掉100个能炼出10个二阶就不亏，且理想主义者本身也追求这种奉献。关键在于成为“<b>二阶理想主义者</b>”。<br>
-                                    -   <b>Starlight</b>建议平衡接诊患者类型，以保障收入和职业生涯的可持续性。<br><br>
-                                    <b>4. 理解医生处境与行业规则派：</b><br>
-                                    -   <b>飞扬大学生</b>以警察类比，指出题主的行为可能被同事视为“坏规矩”、“搅屎棍”，强调了群体内部规则的重要性。<br>
-                                    -   <b>学前班校霸（白嫖群主版）</b>指出龈下刮治的麻烦程度和低性价比，解释了其他医生不愿接手是正常现象。他还提到在别的医生面前不宜提及其他医生的治疗方案。<br>
-                                    -   <b>qiqi</b>认为教育和医疗行业需要理想主义者，但也强调医生间沟通的技巧，不应直接质问同事为何不治疗。<br><br>
-                                    <b>四、群主 (AA昍) 引导与方案点评</b><br>
-                                    <b>AA昍</b>在讨论中多次引导大家从不同视角看待问题：<br>
-                                    -   <b>从患者视角看医生：</b>他以《问心》医疗剧为例，说明了信息不对称和医生性格可能导致的医患误解，引导大家思考作为患者如何理解和珍惜好医生。<br>
-                                    -   <b>从自身职业发展看案例：</b>他分享了自己写网文的经历，强调从生活案例中汲取创作养分的重要性，鼓励大家将讨论内容应用于各自领域。<br>
-                                    -   <b>强调“二阶理想主义”：</b>他反复提及“二阶理想主义者”的概念，认为理想主义者不仅要有情怀，更要有智慧、懂策略，学会自我保护和可持续发展，才能更好地实现理想（如“存人失地，人地皆存，活下来才能治更多人”）。<br>
-                                    -   <b>对“程序正义”的思考：</b>他指出，虽然程序正义保护了医生，但有时也会让有担当的医生陷入困境。<br>
-                                    -   <b>对“上价值”的看法：</b>他认为给工作“上价值”与获得物质回报不冲突，二阶理想主义者可以兼收。<br><br>
-                                    <b>五、讨论共识与分歧总结</b><br>
-                                    <b>共识：</b><br>
-                                    1.  <b>题主是一位非常善良且技术过硬的好医生</b>，其医者仁心值得尊敬。<br>
-                                    2.  <b>自我保护至关重要</b>，医生在坚持职业操守的同时，必须学会规避不必要的风险，延长职业生涯才能帮助更多人。<br>
-                                    3.  建议患者<b>转诊至更高级别医院（如华西口腔）</b>是一个可行的解决方案，既给了患者希望，也为题主解了围。<br>
-                                    4.  患者自身作为“第一责任人”，在两年未复查的问题上负有一定责任。<br>
-                                    <b>分歧/持续探讨点：</b><br>
-                                    -   如何在理想主义与现实生存（收入、风险、人际关系）之间找到最佳平衡点，尚无标准答案，更多是个人选择和智慧的体现。<br><br>
-                                    <b>六、宏观影响与价值提炼（重点）</b><br>
-                                    本次小会围绕一个具体的医疗案例，深刻探讨了<b>理想主义者在现实复杂环境中的生存与发展策略</b>这一普适性议题。其核心价值在于：<br><br>
-                                    <b>1.  “二阶理想主义”的提出与实践：</b><br>
-                                    讨论超越了简单的是非对错和道德评判，引入了“二阶理想主义”这一核心概念。它启发我们，真正的理想主义并非盲目牺牲或一味硬扛，而是<b>既要坚守初心，又要讲究策略，懂得自我保护和可持续发展</b>。这不仅适用于医生，也适用于任何怀抱理想、试图在复杂现实中有所作为的个体。正如<b>幼儿园文体委员</b>所言：“<b>存人失地，人地皆存，活下来才能治更多人。</b>”以及“<b>共产主义者有义务发财</b>”，这都体现了将理想与现实手段相结合的二阶思维。<br><br>
-                                    <b>2.  “第一责任人”与边界意识：</b><br>
-                                    讨论中反复强调患者作为自身健康的“第一责任人”，以及医生在提供帮助时也应有边界意识。这提醒我们，在任何互助关系中，明确各方责任，避免无限兜底，是保证关系健康和可持续的关键。过度承担他人责任，不仅可能耗尽自身，也可能剥夺对方成长的机会。<br><br>
-                                    <b>3.  系统思维与多视角看问题：</b><br>
-                                    无论是分析患者病情（如<b>学前班校霸（白嫖群主版）</b>分析的牙周炎恶性循环），还是理解同事行为，或是规划个人职业发展，都需要跳出单一事件，从更宏观的系统和多方利益角度进行考量。例如，医生拒诊高风险患者，可能并非单纯怕麻烦，而是基于医院整体风险控制、个人职业安全、甚至是对患者长远负责（避免能力不足导致更大伤害）的综合判断。<br><br>
-                                    <b>4.  沟通的艺术与策略：</b><br>
-                                    在处理复杂人际关系（如医患、医医）时，直接的“真诚”有时并非最优解。讨论中提出的“专业术语解释”、“向上级转诊”、“教患者话术”等，都是在特定情境下，为了达成多方相对可接受结果而采取的沟通策略。这启发我们，沟通不仅是表达，更是为了实现特定目标的策略性行为。<br><br>
-                                    <b>5.  在限制中寻求最优解：</b><br>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">医患关系</span>
+<span class="tag-item">职业道德</span>
+<span class="tag-item">风险规避</span>
+<span class="tag-item">医疗伦理</span>
+<span class="tag-item">牙周炎治疗</span>
+<span class="tag-item">华法林</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、问题提出与背景补充</b><br/>
+                                    本次小会的核心议题由一位匿名医生（下称“题主”）提出，通过<b>AA昍</b>转发。题主曾成功治疗一位服用华法林（抗凝药）的牙周炎患者，该患者因凝血功能差在当地求医无门。两年后患者复发，再次求助题主。但题主目前休假学习，其他同事因风险或嫌麻烦不愿接诊。患者不解为何同样情况下，只有题主愿意治疗。这引出了两个核心问题：<br/>
+                                    1.  如何向患者解释而不引发医患矛盾或给同事造成麻烦？<br/>
+                                    2.  医生是否应更倾向于规避风险，不接高风险患者？<br/><br/>
+                                    题主补充了大量背景信息：<br/>
+                                    -   <b>个人特质：</b>心软，易因患者可怜而接诊，治疗成功后有成就感。<br/>
+                                    -   <b>对患者解释：</b>曾用“华法林吃久了风险变大”来解释，但担心被深究。<br/>
+                                    -   <b>对同事理解：</b>认同同事规避风险的做法，理解医生培养周期长、医疗环境对医生保护不足等现实。<br/>
+                                    -   <b>自我反思：</b>承认自己可能因自负而显得与众不同，对同事拒诊的猜测可能主观。<br/>
+                                    -   <b>患者病情：</b>牙周炎严重，影响生活质量，不治疗会恶化。治疗（龈下刮治）创面大、出血多。<br/>
+                                    -   <b>患者情况更新：</b>患者因心脏病需长期服用华法林，无法调整。题主所在医院已是当地最高级别，无上级医院可转诊。题主有能力独当一面，曾接诊过HIV患者但被主任劝阻勿再接。患者两年未复查是因觉得不便且短期无出血。<br/><br/>
+                                    后续题主心态变化：问题核心从“如何对患者说”转向“<b>我是否应该继续这种高风险、低回报（相比常规治疗的同事）的行医方式</b>”。<br/><br/>
+<b>二、核心焦点与深层议题挖掘</b><br/>
+<b>职业道德 vs. 现实风险：</b> 医生救死扶伤的天职与医疗纠纷频发、制度保护不足的现实之间的尖锐矛盾。<br/>
+<b>个体选择 vs. 群体规则：</b> 题主突破常规接诊高风险患者，可能被视为“搅屎棍”（<b>飞扬大学生</b>语），破坏了同事间的默契和潜在的行业规则。<br/>
+<b>患者责任 vs. 医生担当：</b> 患者两年未复查导致复发，其作为“第一责任人”的意识是否到位？医生是否应无限兜底？<br/>
+<b>理想主义 vs. 可持续性：</b> 题主的善良和理想主义值得尊敬，但这种高耗能、高风险的模式是否可持续？如何平衡初心与现实压力？<br/>
+<b>信息不对称与沟通策略：</b> 如何在不损害同事关系的前提下，向患者解释复杂的医疗决策和风险评估差异。<br/><br/>
+<b>三、多方观点流派与方案探讨</b><br/>
+<b>1. 患者沟通与风险转移派：</b><br/>
+                                    -   <b>鱼皮</b>、<b>卿缥缥</b>、<b>扶疏</b>、<b>学前班校霸（白嫖群主版）</b>等建议向更高级别或专业性更强的医院（如华西口腔医院）转诊。<b>AA昍</b>指出，即使华西号难挂，给患者一个奔头也是好的，题主后补充自己是华西毕业，可理直气壮推荐。<br/>
+                                    -   <b>64年，今年61，属龙(linbessi)</b>建议用专业术语向患者解释，强调是“病情变化导致不适合手术”，而非医生不愿治。<b>啊怿子 -</b>也认为此法可行，可借同事拒诊佐证。<br/>
+                                    -   <b>幼儿园文体委员(q477936163)</b>建议教给患者一套“求医话术”，强调自己既往治疗成功经验和配合意愿，以增加其他医生接诊信心。<b>AA昍</b>对此表示“哈哈哈哈哈哈”，但认为有其道理。<br/><br/>
+<b>2. 自我保护与心态调整派：</b><br/>
+                                    -   <b>子蟹</b>、<b>17（宕机版）</b>、<b>波多野杰伊</b>、<b>阿戒</b>、<b>木已成舟</b>、<b>事不关猫己</b>、<b>Starlight</b>、<b>佳桐</b>、<b>鱼皮</b>、<b>mighty girl</b>、<b>芬达(monkey527)</b>等多位群友强调题主应<b>优先保护自己</b>，留得青山在，才能帮助更多人。指出医疗行业风险高，医生不应承担所有责任，程序正义也是一种保护。<br/>
+                                    -   <b>啊怿子 -</b>直言题主可能未充分意识到风险，担心其因过于正直善良而遭遇不测，导致一个好医生就此消失。<br/>
+                                    -   <b>卿缥缥</b>建议题主给自己设定界限，适当“情感隔离”，拒绝部分高风险病例，以保证职业生涯的可持续性。<br/><br/>
+<b>3. 理想主义与现实平衡派：</b><br/>
+                                    -   <b>AA昍</b>提出“<b>共产主义者有义务发财</b>”和“<b>每收治1个苦难病人，就允许自己再收治10个有钱病人</b>”的KPI平衡法，认为理想主义者在资本主义世界中需要物质基础来支撑理想，并实现可持续发展。<br/>
+                                    -   <b>鱼皮</b>担忧普通人的尊敬和崇拜会将理想主义者架上高台。<b>AA昍</b>回应，理想主义者本就是“耗材”，烧掉100个能炼出10个二阶就不亏，且理想主义者本身也追求这种奉献。关键在于成为“<b>二阶理想主义者</b>”。<br/>
+                                    -   <b>Starlight</b>建议平衡接诊患者类型，以保障收入和职业生涯的可持续性。<br/><br/>
+<b>4. 理解医生处境与行业规则派：</b><br/>
+                                    -   <b>飞扬大学生</b>以警察类比，指出题主的行为可能被同事视为“坏规矩”、“搅屎棍”，强调了群体内部规则的重要性。<br/>
+                                    -   <b>学前班校霸（白嫖群主版）</b>指出龈下刮治的麻烦程度和低性价比，解释了其他医生不愿接手是正常现象。他还提到在别的医生面前不宜提及其他医生的治疗方案。<br/>
+                                    -   <b>qiqi</b>认为教育和医疗行业需要理想主义者，但也强调医生间沟通的技巧，不应直接质问同事为何不治疗。<br/><br/>
+<b>四、群主 (AA昍) 引导与方案点评</b><br/>
+<b>AA昍</b>在讨论中多次引导大家从不同视角看待问题：<br/>
+                                    -   <b>从患者视角看医生：</b>他以《问心》医疗剧为例，说明了信息不对称和医生性格可能导致的医患误解，引导大家思考作为患者如何理解和珍惜好医生。<br/>
+                                    -   <b>从自身职业发展看案例：</b>他分享了自己写网文的经历，强调从生活案例中汲取创作养分的重要性，鼓励大家将讨论内容应用于各自领域。<br/>
+                                    -   <b>强调“二阶理想主义”：</b>他反复提及“二阶理想主义者”的概念，认为理想主义者不仅要有情怀，更要有智慧、懂策略，学会自我保护和可持续发展，才能更好地实现理想（如“存人失地，人地皆存，活下来才能治更多人”）。<br/>
+                                    -   <b>对“程序正义”的思考：</b>他指出，虽然程序正义保护了医生，但有时也会让有担当的医生陷入困境。<br/>
+                                    -   <b>对“上价值”的看法：</b>他认为给工作“上价值”与获得物质回报不冲突，二阶理想主义者可以兼收。<br/><br/>
+<b>五、讨论共识与分歧总结</b><br/>
+<b>共识：</b><br/>
+                                    1.  <b>题主是一位非常善良且技术过硬的好医生</b>，其医者仁心值得尊敬。<br/>
+                                    2.  <b>自我保护至关重要</b>，医生在坚持职业操守的同时，必须学会规避不必要的风险，延长职业生涯才能帮助更多人。<br/>
+                                    3.  建议患者<b>转诊至更高级别医院（如华西口腔）</b>是一个可行的解决方案，既给了患者希望，也为题主解了围。<br/>
+                                    4.  患者自身作为“第一责任人”，在两年未复查的问题上负有一定责任。<br/>
+<b>分歧/持续探讨点：</b><br/>
+                                    -   如何在理想主义与现实生存（收入、风险、人际关系）之间找到最佳平衡点，尚无标准答案，更多是个人选择和智慧的体现。<br/><br/>
+<b>六、宏观影响与价值提炼（重点）</b><br/>
+                                    本次小会围绕一个具体的医疗案例，深刻探讨了<b>理想主义者在现实复杂环境中的生存与发展策略</b>这一普适性议题。其核心价值在于：<br/><br/>
+<b>1.  “二阶理想主义”的提出与实践：</b><br/>
+                                    讨论超越了简单的是非对错和道德评判，引入了“二阶理想主义”这一核心概念。它启发我们，真正的理想主义并非盲目牺牲或一味硬扛，而是<b>既要坚守初心，又要讲究策略，懂得自我保护和可持续发展</b>。这不仅适用于医生，也适用于任何怀抱理想、试图在复杂现实中有所作为的个体。正如<b>幼儿园文体委员</b>所言：“<b>存人失地，人地皆存，活下来才能治更多人。</b>”以及“<b>共产主义者有义务发财</b>”，这都体现了将理想与现实手段相结合的二阶思维。<br/><br/>
+<b>2.  “第一责任人”与边界意识：</b><br/>
+                                    讨论中反复强调患者作为自身健康的“第一责任人”，以及医生在提供帮助时也应有边界意识。这提醒我们，在任何互助关系中，明确各方责任，避免无限兜底，是保证关系健康和可持续的关键。过度承担他人责任，不仅可能耗尽自身，也可能剥夺对方成长的机会。<br/><br/>
+<b>3.  系统思维与多视角看问题：</b><br/>
+                                    无论是分析患者病情（如<b>学前班校霸（白嫖群主版）</b>分析的牙周炎恶性循环），还是理解同事行为，或是规划个人职业发展，都需要跳出单一事件，从更宏观的系统和多方利益角度进行考量。例如，医生拒诊高风险患者，可能并非单纯怕麻烦，而是基于医院整体风险控制、个人职业安全、甚至是对患者长远负责（避免能力不足导致更大伤害）的综合判断。<br/><br/>
+<b>4.  沟通的艺术与策略：</b><br/>
+                                    在处理复杂人际关系（如医患、医医）时，直接的“真诚”有时并非最优解。讨论中提出的“专业术语解释”、“向上级转诊”、“教患者话术”等，都是在特定情境下，为了达成多方相对可接受结果而采取的沟通策略。这启发我们，沟通不仅是表达，更是为了实现特定目标的策略性行为。<br/><br/>
+<b>5.  在限制中寻求最优解：</b><br/>
                                     现实往往充满限制和无奈（如医疗资源不足、制度不完善、患者认知局限等）。真正的智慧在于，承认这些限制，并在限制的框架内，努力寻求对各方相对最优的解决方案，而不是执着于一个完美的、但可能无法实现的理想状态。这体现了一种务实的、建设性的问题解决态度。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             在复杂的医疗环境中，医生需在坚持职业操守、救助患者与保护自身职业生涯、避免不必要风险之间寻求平衡，转诊至更高水平医院（如华西）是对此案例的一个可行建议。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 向上级转诊，似乎是个思路，是不是可以和同事「串一下供」……
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>AA昍</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 凝血指标也许还和之前的一致，但是这个牙齿经过了这么长的时间，已经不再适合手术了啊。说清楚问题吧，这类型的患者是很执着的。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>64年，今年61，属龙</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 （推荐华西）华西能不能挂上号，是患者的事，但是你给了患者一个盼头，就是良方，总枯等要好。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>啊怿子 -</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 在别的医生面前，尽量不要提其他医生的情况，除非描述病情必须。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>学前班校霸（白嫖群主版）</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 在保护自己的前提下，问心无愧就好。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>事不关猫己</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 是啊，要把好的想法转变成好的结果，离不开好的方法，好同志要做好事，就要更加勇于斗争，善于斗争。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>啊怿子 -</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             题主的核心困扰已转向个人心态与职业选择：是否应继续承担高风险、低（相对）回报的行医方式。这引申出关于“二阶理想主义”、可持续奉献以及如何在体制内保护自身同时践行理想的深刻思考。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 主要问题是我自己的心态吧，还该不该继续这样下去...我的收入远比不上那些只接常规无风险的患者的医生的收入，还担着比较高的风险，不知道以后该不该继续下去。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>匿名提问人</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 共产主义者有义务发财，我的看法。因为在资本主义世界里想要建设共产主义，必须得有大量的钞票，来投票。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>AA昍</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 每收治1个苦难病人，我就允许自己再收治10个有钱病人，平衡一下我的精神和物质，可持续发展。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>AA昍</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 存人失地，人地皆存。活下来才能治更多人。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>幼儿园文体委员</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 好医生请不要把自己压倒极限。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>芬达</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 医生这个职业相对来说是需要学习成绩极端好的...所以医生，说难听点大部分是Creepy中的creepy，weirdo中的weirdo。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>飞扬大学生</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="w-full mb-12 anchor-target" id="section-qa">
+<h2 class="section-title">
                 四、解惑一点通・有问必答
             </h2>
-            <div class="space-y-8">
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
-                    <div class="mb-4">
-                        <h4 class="text-xl font-semibold text-black flex items-center">
-                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+<div class="space-y-8">
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<div class="mb-4">
+<h4 class="text-xl font-semibold text-black flex items-center">
+<i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
                             如何科学汆肉与选择料酒？
                         </h4>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             宇世无争: "聊这个吧，上次的flag...关于汆肉，很多人也容易做错，改天聊"
                         </p>
-                    </div>
-                    <div class="border-t border-gray-200 pt-4">
-                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
-                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+</div>
+<div class="border-t border-gray-200 pt-4">
+<h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+<i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
                             解答
                         </h5>
-                        <div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、问题背景</b><br>
-                                    <b>宇世无争</b>兑现了之前的承诺，详细科普了关于肉类汆水（焯水）的科学原理和正确方法，以及如何选择合适的料酒。<b>学前班校霸（白嫖群主版）</b>也分享了相关视频资料。<br><br>
-                                    <b>二、核心原因分析与科学原理</b><br>
-                                    <b>汆肉的目的：</b>去除肉内部残存的、可能导致变质的血液和细胞渗出液（血污）。<br>
-                                    <b>蛋白质变性：</b>蛋白质在60℃以上会开始明显变性，表现为脱水、收缩变硬。如果沸水下锅，肉外层会迅速形成“硬壳”，阻碍内部血污排出。<br>
-                                    <b>正确方法：</b><br>
-                                    1.  <b>冷水下锅：</b>对于炖牛肉、排骨等大块肉，应冷水下锅，让污物随水温升高缓慢流出。小火汆水效果最好，但不必过久，以免鲜味物质流失过多。<br>
-                                    2.  <b>浮沫处理：</b>加热至70℃左右，污物（蛋白质）会凝集成浮沫。此时可将肉捞出。<br>
-                                    3.  <b>热水清洗：</b>捞出的肉需用高于70℃的水冲洗，否则肉遇冷收缩会重新吸附脏东西。<br>
-                                    4.  <b>高品质肉原汤：</b>若肉质好，可保留原汆肉水，煮沸滤渣后将洗好的肉放回炖煮。<br><br>
-                                    <b>料酒选择：</b><br>
-                                    -   <b>日常去腥：</b>推荐<b>古越龙山黄酒</b>（如清醇三年或金三年），性价比高，成分纯正。<br>
-                                    -   <b>避免劣质料酒：</b>一些料酒（如提及的王致和）是用香辛料和食用酒精勾兑，效果不佳。<br>
-                                    -   <b>特定烹饪需求：</b>啫啫煲或爆炒等需要点火的菜肴，可用<b>红星二锅头（绿瓶）</b>；广式烧腊可用<b>天津食品出品的金星牌玫瑰露酒</b>；糖醋排骨等酸甜口味可尝试<b>梅子酒</b>。<br><br>
-                                    <b>三、解决方案与建议</b><br>
-                                    <b>汆肉全流程总结（由宇世无争提供）：</b><br>
-                                    1.  肉冲洗后冷水下锅，可加葱姜、黄酒。<br>
-                                    2.  中小火加热，可搅拌。<br>
-                                    3.  同时烧一壶/锅备用水（可作最终炖肉容器）。<br>
-                                    4.  锅内明显浑浊、冒热气时，改最小火，将肉捞至备用热水中。<br>
-                                    5.  继续加热，撇去浮沫后加调料炖煮。<br><br>
+<div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、问题背景</b><br/>
+<b>宇世无争</b>兑现了之前的承诺，详细科普了关于肉类汆水（焯水）的科学原理和正确方法，以及如何选择合适的料酒。<b>学前班校霸（白嫖群主版）</b>也分享了相关视频资料。<br/><br/>
+<b>二、核心原因分析与科学原理</b><br/>
+<b>汆肉的目的：</b>去除肉内部残存的、可能导致变质的血液和细胞渗出液（血污）。<br/>
+<b>蛋白质变性：</b>蛋白质在60℃以上会开始明显变性，表现为脱水、收缩变硬。如果沸水下锅，肉外层会迅速形成“硬壳”，阻碍内部血污排出。<br/>
+<b>正确方法：</b><br/>
+                                    1.  <b>冷水下锅：</b>对于炖牛肉、排骨等大块肉，应冷水下锅，让污物随水温升高缓慢流出。小火汆水效果最好，但不必过久，以免鲜味物质流失过多。<br/>
+                                    2.  <b>浮沫处理：</b>加热至70℃左右，污物（蛋白质）会凝集成浮沫。此时可将肉捞出。<br/>
+                                    3.  <b>热水清洗：</b>捞出的肉需用高于70℃的水冲洗，否则肉遇冷收缩会重新吸附脏东西。<br/>
+                                    4.  <b>高品质肉原汤：</b>若肉质好，可保留原汆肉水，煮沸滤渣后将洗好的肉放回炖煮。<br/><br/>
+<b>料酒选择：</b><br/>
+                                    -   <b>日常去腥：</b>推荐<b>古越龙山黄酒</b>（如清醇三年或金三年），性价比高，成分纯正。<br/>
+                                    -   <b>避免劣质料酒：</b>一些料酒（如提及的王致和）是用香辛料和食用酒精勾兑，效果不佳。<br/>
+                                    -   <b>特定烹饪需求：</b>啫啫煲或爆炒等需要点火的菜肴，可用<b>红星二锅头（绿瓶）</b>；广式烧腊可用<b>天津食品出品的金星牌玫瑰露酒</b>；糖醋排骨等酸甜口味可尝试<b>梅子酒</b>。<br/><br/>
+<b>三、解决方案与建议</b><br/>
+<b>汆肉全流程总结（由宇世无争提供）：</b><br/>
+                                    1.  肉冲洗后冷水下锅，可加葱姜、黄酒。<br/>
+                                    2.  中小火加热，可搅拌。<br/>
+                                    3.  同时烧一壶/锅备用水（可作最终炖肉容器）。<br/>
+                                    4.  锅内明显浑浊、冒热气时，改最小火，将肉捞至备用热水中。<br/>
+                                    5.  继续加热，撇去浮沫后加调料炖煮。<br/><br/>
                                     群友们对这些烹饪技巧表示了极大兴趣，纷纷表示“学会了”、“学废了”，并收藏了相关信息。<b>学前班校霸（白嫖群主版）</b>对科学分析表示赞赏，<b>桃乐丝</b>也提到花雕酒确实比普通料酒味道更好。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-5 pt-4 border-t border-gray-200">
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">烹饪技巧</span>
-                            <span class="tag-item">汆肉</span>
-                            <span class="tag-item">料酒选择</span>
-                            <span class="tag-item">低温慢煮</span>
-                            <span class="tag-item">美食科普</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
-                    <div class="mb-4">
-                        <h4 class="text-xl font-semibold text-black flex items-center">
-                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-5 pt-4 border-t border-gray-200">
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">烹饪技巧</span>
+<span class="tag-item">汆肉</span>
+<span class="tag-item">料酒选择</span>
+<span class="tag-item">低温慢煮</span>
+<span class="tag-item">美食科普</span>
+</div>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<div class="mb-4">
+<h4 class="text-xl font-semibold text-black flex items-center">
+<i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
                             房产处置策略：卖还是租？何时出手？
                         </h4>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             高大壮太天真: "想请问大家一个问题。我有一套房子在西安，现在是毛坯房，一直准备卖..."
                         </p>
-                    </div>
-                    <div class="border-t border-gray-200 pt-4">
-                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
-                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+</div>
+<div class="border-t border-gray-200 pt-4">
+<h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+<i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
                             解答
                         </h5>
-                        <div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、问题背景</b><br>
-                                    <b>高大壮太天真</b>面临西安一套毛坯房的处置难题：目前市场不佳，计划1-2年内出手（有贷款，但不涉及二套贷问题，卖后到手约56万，原买入价9000多元/平，现估值110万/92平）。现有租客想租作储藏室，租期3年，月租600元。他纠结于是现在降价急售，还是先出租（可能面临违约金），担心未来房价更低或砸手里。<br><br>
-                                    <b>二、核心原因分析与多方观点</b><br>
-                                    <b>市场判断：</b><br>
-                                    -   <b>学前班校霸（白嫖群主版）</b>认为目前接近谷底，但未来不好说，需看地段、人口、配套。对西安等驾坡地段，他建议可租给钓鱼佬，对西咸新区则劝赶紧卖。<br>
-                                    -   <b>黄云</b>、<b>高大壮太天真</b>自己也担心房价会更低。<br>
-                                    -   <b>AA昍</b>认为，当前房地产市场整体低迷，除非家破人亡，否则不应轻易卖房。他指出，如果房价还会大跌，那买新房（通常更大）会亏更多，逻辑上矛盾。他认为华夏经济基本面趋向见底反弹，此时出清金融资产（如房产）不明智。<br>
-                                    -   <b>72</b>引用翟东升教授观点，认为下一次购房高峰在2027-2031年，因此2025-2026年可能是买入点，繁荣点是卖出点。他也强调未来只有人口净流入城市核心区房价有溢价。<br>
-                                    -   <b>土豆</b>和<b>AA昍</b>均提到当前经济形势下“现金为王”。<br><br>
-                                    <b>处置策略：</b><br>
-                                    -   <b>出租的弊端：</b><b>AA昍</b>和<b>高大壮太天真</b>自己都认为月租600元过低，不值得异地操心，且存在租客违约、房屋被滥用（如贩毒、藏尸）等风险。<b>桃乐丝</b>也补充房东责任大，维修、邻里纠纷等很麻烦。<br>
-                                    -   <b>卖房的考量：</b><b>啊八有一个理想</b>建议直接卖掉，避免出租麻烦。<b>nicoletoo</b>分享了自己23年成功“逃顶”经历，强调有硬伤的房子应果断出手。<b>Starlight</b>的同事则因犹豫未在高点卖出而腰斩亏损。<br>
-                                    -   <b>持有/贷款/租房的综合策略：</b><b>AA昍</b>提出，若房子本身不错且未来可能自住，则不应在低谷卖出。可考虑：1. 找银行多贷款（目前利率低，公积金或商贷月供差异不大）或亲戚周转，保留现有房产。2. 若现金流紧张，或新购房需求面积更大，不如先租房住，体验好再考虑买，避免买卖周转不灵。他强调房子流动性差，不宜轻易操作“左手卖右手买”。<br>
-                                    -   <b>高大壮太天真</b>后续表示，考虑换到西安工作，倾向于保住现有小房子，同时租大房子住，等待市场明朗。<br><br>
-                                    <b>三、结论与启发</b><br>
+<div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、问题背景</b><br/>
+<b>高大壮太天真</b>面临西安一套毛坯房的处置难题：目前市场不佳，计划1-2年内出手（有贷款，但不涉及二套贷问题，卖后到手约56万，原买入价9000多元/平，现估值110万/92平）。现有租客想租作储藏室，租期3年，月租600元。他纠结于是现在降价急售，还是先出租（可能面临违约金），担心未来房价更低或砸手里。<br/><br/>
+<b>二、核心原因分析与多方观点</b><br/>
+<b>市场判断：</b><br/>
+                                    -   <b>学前班校霸（白嫖群主版）</b>认为目前接近谷底，但未来不好说，需看地段、人口、配套。对西安等驾坡地段，他建议可租给钓鱼佬，对西咸新区则劝赶紧卖。<br/>
+                                    -   <b>黄云</b>、<b>高大壮太天真</b>自己也担心房价会更低。<br/>
+                                    -   <b>AA昍</b>认为，当前房地产市场整体低迷，除非家破人亡，否则不应轻易卖房。他指出，如果房价还会大跌，那买新房（通常更大）会亏更多，逻辑上矛盾。他认为华夏经济基本面趋向见底反弹，此时出清金融资产（如房产）不明智。<br/>
+                                    -   <b>72</b>引用翟东升教授观点，认为下一次购房高峰在2027-2031年，因此2025-2026年可能是买入点，繁荣点是卖出点。他也强调未来只有人口净流入城市核心区房价有溢价。<br/>
+                                    -   <b>土豆</b>和<b>AA昍</b>均提到当前经济形势下“现金为王”。<br/><br/>
+<b>处置策略：</b><br/>
+                                    -   <b>出租的弊端：</b><b>AA昍</b>和<b>高大壮太天真</b>自己都认为月租600元过低，不值得异地操心，且存在租客违约、房屋被滥用（如贩毒、藏尸）等风险。<b>桃乐丝</b>也补充房东责任大，维修、邻里纠纷等很麻烦。<br/>
+                                    -   <b>卖房的考量：</b><b>啊八有一个理想</b>建议直接卖掉，避免出租麻烦。<b>nicoletoo</b>分享了自己23年成功“逃顶”经历，强调有硬伤的房子应果断出手。<b>Starlight</b>的同事则因犹豫未在高点卖出而腰斩亏损。<br/>
+                                    -   <b>持有/贷款/租房的综合策略：</b><b>AA昍</b>提出，若房子本身不错且未来可能自住，则不应在低谷卖出。可考虑：1. 找银行多贷款（目前利率低，公积金或商贷月供差异不大）或亲戚周转，保留现有房产。2. 若现金流紧张，或新购房需求面积更大，不如先租房住，体验好再考虑买，避免买卖周转不灵。他强调房子流动性差，不宜轻易操作“左手卖右手买”。<br/>
+                                    -   <b>高大壮太天真</b>后续表示，考虑换到西安工作，倾向于保住现有小房子，同时租大房子住，等待市场明朗。<br/><br/>
+<b>三、结论与启发</b><br/>
                                     综合来看，群友们普遍认为月租600元出租毛坯房不划算且风险高。对于是否立即卖出，观点不一，取决于对未来市场的判断和个人具体情况。<b>AA昍</b>的分析强调了在市场低谷期持有优质资产、利用低利率贷款以及优先保证现金流的重要性，并提示了“同时买卖永远说不通”的逻辑悖论。<b>72</b>则从人口周期角度给出了对未来房价走势的预判。<b>nicoletoo</b>的成功案例也提醒大家，果断决策有时能避免更大损失。最终，<b>高大壮太天真</b>似乎更倾向于持有现有房产，通过租房解决当前居住需求，观望市场变化。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-5 pt-4 border-t border-gray-200">
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">房地产</span>
-                            <span class="tag-item">房屋买卖</span>
-                            <span class="tag-item">房屋租赁</span>
-                            <span class="tag-item">市场分析</span>
-                            <span class="tag-item">现金流管理</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
-                    <div class="mb-4">
-                        <h4 class="text-xl font-semibold text-black flex items-center">
-                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-5 pt-4 border-t border-gray-200">
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">房地产</span>
+<span class="tag-item">房屋买卖</span>
+<span class="tag-item">房屋租赁</span>
+<span class="tag-item">市场分析</span>
+<span class="tag-item">现金流管理</span>
+</div>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<div class="mb-4">
+<h4 class="text-xl font-semibold text-black flex items-center">
+<i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
                             育儿困境：孩子撒谎与行为管教
                         </h4>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             64年，今年61，属龙: "[合并转发|群聊的聊天记录]...我真的没办法贴脸亲亲抱抱夸夸周墨涵..."
                         </p>
-                    </div>
-                    <div class="border-t border-gray-200 pt-4">
-                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
-                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+</div>
+<div class="border-t border-gray-200 pt-4">
+<h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+<i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
                             解答
                         </h5>
-                        <div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、问题背景</b><br>
-                                    <b>64年，今年61，属龙</b>转发了隔壁群关于育儿的讨论，核心是一位母亲（墨墨）对其孩子（周墨涵，9岁）不刷牙、撒谎（开水龙头伪造刷牙声）等行为感到崩溃和愤怒，甚至用“asshole”、“低级又愚蠢”形容孩子。孩子在学校也常有状况，老师建议家长配合教育。这位母亲尝试过打骂、讲道理，但效果不彰，陷入管也不是、不管也不是的困境。她还提到孩子虐猫、撞坏牙医诊所昂贵仪器等行为。<br><br>
-                                    <b>二、核心原因分析与多方观点</b><br>
-                                    <b>孩子行为成因分析：</b><br>
-                                    -   <b>恐惧与逃避：</b> <b>桃乐丝</b>和隔壁群友<b>Ms.moring🔆</b>认为孩子撒谎源于对母亲责骂或情绪输出的恐惧，是想逃避惩罚的自然反应。<br>
-                                    -   <b>缺乏内在驱动与延迟满足困难：</b> <b>学前班校霸（白嫖群主版）</b>指出，孩子难以理解刷牙等行为的长期益处，缺乏直观收益，属于延迟满足困难。<b>桃乐丝</b>也认为，对刷牙的抗拒可能源于对其他事物的沉迷，或以此反抗大人控制。<br>
-                                    -   <b>病理性可能（ADHD）：</b> <b>桃乐丝</b>和<b>64年，今年61，属龙</b>都提及孩子可能存在ADHD（注意力缺陷多动障碍）的可能，但家长未带其检查，仅凭“典型”表现判断。<br>
-                                    -   <b>习得性行为：</b> <b>啊怿子 -</b>认为，孩子能做到伪造刷牙声，说明已积累经验，可能在别处撒谎成功过。<b>学前班校霸（白嫖群主版）</b>也用“狗吃屎被打后学会不被发现”类比。<br><br>
-                                    <b>家长教育方式探讨：</b><br>
-                                    -   <b>打骂的效用：</b> 普遍认为打骂对制止撒谎效果有限，孩子可能学会更巧妙地撒谎（<b>事不关猫己</b>）。<b>桃乐丝</b>认为打是“核武器”，不应轻易使用。<br>
-                                    -   <b>讲道理与科普：</b> 母亲表示健康知识已讲过无数遍。<b>学前班校霸（白嫖群主版）</b>认为需用孩子听得懂的方式，如打一顿再带去牙科诊所看真实案例，让他意识到后果的严重性。<b>桃乐丝</b>分享了自己从小通过游戏、绘本（《牙齿大街的新鲜事》）、牙医奖励等方式培养孩子刷牙习惯的经验。<br>
-                                    -   <b>情绪管理与“放手”：</b> 母亲表示自己已气到不行，尝试“放养”但实则无法真正放手，导致父亲独自承担压力。<b>桃乐丝</b>认为，孩子大了必须“造反”以独立，关键在于父母处理方式。<br>
-                                    -   <b>愧疚感教育：</b> <b>黄云</b>分享了自己对待侄子犯错的经验，认为不打骂、而是让孩子体会到自己的行为给他人带来的不快（如“你把我朋友送的东西摔碎了，我很不开心”），利用愧疚感比打骂更有效，能让孩子长记性。<br>
-                                    -   <b>家长心态：</b> <b>极品小学生（伽梨版）</b>和<b>桃乐丝</b>均指出，母亲自身心态可能已崩溃，其对孩子的负面评价（“asshole”、“低级又愚蠢”）反映了深层问题。<b>桃乐丝</b>认为母亲可能在自欺欺人，既想吐槽又不想被指出问题。<br><br>
-                                    <b>三、解决方案与建议</b><br>
-                                    <b>1.  就医检查：</b> <b>64年，今年61，属龙</b>和<b>桃乐丝</b>均强烈建议带孩子就医，排查是否存在ADHD等病理性问题。<b>MIR🍈</b>也认为家长应先带孩子看医生，而非主观臆断。<br>
-                                    <b>2.  改变认知与沟通方式：</b> <b>桃乐丝</b>强调，撒谎是人类高级技能，重点在于探究撒谎背后的原因，而非简单惩罚。应帮助孩子建立对健康行为的内在认同，而非仅靠外部约束。<br>
-                                    <b>3.  家长自我调适：</b> <b>啊怿子 -</b>建议家长先照顾好自己情绪，这是一场持久战。<b>桃乐丝</b>认为母亲可能也需要调整，理解孩子的行为动机。<br>
-                                    <b>4.  寻求专业帮助：</b> 除了医学检查，也可考虑儿童心理咨询。<br><br>
-                                    <b>结论与启发：</b><br>
+<div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、问题背景</b><br/>
+<b>64年，今年61，属龙</b>转发了隔壁群关于育儿的讨论，核心是一位母亲（墨墨）对其孩子（周墨涵，9岁）不刷牙、撒谎（开水龙头伪造刷牙声）等行为感到崩溃和愤怒，甚至用“asshole”、“低级又愚蠢”形容孩子。孩子在学校也常有状况，老师建议家长配合教育。这位母亲尝试过打骂、讲道理，但效果不彰，陷入管也不是、不管也不是的困境。她还提到孩子虐猫、撞坏牙医诊所昂贵仪器等行为。<br/><br/>
+<b>二、核心原因分析与多方观点</b><br/>
+<b>孩子行为成因分析：</b><br/>
+                                    -   <b>恐惧与逃避：</b> <b>桃乐丝</b>和隔壁群友<b>Ms.moring🔆</b>认为孩子撒谎源于对母亲责骂或情绪输出的恐惧，是想逃避惩罚的自然反应。<br/>
+                                    -   <b>缺乏内在驱动与延迟满足困难：</b> <b>学前班校霸（白嫖群主版）</b>指出，孩子难以理解刷牙等行为的长期益处，缺乏直观收益，属于延迟满足困难。<b>桃乐丝</b>也认为，对刷牙的抗拒可能源于对其他事物的沉迷，或以此反抗大人控制。<br/>
+                                    -   <b>病理性可能（ADHD）：</b> <b>桃乐丝</b>和<b>64年，今年61，属龙</b>都提及孩子可能存在ADHD（注意力缺陷多动障碍）的可能，但家长未带其检查，仅凭“典型”表现判断。<br/>
+                                    -   <b>习得性行为：</b> <b>啊怿子 -</b>认为，孩子能做到伪造刷牙声，说明已积累经验，可能在别处撒谎成功过。<b>学前班校霸（白嫖群主版）</b>也用“狗吃屎被打后学会不被发现”类比。<br/><br/>
+<b>家长教育方式探讨：</b><br/>
+                                    -   <b>打骂的效用：</b> 普遍认为打骂对制止撒谎效果有限，孩子可能学会更巧妙地撒谎（<b>事不关猫己</b>）。<b>桃乐丝</b>认为打是“核武器”，不应轻易使用。<br/>
+                                    -   <b>讲道理与科普：</b> 母亲表示健康知识已讲过无数遍。<b>学前班校霸（白嫖群主版）</b>认为需用孩子听得懂的方式，如打一顿再带去牙科诊所看真实案例，让他意识到后果的严重性。<b>桃乐丝</b>分享了自己从小通过游戏、绘本（《牙齿大街的新鲜事》）、牙医奖励等方式培养孩子刷牙习惯的经验。<br/>
+                                    -   <b>情绪管理与“放手”：</b> 母亲表示自己已气到不行，尝试“放养”但实则无法真正放手，导致父亲独自承担压力。<b>桃乐丝</b>认为，孩子大了必须“造反”以独立，关键在于父母处理方式。<br/>
+                                    -   <b>愧疚感教育：</b> <b>黄云</b>分享了自己对待侄子犯错的经验，认为不打骂、而是让孩子体会到自己的行为给他人带来的不快（如“你把我朋友送的东西摔碎了，我很不开心”），利用愧疚感比打骂更有效，能让孩子长记性。<br/>
+                                    -   <b>家长心态：</b> <b>极品小学生（伽梨版）</b>和<b>桃乐丝</b>均指出，母亲自身心态可能已崩溃，其对孩子的负面评价（“asshole”、“低级又愚蠢”）反映了深层问题。<b>桃乐丝</b>认为母亲可能在自欺欺人，既想吐槽又不想被指出问题。<br/><br/>
+<b>三、解决方案与建议</b><br/>
+<b>1.  就医检查：</b> <b>64年，今年61，属龙</b>和<b>桃乐丝</b>均强烈建议带孩子就医，排查是否存在ADHD等病理性问题。<b>MIR🍈</b>也认为家长应先带孩子看医生，而非主观臆断。<br/>
+<b>2.  改变认知与沟通方式：</b> <b>桃乐丝</b>强调，撒谎是人类高级技能，重点在于探究撒谎背后的原因，而非简单惩罚。应帮助孩子建立对健康行为的内在认同，而非仅靠外部约束。<br/>
+<b>3.  家长自我调适：</b> <b>啊怿子 -</b>建议家长先照顾好自己情绪，这是一场持久战。<b>桃乐丝</b>认为母亲可能也需要调整，理解孩子的行为动机。<br/>
+<b>4.  寻求专业帮助：</b> 除了医学检查，也可考虑儿童心理咨询。<br/><br/>
+<b>结论与启发：</b><br/>
                                     育儿问题复杂且个体差异大。此案例中，孩子的行为问题可能与多种因素（生理、心理、家庭环境、教育方式）交织。简单粗暴的打骂效果有限，甚至可能适得其反。家长首先需要调整自身心态，理性分析孩子行为背后的深层原因，积极寻求专业医疗和心理支持，并尝试更具建设性的沟通和引导方式。同时，对孩子行为的定性（如“asshole”）需谨慎，避免负面标签对孩子造成长远伤害。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-5 pt-4 border-t border-gray-200">
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">育儿困境</span>
-                            <span class="tag-item">撒谎行为</span>
-                            <span class="tag-item">行为管教</span>
-                            <span class="tag-item">ADHD</span>
-                            <span class="tag-item">家庭教育</span>
-                            <span class="tag-item">亲子沟通</span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-5 pt-4 border-t border-gray-200">
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">育儿困境</span>
+<span class="tag-item">撒谎行为</span>
+<span class="tag-item">行为管教</span>
+<span class="tag-item">ADHD</span>
+<span class="tag-item">家庭教育</span>
+<span class="tag-item">亲子沟通</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="w-full mb-12 anchor-target" id="section-daily-picks">
+<h2 class="section-title">
                 五、智慧火花匣・每日精选
             </h2>
-            <div class="space-y-8">
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
-                    <h4 class="text-xl font-semibold text-black mb-3">
+<div class="space-y-8">
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<h4 class="text-xl font-semibold text-black mb-3">
                         健身与拉伸技巧讨论
                     </h4>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             64年，今年61，属龙: "我准备买哑铃，新手第一次用哑铃，大家有什么推荐不？"
                         </p>
-                    </div>
-                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
-                        <div class="expandable-content" data-char-limit="200">
-                            <div class="content-preview">
-                                <b>一、推荐内容</b><br>
-                                群内围绕<b>64年，今年61，属龙</b>想购买哑铃的提问，展开了关于新手健身器材选择、训练方法、拉伸重要性以及一些特定动作（如深蹲、靠墙蹲）的讨论。<b>AA昍</b>、<b>啊八有一个理想</b>、<b>熊，熊，xióng，熊</b>等群友分享了各自的经验和建议。<br><br>
-                                <b>二、核心价值与特点</b><br>
-                                <b>器材选择：</b><br>
-                                -   <b>哑铃：</b> <b>啊八有一个理想</b>推荐购买可拆卸哑铃，方便调整重量。<b>熊，熊，xióng，熊</b>建议新手从1kg和2.5kg各两个开始。<b>桃乐丝</b>建议初次购买时挑选外观可爱、斤两合适的，培养使用习惯后再进阶。<br>
-                                -   <b>替代品：</b> <b>学前班校霸（白嫖群主版）</b>建议初学可用矿泉水瓶。<b>AA昍</b>分享自己用大水桶灌水当哑铃，兼顾停水冲马桶功能。<b>子蟹</b>证实了水哑铃在停水时的实用性。<br><br>
-                                <b>训练方法与动作：</b><br>
-                                -   <b>自重训练：</b> <b>冰镇啵子汽水</b>和<b>AA昍</b>都认为自重训练对初学者已足够，如马步、深蹲。<b>高大壮太天真</b>推荐自重保加利亚蹲。<br>
-                                -   <b>深蹲：</b> <b>AA昍</b>建议自重深蹲，一天100个（如每组20个）。<b>极品小学生（伽梨版）</b>开始实践并打卡。<b>飞扬大学生</b>建议深蹲时慢蹲慢起，追求质量而非数量。<br>
-                                -   <b>靠墙蹲/蹲墙功：</b> <b>冰镇啵子汽水</b>推荐靠墙蹲（后更正为面壁蹲墙功，膝盖不过脚尖）对改善手脚冰凉有益，并分享了视频。<b>AA昍</b>对此动作提出异议，认为其更练柔韧性而非力量，且“膝盖不过脚尖”的说法可能增加日常意外受伤风险，推荐了#kneesovertoesguy的训练理念，主张主动让膝盖适度超过脚尖以增强适应性。他还认为平板支撑是“垃圾动作”，不如卷腹。<br>
-                                -   <b>其他：</b> <b>熊，熊，xióng，熊</b>分享了疫情期间的居家徒手训练计划（深蹲、俯卧撑、卷腹、举腿、波比跳各100）。<br><br>
-                                <b>拉伸的重要性：</b><br>
-                                -   <b>啊八有一个理想</b>强调拉伸与锻炼同等重要，分享了练前动态拉伸和练后静态拉伸的视频，并指出自己不拉伸会抽筋。<b>AA昍</b>则表示自己因怕麻烦不拉伸，但承认其重要性，并提到泡沫轴可作为拉伸辅助。<b>紫盈</b>、<b>事不关猫己</b>、<b>归舟</b>均表示喜欢拉伸的爽感。<b>MIR🍈</b>和<b>AA昍</b>则觉得拉伸麻烦。<br><br>
-                                <b>三、适用场景或补充信息</b><br>
+</div>
+<div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、推荐内容</b><br/>
+                                群内围绕<b>64年，今年61，属龙</b>想购买哑铃的提问，展开了关于新手健身器材选择、训练方法、拉伸重要性以及一些特定动作（如深蹲、靠墙蹲）的讨论。<b>AA昍</b>、<b>啊八有一个理想</b>、<b>熊，熊，xióng，熊</b>等群友分享了各自的经验和建议。<br/><br/>
+<b>二、核心价值与特点</b><br/>
+<b>器材选择：</b><br/>
+                                -   <b>哑铃：</b> <b>啊八有一个理想</b>推荐购买可拆卸哑铃，方便调整重量。<b>熊，熊，xióng，熊</b>建议新手从1kg和2.5kg各两个开始。<b>桃乐丝</b>建议初次购买时挑选外观可爱、斤两合适的，培养使用习惯后再进阶。<br/>
+                                -   <b>替代品：</b> <b>学前班校霸（白嫖群主版）</b>建议初学可用矿泉水瓶。<b>AA昍</b>分享自己用大水桶灌水当哑铃，兼顾停水冲马桶功能。<b>子蟹</b>证实了水哑铃在停水时的实用性。<br/><br/>
+<b>训练方法与动作：</b><br/>
+                                -   <b>自重训练：</b> <b>冰镇啵子汽水</b>和<b>AA昍</b>都认为自重训练对初学者已足够，如马步、深蹲。<b>高大壮太天真</b>推荐自重保加利亚蹲。<br/>
+                                -   <b>深蹲：</b> <b>AA昍</b>建议自重深蹲，一天100个（如每组20个）。<b>极品小学生（伽梨版）</b>开始实践并打卡。<b>飞扬大学生</b>建议深蹲时慢蹲慢起，追求质量而非数量。<br/>
+                                -   <b>靠墙蹲/蹲墙功：</b> <b>冰镇啵子汽水</b>推荐靠墙蹲（后更正为面壁蹲墙功，膝盖不过脚尖）对改善手脚冰凉有益，并分享了视频。<b>AA昍</b>对此动作提出异议，认为其更练柔韧性而非力量，且“膝盖不过脚尖”的说法可能增加日常意外受伤风险，推荐了#kneesovertoesguy的训练理念，主张主动让膝盖适度超过脚尖以增强适应性。他还认为平板支撑是“垃圾动作”，不如卷腹。<br/>
+                                -   <b>其他：</b> <b>熊，熊，xióng，熊</b>分享了疫情期间的居家徒手训练计划（深蹲、俯卧撑、卷腹、举腿、波比跳各100）。<br/><br/>
+<b>拉伸的重要性：</b><br/>
+                                -   <b>啊八有一个理想</b>强调拉伸与锻炼同等重要，分享了练前动态拉伸和练后静态拉伸的视频，并指出自己不拉伸会抽筋。<b>AA昍</b>则表示自己因怕麻烦不拉伸，但承认其重要性，并提到泡沫轴可作为拉伸辅助。<b>紫盈</b>、<b>事不关猫己</b>、<b>归舟</b>均表示喜欢拉伸的爽感。<b>MIR🍈</b>和<b>AA昍</b>则觉得拉伸麻烦。<br/><br/>
+<b>三、适用场景或补充信息</b><br/>
                                 讨论中，大家一致认同运动对改善体质（如手脚冰凉）、提升健康水平的重要性。对于训练动作的选择和执行，强调了循序渐进、注意姿势正确、避免受伤的原则。拉伸作为训练的重要组成部分，虽然个体感受和执行意愿不同，但其益处得到普遍认可。
                             </div>
-                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                <span class="expand-text">展开全文</span>
-                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="tag-item">健身入门</span>
-                        <span class="tag-item">哑铃选择</span>
-                        <span class="tag-item">自重训练</span>
-                        <span class="tag-item">深蹲</span>
-                        <span class="tag-item">拉伸</span>
-                        <span class="tag-item">运动康复</span>
-                    </div>
-                </div>
-                
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
-                    <h4 class="text-xl font-semibold text-black mb-3">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="tag-item">健身入门</span>
+<span class="tag-item">哑铃选择</span>
+<span class="tag-item">自重训练</span>
+<span class="tag-item">深蹲</span>
+<span class="tag-item">拉伸</span>
+<span class="tag-item">运动康复</span>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<h4 class="text-xl font-semibold text-black mb-3">
                         为什么建这个群？多提问薅羊毛，200块不白交
                     </h4>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             AA昍: "[语音] 说一下「你为什么要建这个群」"
                         </p>
-                    </div>
-                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
-                        <div class="expandable-content" data-char-limit="200">
-                            <div class="content-preview">
-                                <b>一、推荐内容</b><br>
-                                群主<b>AA昍</b>通过一系列语音消息，分享了自己建立“新茧”微信群的初衷、运营思考以及对群成员的期望。这组语音是当日讨论中的一个重要部分，引发了群友对社群价值和个人成长的进一步思考。<br><br>
-                                <b>二、核心价值与特点</b><br>
-                                <b>建群初衷——精神与物质双丰收：</b><br>
-                                -   <b>精神层面：</b> 源于写网文过程中对实时反馈的需求。<b>AA昍</b>提到，写作缺乏即时反馈易感迷茫，群聊提供了一个验证三观、获得启发、感受自身价值的“加油站”，支撑其继续创作。他希望群内同志能在此获得安全感，坚定对国家的信仰。<br>
-                                -   <b>物质层面：</b> 最初设定200元门槛，考虑了红包上限、与知识付费产品的对比等因素，旨在建立一个有价值的小社群，并确保付费成员感到物有所值。<br><br>
-                                <b>对群现状的思考与焦虑：</b><br>
-                                -   <b>人数超预期带来的“履约”压力：</b> 群成员数量远超预期，使得<b>AA昍</b>感到难以与每位成员充分交流，担心无法让每位付费成员都感到“值回票价”，甚至因此产生“强迫症”，希望大家都能积极提问、参与讨论。<br>
-                                -   <b>与“吴老师的群”对比引发的生态位思考：</b> 通过对比其他社群（如吴老师群中存在“反贼”作为“付费玩家的游戏体验”），<b>AA昍</b>反思本群因成员高度同质化（均为同志，氛围包容和谐），可能缺少了通过激烈批评实现成长的路径。但他同时强调，本群的优势在于安全，鼓励成员加大自我暴露，甚至进行“二阶自我批评”，以促进成长。<br><br>
-                                <b>对群成员的期望与价值定位：</b><br>
-                                -   <b>珍惜独特环境，主动自我成长：</b> <b>AA昍</b>认为，本群提供了一个在现实中可能再难遇到的、安全且充满善意的交流环境。他鼓励成员，特别是那些在安全环境中才敢发言的人，抓住机会进行自我暴露，积极提问，参与讨论，实现个人成长。他强调“<b>人只能靠自己进步，内因决定外因</b>”。<br>
-                                -   <b>共同建设，创造长期价值：</b> 他展望群聊的未来可能性，认为群内同志们未来可能成为各行各业的大佬，本群的经历可能成为宝贵回忆和认知提升的起点。他希望这个群能成为一个有共同目标、能相互启发的共同体。<br><br>
-                                <b>三、适用场景或补充信息</b><br>
-                                <b>AA昍</b>的这系列语音，不仅解释了建群的个人动机和运营理念，更核心的是，他试图通过自己的思考和坦诚，<b>激发群成员的主动性和参与感</b>，强调社群的价值在于成员间的互动和共同成长。他鼓励大家不要因为了解了“二阶思维”而变得更胆怯，反而应该在安全的环境中更勇敢地实践和探索。这番分享本身也构成了一次深度的社群建设和价值理念传递。
+</div>
+<div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、推荐内容</b><br/>
+                                群主<b>AA昍</b>通过一系列语音消息，分享了自己建立“新茧”微信群的初衷、运营思考以及对群成员的期望。这组语音是当日讨论中的一个重要部分，引发了群友对社群价值和个人成长的进一步思考。<br/><br/>
+<b>二、核心价值与特点</b><br/>
+<b>建群初衷——精神与物质双丰收：</b><br/>
+                                -   <b>精神层面：</b> 源于写网文过程中对实时反馈的需求。<b>AA昍</b>提到，写作缺乏即时反馈易感迷茫，群聊提供了一个验证三观、获得启发、感受自身价值的“加油站”，支撑其继续创作。他希望群内同志能在此获得安全感，坚定对国家的信仰。<br/>
+                                -   <b>物质层面：</b> 最初设定200元门槛，考虑了红包上限、与知识付费产品的对比等因素，旨在建立一个有价值的小社群，并确保付费成员感到物有所值。<br/><br/>
+<b>对群现状的思考与焦虑：</b><br/>
+                                -   <b>人数超预期带来的“履约”压力：</b> 群成员数量远超预期，使得<b>AA昍</b>感到难以与每位成员充分交流，担心无法让每位付费成员都感到“值回票价”，甚至因此产生“强迫症”，希望大家都能积极提问、参与讨论。<br/>
+                                -   <b>与“吴老师的群”对比引发的生态位思考：</b> 通过对比其他社群（如吴老师群中存在“反贼”作为“付费玩家的游戏体验”），<b>AA昍</b>反思本群因成员高度同质化（均为同志，氛围包容和谐），可能缺少了通过激烈批评实现成长的路径。但他同时强调，本群的优势在于安全，鼓励成员加大自我暴露，甚至进行“二阶自我批评”，以促进成长。<br/><br/>
+<b>对群成员的期望与价值定位：</b><br/>
+                                -   <b>珍惜独特环境，主动自我成长：</b> <b>AA昍</b>认为，本群提供了一个在现实中可能再难遇到的、安全且充满善意的交流环境。他鼓励成员，特别是那些在安全环境中才敢发言的人，抓住机会进行自我暴露，积极提问，参与讨论，实现个人成长。他强调“<b>人只能靠自己进步，内因决定外因</b>”。<br/>
+                                -   <b>共同建设，创造长期价值：</b> 他展望群聊的未来可能性，认为群内同志们未来可能成为各行各业的大佬，本群的经历可能成为宝贵回忆和认知提升的起点。他希望这个群能成为一个有共同目标、能相互启发的共同体。<br/><br/>
+<b>三、适用场景或补充信息</b><br/>
+<b>AA昍</b>的这系列语音，不仅解释了建群的个人动机和运营理念，更核心的是，他试图通过自己的思考和坦诚，<b>激发群成员的主动性和参与感</b>，强调社群的价值在于成员间的互动和共同成长。他鼓励大家不要因为了解了“二阶思维”而变得更胆怯，反而应该在安全的环境中更勇敢地实践和探索。这番分享本身也构成了一次深度的社群建设和价值理念传递。
                             </div>
-                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                <span class="expand-text">展开全文</span>
-                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="tag-item">社群建设</span>
-                        <span class="tag-item">运营思考</span>
-                        <span class="tag-item">个人成长</span>
-                        <span class="tag-item">二阶思维</span>
-                        <span class="tag-item">社群价值</span>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <footer class="w-full mt-16">
-            <div class="bento-card p-8">
-                <div class="text-center text-gray-700 space-y-3">
-                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-base">
-                        <div class="flex items-center">
-                            <i class="fas fa-database mr-2 text-[#4D6BFE]"></i>
-                            <span>微信群聊记录</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-robot mr-2 text-[#4D6BFE]"></i>
-                            <span id="generation-time">2025-06-19 03:00:00</span>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-500 max-w-2xl mx-auto leading-relaxed">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">社群建设</span>
+<span class="tag-item">运营思考</span>
+<span class="tag-item">个人成长</span>
+<span class="tag-item">二阶思维</span>
+<span class="tag-item">社群价值</span>
+</div>
+</div>
+</div>
+</section>
+<nav class="w-full mt-12 daily-nav">
+<div class="bento-card p-4">
+<div class="flex justify-between items-center">
+<button class="nav-button day-nav-prev" type="button">
+<i class="fas fa-chevron-left"></i>
+                        上一天
+                    </button>
+<div class="text-center">
+<span class="text-sm text-gray-600">日报导航</span>
+</div>
+<button class="nav-button day-nav-next" type="button">
+                        下一天
+                        <i class="fas fa-chevron-right"></i>
+</button>
+</div>
+</div>
+</nav><footer class="w-full mt-16">
+<div class="bento-card p-8">
+<div class="text-center text-gray-700 space-y-3">
+<div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-base">
+<div class="flex items-center">
+<i class="fas fa-database mr-2 text-[#4D6BFE]"></i>
+<span>微信群聊记录</span>
+</div>
+<div class="flex items-center">
+<i class="fas fa-robot mr-2 text-[#4D6BFE]"></i>
+<span id="generation-time">2025-06-19 03:00:00</span>
+</div>
+</div>
+<p class="text-sm text-gray-500 max-w-2xl mx-auto leading-relaxed">
                         本报告基于群聊数据自动生成，仅供参考。内容可能包含个人观点，不代表群组官方立场。数据处理过程中已尽量匿名化处理敏感信息。
                     </p>
-                </div>
-            </div>
-        </footer>
-    </div>
-
-    <script>
+</div>
+</div>
+</footer>
+</div><div aria-label="页面快捷操作" class="floating-actions">
+<div class="directory-wrapper">
+<button aria-controls="directory-panel" aria-expanded="false" aria-label="打开内容导航" class="floating-button" id="directory-toggle" type="button">
+<i class="fas fa-list-ul"></i>
+</button>
+<div aria-hidden="true" aria-modal="false" class="directory-panel" id="directory-panel" role="dialog">
+<div class="directory-header">
+<span class="directory-title">内容导航</span>
+<button aria-label="关闭内容导航" class="directory-close" id="directory-close" type="button">
+<i class="fas fa-times"></i>
+</button>
+</div>
+<div class="directory-list" id="directory-list">
+<!-- HTML注释: 目录项由脚本在运行时自动生成，支持主模块与子模块锚点 -->
+</div>
+</div>
+</div>
+<button aria-label="返回顶部" class="floating-button floating-button--hidden" id="scroll-top-btn" type="button">
+<i class="fas fa-arrow-up"></i>
+</button>
+</div>
+<script>
+        // HTML注释: 定义基础URL常量
+        const BASE_URL = 'https://xinjian-bot.github.io/-/';
+        
         document.addEventListener('DOMContentLoaded', function() {
             // Bento card hover effect is handled by CSS :hover pseudo-class
-    
+
             // Number animation effect
             const numberElements = document.querySelectorAll('.number-display');
             numberElements.forEach(element => {
                 const finalValueText = element.textContent.replace(/,/g, '');
                 const finalValue = parseInt(finalValueText, 10);
-    
+
                 if (isNaN(finalValue)) return;
-    
+
                 let currentValue = 0;
                 const duration = 1500; // Animation duration in ms
                 const frameRate = 1000 / 60; // 60fps
                 const totalFrames = Math.round(duration / frameRate);
                 const increment = finalValue / totalFrames;
-    
+
                 let currentFrame = 0;
                 const timer = setInterval(() => {
                     currentFrame++;
                     currentValue += increment;
-    
+
                     if (currentFrame >= totalFrames) {
                         currentValue = finalValue;
                         clearInterval(timer);
@@ -1301,14 +1525,23 @@
                     element.textContent = Math.floor(currentValue).toLocaleString('en-US');
                 }, frameRate);
             });
-    
+
             // HTML注释: 初始化日报导航功能
             initDailyNavigation();
-    
+
             // HTML注释: 初始化展开功能
             initExpandableContent();
+
+            // HTML注释: 初始化浮动按钮与目录互动
+            initFloatingActions();
+            
+            // HTML注释: 设置历史日报链接
+            const historyLink = document.getElementById('history-link');
+            if (historyLink) {
+                historyLink.href = BASE_URL + '新茧历史日报汇总.html';
+            }
         });
-    
+
         // HTML注释: 这个函数实现了日报间的导航功能，包括：
         // 1. 从当前页面URL或内容中提取日期
         // 2. 检查前后日期的日报文件是否存在
@@ -1322,15 +1555,15 @@
                     console.warn('无法从页面中提取日期信息');
                     return;
                 }
-    
+
                 // HTML注释: 设置导航按钮
                 await setupNavigationButtons(currentDate);
-    
+
             } catch (error) {
                 console.error('初始化日报导航时出错:', error);
             }
         }
-    
+
         // HTML注释: 从页面中提取当前日期
         // HTML注释: 支持多种方式提取日期：优先从页面元素、URL文件名或页面标题
         function getCurrentDateFromPage() {
@@ -1346,29 +1579,33 @@
                     return `${year}-${month}-${day}`;
                 }
             }
-    
+
             // HTML注释: 方法2：从URL文件名中提取日期
             const pathname = window.location.pathname;
             const filenameMatch = pathname.match(/新茧群日报_(\d{4}-\d{2}-\d{2})\.html/);
             if (filenameMatch) {
                 return filenameMatch[1];
             }
-    
+
             // HTML注释: 方法3：从页面标题中提取日期
             const titleMatch = document.title.match(/(\d{4}-\d{2}-\d{2})/);
             if (titleMatch) {
                 return titleMatch[1];
             }
-    
+
             return null;
         }
-    
+
         // HTML注释: 设置导航按钮的状态和链接
          // HTML注释: 根据当前日期，检查前后日期的日报文件是否存在
          async function setupNavigationButtons(currentDate) {
-             const prevButton = document.getElementById('prev-day');
-             const nextButton = document.getElementById('next-day');
-             const navContainer = document.querySelector('nav');
+             const prevButtons = document.querySelectorAll('.day-nav-prev');
+             const nextButtons = document.querySelectorAll('.day-nav-next');
+             const navContainers = document.querySelectorAll('.daily-nav');
+
+             if (!prevButtons.length && !nextButtons.length) {
+                 return;
+             }
              
              // HTML注释: 计算前一天和后一天的日期
              const currentDateObj = new Date(currentDate);
@@ -1384,49 +1621,56 @@
              const prevExists = await checkReportExists(prevDate);
              const nextExists = await checkReportExists(nextDate);
              
-             // HTML注释: 如果前后日期的日报都不存在，隐藏整个导航栏容器
+             // HTML注释: 如果前后日期的日报都不存在，隐藏所有导航栏容器
              if (!prevExists && !nextExists) {
-                 navContainer.style.display = 'none';
+                 navContainers.forEach(container => {
+                     container.style.display = 'none';
+                 });
                  return;
              }
              
-             // HTML注释: 显示导航栏容器
-             navContainer.style.display = 'block';
+             // HTML注释: 显示所有导航栏容器
+             navContainers.forEach(container => {
+                 container.style.display = 'block';
+             });
              
              // HTML注释: 设置前一天按钮
-             if (prevExists) {
-                 prevButton.onclick = () => {
-                     window.location.href = `https://xinjian-bot.github.io/-/新茧群日报_${prevDate}.html`;
-                 };
-                 prevButton.disabled = false;
-             } else {
-                 prevButton.disabled = true;
-                 prevButton.onclick = null;
-             }
-    
+             prevButtons.forEach(button => {
+                 if (prevExists) {
+                     button.disabled = false;
+                     button.onclick = () => {
+                         window.location.href = BASE_URL + `新茧群日报_${prevDate}.html`;
+                     };
+                 } else {
+                     button.disabled = true;
+                     button.onclick = null;
+                 }
+             });
+
              // HTML注释: 设置后一天按钮
-             if (nextExists) {
-                 nextButton.onclick = () => {
-                     window.location.href = `https://xinjian-bot.github.io/-/新茧群日报_${nextDate}.html`;
-                 };
-                 nextButton.disabled = false;
-             } else {
-                 // HTML注释: 后一天的日报不存在，禁用"下一天"按钮
-                 nextButton.disabled = true;
-                 nextButton.onclick = null;
-             }
+             nextButtons.forEach(button => {
+                 if (nextExists) {
+                     button.disabled = false;
+                     button.onclick = () => {
+                         window.location.href = BASE_URL + `新茧群日报_${nextDate}.html`;
+                     };
+                 } else {
+                     button.disabled = true;
+                     button.onclick = null;
+                 }
+             });
          }
-    
+
         // HTML注释: 检查指定日期的日报文件是否存在
         async function checkReportExists(date) {
             try {
-                const response = await fetch(`https://xinjian-bot.github.io/-/新茧群日报_${date}.html`, { method: 'HEAD' });
+                const response = await fetch(BASE_URL + `新茧群日报_${date}.html`, { method: 'HEAD' });
                 return response.ok;
             } catch (error) {
                 return false;
             }
         }
-    
+
         // HTML注释: 格式化日期为YYYY-MM-DD格式
         function formatDate(date) {
             const year = date.getFullYear();
@@ -1434,7 +1678,7 @@
             const day = String(date.getDate()).padStart(2, '0');
             return `${year}-${month}-${day}`;
         }
-    
+
         // HTML注释: 初始化展开功能
         function initExpandableContent() {
             const expandableContents = document.querySelectorAll('.expandable-content');
@@ -1531,6 +1775,167 @@
                 }
             });
         }
+
+        // HTML注释: 构建目录数据，统一扫描主模块与子级卡片生成锚点
+        function buildDirectory(panelElement) {
+            const listElement = panelElement.querySelector('#directory-list');
+            if (!listElement) {
+                return;
+            }
+
+            listElement.innerHTML = '';
+
+            const directoryConfigs = [
+                { id: 'section-overview', icon: 'fa-chart-column' },
+                { id: 'section-hot-topics', icon: 'fa-fire' },
+                { id: 'section-meeting', icon: 'fa-users' },
+                { id: 'section-qa', icon: 'fa-circle-question' },
+                { id: 'section-daily-picks', icon: 'fa-lightbulb' }
+            ];
+
+            directoryConfigs.forEach((config) => {
+                const sectionElement = document.getElementById(config.id);
+                if (!sectionElement) {
+                    return;
+                }
+
+                const sectionTitleElement = sectionElement.querySelector('.section-title');
+                const sectionTitle = sectionTitleElement ? sectionTitleElement.textContent.trim() : config.id;
+
+                const itemWrapper = document.createElement('div');
+                itemWrapper.className = 'directory-item';
+
+                const entryButton = document.createElement('button');
+                entryButton.type = 'button';
+                entryButton.className = 'directory-entry';
+                entryButton.setAttribute('data-target', config.id);
+                entryButton.innerHTML = `<span class="directory-icon"><i class="fas ${config.icon}"></i></span><span class="directory-text">${sectionTitle}</span>`;
+                itemWrapper.appendChild(entryButton);
+
+                const subHeadings = sectionElement.querySelectorAll('.bento-card h4');
+                if (subHeadings.length > 0) {
+                    const sublistElement = document.createElement('div');
+                    sublistElement.className = 'directory-sublist';
+
+                    subHeadings.forEach((heading, index) => {
+                        const cardElement = heading.closest('.bento-card');
+                        if (!cardElement) {
+                            return;
+                        }
+
+                        if (!cardElement.classList.contains('anchor-target')) {
+                            cardElement.classList.add('anchor-target');
+                        }
+
+                        if (!cardElement.id) {
+                            cardElement.id = `${config.id}-item-${index + 1}`;
+                        }
+
+                        const subButton = document.createElement('button');
+                        subButton.type = 'button';
+                        subButton.className = 'directory-subitem';
+                        subButton.setAttribute('data-target', cardElement.id);
+                        subButton.innerHTML = `<span class="directory-text">${heading.textContent.trim()}</span>`;
+                        sublistElement.appendChild(subButton);
+                    });
+
+                    itemWrapper.appendChild(sublistElement);
+                }
+
+                listElement.appendChild(itemWrapper);
+            });
+        }
+
+        // HTML注释: 初始化浮动按钮与目录交互
+        function initFloatingActions() {
+            const scrollTopBtn = document.getElementById('scroll-top-btn');
+            const directoryToggle = document.getElementById('directory-toggle');
+            const directoryPanel = document.getElementById('directory-panel');
+            const directoryClose = document.getElementById('directory-close');
+
+            if (scrollTopBtn) {
+                const toggleScrollButton = () => {
+                    if (window.scrollY > 240) {
+                        scrollTopBtn.classList.remove('floating-button--hidden');
+                    } else {
+                        scrollTopBtn.classList.add('floating-button--hidden');
+                    }
+                };
+
+                toggleScrollButton();
+                window.addEventListener('scroll', toggleScrollButton, { passive: true });
+
+                scrollTopBtn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+
+            if (!directoryPanel) {
+                return;
+            }
+
+            buildDirectory(directoryPanel);
+
+            if (!directoryToggle) {
+                return;
+            }
+
+            const closePanel = () => {
+                directoryPanel.classList.remove('open');
+                directoryToggle.setAttribute('aria-expanded', 'false');
+                directoryPanel.setAttribute('aria-hidden', 'true');
+            };
+
+            const openPanel = () => {
+                directoryPanel.classList.add('open');
+                directoryToggle.setAttribute('aria-expanded', 'true');
+                directoryPanel.setAttribute('aria-hidden', 'false');
+            };
+
+            const togglePanel = () => {
+                if (directoryPanel.classList.contains('open')) {
+                    closePanel();
+                } else {
+                    openPanel();
+                }
+            };
+
+            directoryToggle.addEventListener('click', (event) => {
+                event.stopPropagation();
+                togglePanel();
+            });
+
+            if (directoryClose) {
+                directoryClose.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    closePanel();
+                });
+            }
+
+            const directoryItems = directoryPanel.querySelectorAll('[data-target]');
+            directoryItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const targetId = item.getAttribute('data-target');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                    closePanel();
+                });
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!directoryPanel.contains(event.target) && !directoryToggle.contains(event.target)) {
+                    closePanel();
+                }
+            });
+
+            window.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closePanel();
+                }
+            });
+        }
     </script>
-    </body>
-    </html>
+</body>
+</html>

@@ -1,22 +1,23 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>新茧日报 2025-06-26</title>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6C9T7FPDT2"></script>
-    <script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>新茧日报 2025-06-26</title>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-6C9T7FPDT2"></script>
+<script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
       gtag('config', 'G-6C9T7FPDT2');
     </script>
-    <!-- 正常标题格式应为：新茧日报 yyyy-mm-dd，以便外部链接查看时了解日报日期 -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
+<!-- 正常标题格式应为：新茧日报 yyyy-mm-dd，以便外部链接查看时了解日报日期 -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
         * {
@@ -26,6 +27,11 @@
         body {
             background-color: #ffffff;
             color: #000000;
+        }
+
+        :root {
+            --directory-main-font-size: clamp(0.85rem, 0.9vw + 0.6rem, 0.95rem);
+            --directory-sub-font-size: clamp(0.78rem, 0.75vw + 0.5rem, 0.88rem);
         }
 
         .bento-card {
@@ -153,869 +159,1272 @@
         .expand-btn.expanded .expand-icon {
             transform: rotate(180deg);
         }
+
+        /* HTML注释: 目录锚点滚动偏移，避免标题被遮挡 */
+        .anchor-target {
+            scroll-margin-top: 120px;
+        }
+
+        /* HTML注释: 右下角浮动快捷按钮区域样式 */
+        .floating-actions {
+            position: fixed;
+            right: 1.25rem;
+            bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            z-index: 50;
+        }
+
+        .floating-button {
+            background: linear-gradient(135deg, #4D6BFE 0%, #6B8BFF 100%);
+            color: #ffffff;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px -5px rgba(77, 107, 254, 0.35);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .floating-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -6px rgba(77, 107, 254, 0.45);
+        }
+
+        .floating-button:focus-visible {
+            outline: 2px solid rgba(77, 107, 254, 0.45);
+            outline-offset: 2px;
+        }
+
+        .floating-button--hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            pointer-events: none;
+        }
+
+        .directory-wrapper {
+            position: relative;
+        }
+
+        .directory-panel {
+            position: absolute;
+            right: 0;
+            bottom: 3.5rem;
+            width: 18rem;
+            background: #ffffff;
+            border: 1px solid rgba(77, 107, 254, 0.2);
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 40px -15px rgba(77, 107, 254, 0.35);
+            padding: 1rem;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            max-height: min(75vh, 30rem);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+
+        .directory-panel.open {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .directory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .directory-title {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: var(--directory-main-font-size);
+        }
+
+        .directory-close {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 9999px;
+            transition: color 0.2s ease;
+        }
+
+        .directory-close:hover {
+            color: #4D6BFE;
+        }
+
+        .directory-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .directory-list button {
+            width: 100%;
+            text-align: left;
+            background: rgba(77, 107, 254, 0.08);
+            color: #1f2937;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.55rem 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: var(--directory-main-font-size);
+        }
+
+        .directory-list button:hover {
+            background: rgba(77, 107, 254, 0.18);
+            color: #1d4ed8;
+        }
+
+        /* HTML注释: 二级导航容器与按钮样式，支持多层级显示 */
+        .directory-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .directory-entry {
+            background: rgba(77, 107, 254, 0.08);
+        }
+
+        .directory-sublist {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-left: 2.5rem;
+            padding-left: 0.75rem;
+            border-left: 1px solid rgba(77, 107, 254, 0.2);
+        }
+
+        .directory-subitem {
+            background: rgba(77, 107, 254, 0.04);
+            padding-top: 0.45rem;
+            padding-bottom: 0.45rem;
+            font-size: var(--directory-sub-font-size);
+        }
+
+        .directory-subitem:hover {
+            background: rgba(77, 107, 254, 0.14);
+        }
+
+        .directory-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 9999px;
+            background: rgba(77, 107, 254, 0.12);
+            color: #4D6BFE;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .directory-text {
+            flex: 1;
+            color: inherit;
+        }
+
+        @media (max-width: 640px) {
+            .floating-actions {
+                right: 0.75rem;
+                bottom: 1rem;
+            }
+
+            .directory-panel {
+                width: min(80vw, 15rem);
+                bottom: 3.25rem;
+                max-height: min(70vh, 20rem);
+            }
+            :root {
+                --directory-main-font-size: 0.8rem;
+                --directory-sub-font-size: 0.72rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-white text-black min-h-screen">
-    <!-- HTML注释: 整体宽度通过 max-w-4xl 控制，实现日报宽度调小并保持响应式。-->
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-
-        <!-- === "新茧日报" 文件头区域 开始 === -->
-        <header class="w-full mb-8">
-            <div class="bento-card p-8">
-                <div class="text-center">
-                    <h1 class="text-5xl font-black text-black mb-6">
+<!-- HTML注释: 整体宽度通过 max-w-4xl 控制，实现日报宽度调小并保持响应式。-->
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+<!-- === "新茧日报" 文件头区域 开始 === -->
+<header class="w-full mb-8">
+<div class="bento-card p-8">
+<div class="text-center">
+<h1 class="text-5xl font-black text-black mb-6">
                         新茧日报
                     </h1>
-                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-lg mb-4">
-                        <div class="flex items-center text-gray-700">
-                            <i class="fas fa-calendar-alt mr-2 text-[#4D6BFE]"></i>
-                            <span id="report-date">2025年06月26日</span>
-                        </div>
-                        <div class="flex items-center text-gray-700">
-                            <i class="fas fa-clock mr-2 text-[#4D6BFE]"></i>
-                            <span>03:00 - 03:00（次日）</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-center">
-                        <a href="https://xinjian-bot.github.io/-/新茧历史日报汇总.html" class="history-link">
-                            <i class="fas fa-history"></i>
+<div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-lg mb-4">
+<div class="flex items-center text-gray-700">
+<i class="fas fa-calendar-alt mr-2 text-[#4D6BFE]"></i>
+<span id="report-date">2025年06月26日</span>
+</div>
+<div class="flex items-center text-gray-700">
+<i class="fas fa-clock mr-2 text-[#4D6BFE]"></i>
+<span>03:00 - 03:00（次日）</span>
+</div>
+</div>
+<div class="flex justify-center">
+<a class="history-link" href="#" id="history-link">
+<i class="fas fa-history"></i>
                             新茧历史日报
                         </a>
-                    </div>
-                </div>
-            </div>
-        </header>
-        <!-- === "新茧日报" 文件头区域 结束 === -->
-
-        <!-- HTML注释: 新增导航区域 -->
-        <nav class="w-full mb-8">
-            <div class="bento-card p-4">
-                <div class="flex justify-between items-center">
-                    <button id="prev-day" class="nav-button">
-                        <i class="fas fa-chevron-left"></i>
+</div>
+</div>
+</div>
+</header>
+<!-- === "新茧日报" 文件头区域 结束 === -->
+<!-- HTML注释: 新增导航区域 -->
+<nav class="w-full mb-8 daily-nav">
+<div class="bento-card p-4">
+<div class="flex justify-between items-center">
+<button class="nav-button day-nav-prev" type="button">
+<i class="fas fa-chevron-left"></i>
                         上一天
                     </button>
-                    
-                    <div class="text-center">
-                        <span class="text-sm text-gray-600">日报导航</span>
-                    </div>
-                    
-                    <button id="next-day" class="nav-button">
+<div class="text-center">
+<span class="text-sm text-gray-600">日报导航</span>
+</div>
+<button class="nav-button day-nav-next" type="button">
                         下一天
                         <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-        </nav>
-
-        <!-- === 模块一：总消息概览 开始 === -->
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+</button>
+</div>
+</div>
+</nav>
+<!-- === 模块一：总消息概览 开始 === -->
+<section class="w-full mb-12 anchor-target" id="section-overview">
+<h2 class="section-title">
                 一、总消息概览
             </h2>
-            <div class="bento-card p-8 bg-gradient-to-br from-[#4D6BFE]/20 via-[#4D6BFE]/10 to-[#4D6BFE]/5 text-center rounded-2xl">
-                <div class="number-display text-[#4D6BFE]">
+<div class="bento-card p-8 bg-gradient-to-br from-[#4D6BFE]/20 via-[#4D6BFE]/10 to-[#4D6BFE]/5 text-center rounded-2xl">
+<div class="number-display text-[#4D6BFE]">
                     5781
                 </div>
-                <p class="text-xl font-semibold text-black mt-3">总消息数量</p>
-            </div>
-        </section>
-        <!-- === 模块一：总消息概览 结束 === -->
-
-        <!-- === 模块二：火花碰撞时刻・热点话题 开始 === -->
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+<p class="text-xl font-semibold text-black mt-3">总消息数量</p>
+</div>
+</section>
+<!-- === 模块一：总消息概览 结束 === -->
+<!-- === 模块二：火花碰撞时刻・热点话题 开始 === -->
+<section class="w-full mb-12 anchor-target" id="section-hot-topics">
+<h2 class="section-title">
                 二、火花碰撞时刻・热点话题
             </h2>
-            <div class="space-y-8">
-                <!-- 热点话题卡片 1 -->
-                <div class="bento-card p-6 rounded-xl">
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+<div class="space-y-8">
+<!-- 热点话题卡片 1 -->
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             煎牛排的艺术：一场关于火候与风味的深度研讨
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             04:19 - 08:13
                         </span>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                            黄云：接近完美
                         </p>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">煎牛排</span>
-                            <span class="tag-item">烹饪技巧</span>
-                            <span class="tag-item">美拉德反应</span>
-                            <span class="tag-item">黄油</span>
-                            <span class="tag-item">黑胡椒</span>
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、话题背景与起因</b><br>
-                                    讨论由群友<b>黄云</b>深夜分享的一张牛排照片引发。照片中牛排表面焦黑，这立即激起了群友<b>宇世无争</b>的好奇与专业探讨，一场关于家庭烹饪的深度技术交流就此展开。<br><br>
-                                    <b>二、主要观点与讨论详情</b><br>
-                                    <b>宇世无争</b>首先对牛排的“焦化严重”提出疑问，并迅速给出了核心建议：<b>“黑胡椒不要放那么早”</b>，因为高温会使其变糊发苦。这一观点开启了关于烹饪时机和风味控制的讨论。<br><br>
-                                    随后，两人围绕<b>黄油</b>的使用展开了精彩的攻防：<br>
-                                    - <b>黄云</b>认为黄油不耐高温，应在最后30秒淋一下。<br>
-                                    - <b>宇世无争</b>则提出了一个精妙的观点：“<b>黄油不耐高温的表现就是会焦化</b>”，可以利用这一点，在煎牛排后期转小火时加入黄油，既能给锅降温，又能辅助产生更完美的焦褐色泽。他还分享了具体操作技巧，如用牛排压住黄油以均匀受热，以及勤刮锅底的焦渣以避免影响牛排口感。<br><br>
-                                    <b>黄云</b>对自己偏好的“法式黑椒”风格进行了解释，他喜欢提前铺满粗黑胡椒，利用热油激发其辛香和烟熏感。他还从化学角度分析了胡椒风味的来源：“<b>胡椒中的精油和胡椒碱这俩成分在高温下部分转化，产生更深沉的风味，同时苦味化合物尚未大量生成的时候</b>”，这展示了他对烹饪背后科学原理的思考。<br><br>
-                                    此外，群友们还就牛排的佐料达成共识。<b>黄云</b>提出，如果牛排品质足够好，只需盐和黑胡椒即可，迷迭香、欧芹等香料反而会“抢味道”。<br><br>
-                                    <b>三、结论与启发</b><br>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">煎牛排</span>
+<span class="tag-item">烹饪技巧</span>
+<span class="tag-item">美拉德反应</span>
+<span class="tag-item">黄油</span>
+<span class="tag-item">黑胡椒</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、话题背景与起因</b><br/>
+                                    讨论由群友<b>黄云</b>深夜分享的一张牛排照片引发。照片中牛排表面焦黑，这立即激起了群友<b>宇世无争</b>的好奇与专业探讨，一场关于家庭烹饪的深度技术交流就此展开。<br/><br/>
+<b>二、主要观点与讨论详情</b><br/>
+<b>宇世无争</b>首先对牛排的“焦化严重”提出疑问，并迅速给出了核心建议：<b>“黑胡椒不要放那么早”</b>，因为高温会使其变糊发苦。这一观点开启了关于烹饪时机和风味控制的讨论。<br/><br/>
+                                    随后，两人围绕<b>黄油</b>的使用展开了精彩的攻防：<br/>
+                                    - <b>黄云</b>认为黄油不耐高温，应在最后30秒淋一下。<br/>
+                                    - <b>宇世无争</b>则提出了一个精妙的观点：“<b>黄油不耐高温的表现就是会焦化</b>”，可以利用这一点，在煎牛排后期转小火时加入黄油，既能给锅降温，又能辅助产生更完美的焦褐色泽。他还分享了具体操作技巧，如用牛排压住黄油以均匀受热，以及勤刮锅底的焦渣以避免影响牛排口感。<br/><br/>
+<b>黄云</b>对自己偏好的“法式黑椒”风格进行了解释，他喜欢提前铺满粗黑胡椒，利用热油激发其辛香和烟熏感。他还从化学角度分析了胡椒风味的来源：“<b>胡椒中的精油和胡椒碱这俩成分在高温下部分转化，产生更深沉的风味，同时苦味化合物尚未大量生成的时候</b>”，这展示了他对烹饪背后科学原理的思考。<br/><br/>
+                                    此外，群友们还就牛排的佐料达成共识。<b>黄云</b>提出，如果牛排品质足够好，只需盐和黑胡椒即可，迷迭香、欧芹等香料反而会“抢味道”。<br/><br/>
+<b>三、结论与启发</b><br/>
                                     这场看似随意的深夜食堂交流，实则是一场高质量的烹饪技术研讨。它不仅为群友们提供了实用的煎牛排技巧，更重要的是传递了一种探究精神：无论是家庭烹饪还是其他领域，理解事物背后的原理（如黄油的焦化、香料的风味释放），才能真正掌握技巧，创造出属于自己的“完美作品”。这场讨论完美诠释了群内“知其然，亦知其所以然”的学习氛围。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             煎牛排时，香料（如黑胡椒）和脂肪（如黄油）的加入时机对最终风味有决定性影响，理解其物理化学性质是提升厨艺的关键。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 不耐高温的表现就是会焦化。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>宇世无争</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 黑胡椒，不加热都行，没必要高温加热成糊的。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>宇世无争</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 如果牛排品质不至于差就不要加（迷迭香）。包括欧芹碎。会抢味道。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>黄云</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- 热点话题卡片 2 -->
-                <div class="bento-card p-6 rounded-xl">
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 热点话题卡片 2 -->
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             论信仰与疗愈：当佛法遭遇现代心理学
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             08:32 - 14:32
                         </span>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             重金属绵羊：咱们群里有学习佛法的同志吗
                         </p>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">抑郁症</span>
-                            <span class="tag-item">心理疗愈</span>
-                            <span class="tag-item">佛学</span>
-                            <span class="tag-item">禅宗</span>
-                            <span class="tag-item">认知重塑</span>
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、话题背景与起因</b><br>
-                                    群友<b>重金属绵羊</b>分享了她因抑郁症寻求帮助的经历。一位朋友介绍的“师兄”让她每日诵读《地藏经》，并强调“学佛有次第”，但这让她感到不适。她由此对佛法疗愈产生了困惑，并向群友征求看法。<br><br>
-                                    <b>二、主要观点与讨论详情</b><br>
-                                    讨论迅速围绕“如何看待宗教/哲学在心理疗愈中的作用”展开：<br><br>
-                                    <b>1. 尊重个体感受，警惕外部控制：</b><br>
-                                    群友们普遍认为，<b>重金属绵羊</b>感到不适本身就是最重要的信号。<b>某只柿子🍅</b>直言：“你现在最重要是看点啥东西让自己心情好，那破书你看了都不舒服了，看它干嘛。”<br>
-                                    当<b>重金属绵羊</b>补充道，对方还要求她每日诵经并“向她回向”，甚至拉她入群时，大家立刻警觉起来。<b>热锅凉油翻炒</b>和<b>宇世无争</b>等群友指出这极有可能是传教甚至诈骗的套路，是在进行“服从性测试”。<br><br>
-                                    <b>2. 疗愈方法的本质是“自我重塑”：</b><br>
-                                    <b>啊怿子 -</b>提出：“法门因人而异，哪来的学佛有次第？”他认为，最迫切的“次第”是找到能让自己内心安定的经典。<b>AA昍</b>则从更深层次剖析，他指出，无论是读经、健身还是冥想，本质都是“<b>期待认知层面反作用于前额叶皮层，重塑你的大脑神经通路。</b>”核心在于这个方法对自己是否有效。如果一个东西让你难受，它就无法实现重塑，反而可能加重病情。<br><br>
-                                    <b>3. 马列主义作为更高阶的“经书”：</b><br>
-                                    <b>AA昍</b>进一步提出，可以将共产主义理论视为一种更高级的哲学工具。他认为“<b>唯物辩证法，破诸法魔障，得见真我</b>”，并指出可以将党理解为一种“宗教”，为信徒提供终极关怀和行为准则。这个观点引发了群内关于“党与宗教”的深入讨论。<br><br>
-                                    <b>三、结论与启发</b><br>
-                                    这场讨论从一个具体的个人困惑，升华到对心理疗愈、哲学工具和个人信仰选择的深度思辨。它为群友们提供了宝贵的启示：<br>
-                                    - <b>自我感受是最高准则</b>：在寻求任何形式的帮助时，自己的内心感受是判断其是否有效的最终标准。任何让你感到被强迫、被控制、产生负罪感的“疗愈”，都应立即远离。<br>
-                                    - <b>工具的有效性因人而异</b>：无论是现代医学、东方哲学还是体育锻炼，都是帮助自我重塑的工具，没有高下之分，只有适合与否。<br>
-                                    - <b>警惕精神控制</b>：打着“为你好”旗号的控制无处不在。当对方要求你进行非理性的服从（如“回向”、“拉群”）时，必须保持高度警惕。<br>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">抑郁症</span>
+<span class="tag-item">心理疗愈</span>
+<span class="tag-item">佛学</span>
+<span class="tag-item">禅宗</span>
+<span class="tag-item">认知重塑</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、话题背景与起因</b><br/>
+                                    群友<b>重金属绵羊</b>分享了她因抑郁症寻求帮助的经历。一位朋友介绍的“师兄”让她每日诵读《地藏经》，并强调“学佛有次第”，但这让她感到不适。她由此对佛法疗愈产生了困惑，并向群友征求看法。<br/><br/>
+<b>二、主要观点与讨论详情</b><br/>
+                                    讨论迅速围绕“如何看待宗教/哲学在心理疗愈中的作用”展开：<br/><br/>
+<b>1. 尊重个体感受，警惕外部控制：</b><br/>
+                                    群友们普遍认为，<b>重金属绵羊</b>感到不适本身就是最重要的信号。<b>某只柿子🍅</b>直言：“你现在最重要是看点啥东西让自己心情好，那破书你看了都不舒服了，看它干嘛。”<br/>
+                                    当<b>重金属绵羊</b>补充道，对方还要求她每日诵经并“向她回向”，甚至拉她入群时，大家立刻警觉起来。<b>热锅凉油翻炒</b>和<b>宇世无争</b>等群友指出这极有可能是传教甚至诈骗的套路，是在进行“服从性测试”。<br/><br/>
+<b>2. 疗愈方法的本质是“自我重塑”：</b><br/>
+<b>啊怿子 -</b>提出：“法门因人而异，哪来的学佛有次第？”他认为，最迫切的“次第”是找到能让自己内心安定的经典。<b>AA昍</b>则从更深层次剖析，他指出，无论是读经、健身还是冥想，本质都是“<b>期待认知层面反作用于前额叶皮层，重塑你的大脑神经通路。</b>”核心在于这个方法对自己是否有效。如果一个东西让你难受，它就无法实现重塑，反而可能加重病情。<br/><br/>
+<b>3. 马列主义作为更高阶的“经书”：</b><br/>
+<b>AA昍</b>进一步提出，可以将共产主义理论视为一种更高级的哲学工具。他认为“<b>唯物辩证法，破诸法魔障，得见真我</b>”，并指出可以将党理解为一种“宗教”，为信徒提供终极关怀和行为准则。这个观点引发了群内关于“党与宗教”的深入讨论。<br/><br/>
+<b>三、结论与启发</b><br/>
+                                    这场讨论从一个具体的个人困惑，升华到对心理疗愈、哲学工具和个人信仰选择的深度思辨。它为群友们提供了宝贵的启示：<br/>
+                                    - <b>自我感受是最高准则</b>：在寻求任何形式的帮助时，自己的内心感受是判断其是否有效的最终标准。任何让你感到被强迫、被控制、产生负罪感的“疗愈”，都应立即远离。<br/>
+                                    - <b>工具的有效性因人而异</b>：无论是现代医学、东方哲学还是体育锻炼，都是帮助自我重塑的工具，没有高下之分，只有适合与否。<br/>
+                                    - <b>警惕精神控制</b>：打着“为你好”旗号的控制无处不在。当对方要求你进行非理性的服从（如“回向”、“拉群”）时，必须保持高度警惕。<br/>
                                     - <b>信念的力量</b>：讨论最终回归到信念的力量。无论是信佛还是信党，一个强大、自洽、能指导行动的信仰体系，是抵御内心混乱和外部侵蚀的坚固堡垒。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             面对心理困境，应以自我感受为首要标准，选择能让自己内心安定、状态好转的工具，并警惕任何让你感到被控制的“疗愈”方式。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 法门因人而异，哪来的学佛有次第？
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>啊怿子 -</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 抑郁症就诊，如果让你感觉到负担和抵抗，换医生就行。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>热锅凉油翻炒</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 你现在最重要是看点啥东西让自己心情好，那破书你看了都不舒服了，看它干嘛。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>某只柿子🍅</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             无论是读经还是锻炼，本质都是通过外力“重塑”大脑神经通路，其核心在于是否对自己有效。马列主义亦可作为一种强大的精神工具。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 不管是读啥，本质上都是期待认知层面反作用于前额叶皮层，重塑你的大脑神经通路。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>AA昍</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 唯物辩证法，破诸法魔障，得见真我。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>AA昍</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 所以要把共产主义理解为宗教信仰，所有宗教追求，都可以向党去要，向马列主义去要，自然不会有各种奇奇怪怪的念头。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>AA昍</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- === 模块二：火花碰撞时刻・热点话题 结束 === -->
-
-        <!-- === 模块三：秉烛共谈录・小会精粹 开始 === -->
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- === 模块二：火花碰撞时刻・热点话题 结束 === -->
+<!-- === 模块三：秉烛共谈录・小会精粹 开始 === -->
+<section class="w-full mb-12 anchor-target" id="section-meeting">
+<h2 class="section-title">
                 三、秉烛共谈录・小会精粹
             </h2>
-            <div class="space-y-8">
-                <!-- 小会问题卡片 1 -->
-                <div class="bento-card p-6 rounded-xl">
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+<div class="space-y-8">
+<!-- 小会问题卡片 1 -->
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             A7精英的“扶弟魔”困局：当经济独立遭遇精神控制
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-users mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-users mr-1.5 text-gray-500"></i>
                             20:12 - 23:23
                         </span>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             啊怿子 -：2025.06.26【小会】27.问题一、和家人一沟通就炸
                         </p>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">家庭关系</span>
-                            <span class="tag-item">扶弟魔</span>
-                            <span class="tag-item">自我攻击</span>
-                            <span class="tag-item">习得性无助</span>
-                            <span class="tag-item">认知失调</span>
-                            <span class="tag-item">边界感</span>
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、问题提出与背景补充</b><br>
-                                    本次小会围绕一位匿名群友（下文简称“题主”）的深度困惑展开。题主在事业上极为成功，拥有七位数存款，但与家人的关系却让她极度痛苦，甚至怀疑自己有精神问题。表面冲突包括：父母不顾反对寄送无用物品；因防疫不参加聚会被母亲辱骂；父亲无视其财务自由，持续催促找工作；家人反对她与“条件一般”的年下男友交往。题主感到无论如何沟通都无效，并因自己对父母的暴躁情绪而深感愧疚。<br><br>
-
-                                    <b>二、核心焦点与深层议题挖掘</b><br>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">家庭关系</span>
+<span class="tag-item">扶弟魔</span>
+<span class="tag-item">自我攻击</span>
+<span class="tag-item">习得性无助</span>
+<span class="tag-item">认知失调</span>
+<span class="tag-item">边界感</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、问题提出与背景补充</b><br/>
+                                    本次小会围绕一位匿名群友（下文简称“题主”）的深度困惑展开。题主在事业上极为成功，拥有七位数存款，但与家人的关系却让她极度痛苦，甚至怀疑自己有精神问题。表面冲突包括：父母不顾反对寄送无用物品；因防疫不参加聚会被母亲辱骂；父亲无视其财务自由，持续催促找工作；家人反对她与“条件一般”的年下男友交往。题主感到无论如何沟通都无效，并因自己对父母的暴躁情绪而深感愧疚。<br/><br/>
+<b>二、核心焦点与深层议题挖掘</b><br/>
                                     讨论初期，群友们普遍因题主优渥的经济条件而感到困惑。然而，随着<b>AA昍</b>引导题主补充关键信息——“我有个差好几岁的弟弟，性格有些阴暗偏激，眼高手低”，整个问题的性质发生了根本转变。讨论的核心焦点迅速从表面冲突转向了以下深层议题：
-                                    <br>1. <b>不平等的家庭资源分配</b>：父母在房产、教育（送弟弟出国）上对弟弟投入更多。
-                                    <br>2. <b>不匹配的养老期望</b>：尽管资源倾斜，父母却期望未来由更成功的姐姐来养老。
-                                    <br>3. <b>“扶弟魔”的潜在风险</b>：题主担忧能力不足的弟弟和投资冲动的父亲会掏空家底，最终所有养老重担都将压在她身上。
-                                    <br>4. <b>自我攻击与认知失调</b>：面对明显的不公，题主的第一反应不是愤怒，而是自我怀疑和愧疚，认为自己“太自私”、“不孝顺”，这是问题的核心症结。<br><br>
-                                    
-                                    <b>三、多方观点流派与方案探讨</b><br>
-                                    <b>1. 初期困惑派</b>：多数群友最初的反应是“有钱还烦恼什么”，建议题主忽略父母的唠叨即可。这反映了在信息不全时，人们容易低估问题的复杂性。<br>
-                                    <b>2. 侦探派</b>：以<b>阿戒</b>、<b>大京</b>为代表，他们敏锐地抓住了“独生子女”这一盲点，通过提问“是否有兄弟姐妹”，成功挖掘出关键的隐藏信息。<br>
-                                    <b>3. 直击要害派</b>：以<b>桃乐丝</b>、<b>某只柿子🍅</b>为代表，他们一针见血地指出“继承家产是弟弟，养老要找女儿”的不公本质，并认为父母的行为是一种变相的“吸血”。<br>
-                                    <b>4. 心理分析派</b>：以<b>Garrido</b>、<b>鱼皮</b>等群友为代表，他们运用心理学知识，准确地指出了题主存在“自我攻击”、“合理化”父母行为等防御机制。<br><br>
-
-                                    <b>四、群主 (AA昍) 引导与方案点评</b><br>
-                                    <b>AA昍</b>在此次讨论中起到了关键的引导和解构作用：<br>
-                                    - <b>揭示隐藏力场</b>：他通过“家庭力场不平衡”的比喻，引导大家思考“为何富裕家庭仍要催促成功的女儿继续赚钱”，最终锁定了“弟弟”这个被题主刻意回避的核心变量。<br>
-                                    - <b>剖析核心病理</b>：他精准地将题主的困境概括为<b>“自我攻击”</b>和<b>“习得性无助”</b>。通过“电击狗”实验的类比，他生动地解释了题主为何明明有能力反抗，却选择在痛苦的循环中“原地拉磨”。<br>
-                                    - <b>打破认知闭环</b>：他通过三次追问“你觉得自己错了吗？”，层层递进，最终帮助题主打破了“因为我错了，所以父母对我不好是合理的”这一自我攻击的死亡循环。<br>
-                                    - <b>提供破局关键</b>：他指出，对于题主这样聪明且有能力的“静态人物”，外部的安慰和建议（火宅三车喻）是无效的。唯一的破局点是让她从内心真正相信“<b>这不是你的错</b>”，从而停止自我攻击，重建自我价值。<br><br>
-
-                                    <b>五、讨论共识与分歧总结</b><br>
-                                    本次小会最终达成高度共识：题主的困境并非个人“矫情”或“精神问题”，而是源于一个重男轻女、权责不对等的家庭系统。她的愤怒是完全正当的，而她的痛苦则来自于长期的情感压抑和自我攻击。大家一致认为，题主需要停止内耗，建立清晰的边界，并优先保护好自己的财产和人生。<br><br>
-                                    
-                                    <b>六、宏观影响与价值提炼（重点）</b><br>
-                                    本次小会堪称一次教科书级的心理分析实践，为所有参与者带来了深刻的启发：<br>
-                                    - <b>金钱与精神独立的二元悖论</b>：此案例深刻揭示，经济独立不必然带来精神独立。在强大的原生家庭控制模式下，个体即使拥有雄厚的经济实力，也可能陷入“习得性无助”的心理困境。精神的“断奶”与经济的独立同样重要。<br>
-                                    - <b>识别“自我攻击”这一隐形杀手</b>：学会识别“是不是我的错？”这种内耗式反思，是走出心理困境的第一步。当外部的负面反馈与客观现实严重不符时，要警惕自我攻击的心理陷阱，这是保护自我价值的核心能力。<br>
-                                    - <b>信息挖掘的“力场分析法”</b>：当一个系统（无论是家庭还是组织）的行为逻辑看起来不平衡时，背后一定存在被隐藏的关键变量。学会观察“不该动的时候谁在动，该动的时候谁没动”，是挖掘真相、洞察本质的高阶思维。<br>
+                                    <br/>1. <b>不平等的家庭资源分配</b>：父母在房产、教育（送弟弟出国）上对弟弟投入更多。
+                                    <br/>2. <b>不匹配的养老期望</b>：尽管资源倾斜，父母却期望未来由更成功的姐姐来养老。
+                                    <br/>3. <b>“扶弟魔”的潜在风险</b>：题主担忧能力不足的弟弟和投资冲动的父亲会掏空家底，最终所有养老重担都将压在她身上。
+                                    <br/>4. <b>自我攻击与认知失调</b>：面对明显的不公，题主的第一反应不是愤怒，而是自我怀疑和愧疚，认为自己“太自私”、“不孝顺”，这是问题的核心症结。<br/><br/>
+<b>三、多方观点流派与方案探讨</b><br/>
+<b>1. 初期困惑派</b>：多数群友最初的反应是“有钱还烦恼什么”，建议题主忽略父母的唠叨即可。这反映了在信息不全时，人们容易低估问题的复杂性。<br/>
+<b>2. 侦探派</b>：以<b>阿戒</b>、<b>大京</b>为代表，他们敏锐地抓住了“独生子女”这一盲点，通过提问“是否有兄弟姐妹”，成功挖掘出关键的隐藏信息。<br/>
+<b>3. 直击要害派</b>：以<b>桃乐丝</b>、<b>某只柿子🍅</b>为代表，他们一针见血地指出“继承家产是弟弟，养老要找女儿”的不公本质，并认为父母的行为是一种变相的“吸血”。<br/>
+<b>4. 心理分析派</b>：以<b>Garrido</b>、<b>鱼皮</b>等群友为代表，他们运用心理学知识，准确地指出了题主存在“自我攻击”、“合理化”父母行为等防御机制。<br/><br/>
+<b>四、群主 (AA昍) 引导与方案点评</b><br/>
+<b>AA昍</b>在此次讨论中起到了关键的引导和解构作用：<br/>
+                                    - <b>揭示隐藏力场</b>：他通过“家庭力场不平衡”的比喻，引导大家思考“为何富裕家庭仍要催促成功的女儿继续赚钱”，最终锁定了“弟弟”这个被题主刻意回避的核心变量。<br/>
+                                    - <b>剖析核心病理</b>：他精准地将题主的困境概括为<b>“自我攻击”</b>和<b>“习得性无助”</b>。通过“电击狗”实验的类比，他生动地解释了题主为何明明有能力反抗，却选择在痛苦的循环中“原地拉磨”。<br/>
+                                    - <b>打破认知闭环</b>：他通过三次追问“你觉得自己错了吗？”，层层递进，最终帮助题主打破了“因为我错了，所以父母对我不好是合理的”这一自我攻击的死亡循环。<br/>
+                                    - <b>提供破局关键</b>：他指出，对于题主这样聪明且有能力的“静态人物”，外部的安慰和建议（火宅三车喻）是无效的。唯一的破局点是让她从内心真正相信“<b>这不是你的错</b>”，从而停止自我攻击，重建自我价值。<br/><br/>
+<b>五、讨论共识与分歧总结</b><br/>
+                                    本次小会最终达成高度共识：题主的困境并非个人“矫情”或“精神问题”，而是源于一个重男轻女、权责不对等的家庭系统。她的愤怒是完全正当的，而她的痛苦则来自于长期的情感压抑和自我攻击。大家一致认为，题主需要停止内耗，建立清晰的边界，并优先保护好自己的财产和人生。<br/><br/>
+<b>六、宏观影响与价值提炼（重点）</b><br/>
+                                    本次小会堪称一次教科书级的心理分析实践，为所有参与者带来了深刻的启发：<br/>
+                                    - <b>金钱与精神独立的二元悖论</b>：此案例深刻揭示，经济独立不必然带来精神独立。在强大的原生家庭控制模式下，个体即使拥有雄厚的经济实力，也可能陷入“习得性无助”的心理困境。精神的“断奶”与经济的独立同样重要。<br/>
+                                    - <b>识别“自我攻击”这一隐形杀手</b>：学会识别“是不是我的错？”这种内耗式反思，是走出心理困境的第一步。当外部的负面反馈与客观现实严重不符时，要警惕自我攻击的心理陷阱，这是保护自我价值的核心能力。<br/>
+                                    - <b>信息挖掘的“力场分析法”</b>：当一个系统（无论是家庭还是组织）的行为逻辑看起来不平衡时，背后一定存在被隐藏的关键变量。学会观察“不该动的时候谁在动，该动的时候谁没动”，是挖掘真相、洞察本质的高阶思维。<br/>
                                     - <b>信任与破防的辩证关系</b>：真正的帮助并非一味地给予安慰，而是要在建立信任的基础上，有勇气击碎对方的“心防”。对于内心强大但陷入死循环的人来说，点破其自我欺骗的行为模式，才是最高效的“唤醒”。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             问题的核心是题主在不公的家庭结构中，通过“自我攻击”来合理化父母的偏心行为，形成了“习得性无助”的痛苦闭环。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 如果是独生女，家里这么有钱了，还催女儿继续赚钱干嘛？这里面一定有一个参照物，一个杠杆，使得父母不会把无条件的爱放在女儿身上。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>AA昍</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 继承家产是弟弟继承，但是养老要找女儿，所以觉得心里不平衡吗？
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>桃乐丝</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 题主聪明地意识到了父母不爱自己的事实，但又不愿意接受，所以下意识否认自己的聪明，这样就能给父母开脱了。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>Starlight</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 所有这些行为是在做什么？是在帮助一个伤害、长期伤害自己的权力结构，继续伤害自己，这种行为是自我攻击。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>AA昍</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 你为什么不敢直接的说我没错？因为你不敢，就这么简单。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>AA昍</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 如果一开始是弟弟，会有题主你吗？
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>某只柿子🍅</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- === 模块三：秉烛共谈录・小会精粹 结束 === -->
-        
-        <!-- === 模块四：解惑一点通・有问必答 开始 === -->
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- === 模块三：秉烛共谈录・小会精粹 结束 === -->
+<!-- === 模块四：解惑一点通・有问必答 开始 === -->
+<section class="w-full mb-12 anchor-target" id="section-qa">
+<h2 class="section-title">
                 四、解惑一点通・有问必答
             </h2>
-            <div class="space-y-8">
-                <!-- 问答卡片 1 -->
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
-                    <div class="mb-4">
-                        <h4 class="text-xl font-semibold text-black flex items-center">
-                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+<div class="space-y-8">
+<!-- 问答卡片 1 -->
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<div class="mb-4">
+<h4 class="text-xl font-semibold text-black flex items-center">
+<i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
                             高考志愿填报：专业优先还是学校优先？
                         </h4>
-                    </div>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             大京：朋友西安的，妹妹出分开始选学校专业了，有啥思考角度不
                         </p>
-                    </div>
-                    <div class="border-t border-gray-200 pt-4">
-                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
-                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+</div>
+<div class="border-t border-gray-200 pt-4">
+<h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+<i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
                             解答
                         </h5>
-                        <div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、问题背景</b><br>
-                                    群友<b>大京</b>为朋友的妹妹咨询高考志愿填报策略，核心问题是：在选择时，应优先考虑学校还是专业？<br><br>
-                                    <b>二、核心观点与建议</b><br>
-                                    群内多位有经验的群友给出了综合性建议，核心思路是根据考生的分数段位和未来规划来做决策：<br><br>
-                                    1. <b>普遍建议：专业优先</b><br>
-                                    <b>蓉么么不扎蒸</b>率先提出核心观点：“<b>无非就是优先专业还是优先学校，建议优先专业。</b>”这一观点得到了普遍认同，尤其是在分数不具备顶尖学校优势的情况下，一个好的、适合的专业对未来职业发展至关重要。<br><br>
-                                    2. <b>考虑性别与行业限制</b><br>
-                                    针对<b>大京</b>妹妹的“机械工程”意向，群友们提出了性别在传统工科领域可能面临的就业挑战。<b>蓉么么不扎蒸</b>分享了自身“能源与动力工程”专业的经历：“<b>春招秋招甚至之后社招都会面临‘我们不要女生’的情况。</b>”<b>Bazinga</b>也证实，机械专业女生成绩再好，企业也优先要男生，多数女生最终都通过读研转向了自动化或计算机方向。<br><br>
-                                    3. <b>以终为始，结合未来规划</b><br>
-                                    <b>蓉么么不扎蒸</b>分享了为自己妹妹报考的成功案例，体现了“以终为始”的规划思路。考虑到妹妹成绩普通，且山东地区考公考编意愿强烈，最终选择了“食品科学与工程”专业。这个选择的逻辑是：“<b>考公还行，有岗位，竞争也不大，如果去就业的话，不会像机械和能动这种会有性别差异。</b>”这为分数不占优但追求稳定职业的考生提供了宝贵的参考。<br><br>
-                                    <b>三、结论与启发</b><br>
-                                    高考志愿填报是一个复杂决策，不能简单地一刀切。群友的讨论给出了一个清晰的决策框架：<br>
+<div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、问题背景</b><br/>
+                                    群友<b>大京</b>为朋友的妹妹咨询高考志愿填报策略，核心问题是：在选择时，应优先考虑学校还是专业？<br/><br/>
+<b>二、核心观点与建议</b><br/>
+                                    群内多位有经验的群友给出了综合性建议，核心思路是根据考生的分数段位和未来规划来做决策：<br/><br/>
+                                    1. <b>普遍建议：专业优先</b><br/>
+<b>蓉么么不扎蒸</b>率先提出核心观点：“<b>无非就是优先专业还是优先学校，建议优先专业。</b>”这一观点得到了普遍认同，尤其是在分数不具备顶尖学校优势的情况下，一个好的、适合的专业对未来职业发展至关重要。<br/><br/>
+                                    2. <b>考虑性别与行业限制</b><br/>
+                                    针对<b>大京</b>妹妹的“机械工程”意向，群友们提出了性别在传统工科领域可能面临的就业挑战。<b>蓉么么不扎蒸</b>分享了自身“能源与动力工程”专业的经历：“<b>春招秋招甚至之后社招都会面临‘我们不要女生’的情况。</b>”<b>Bazinga</b>也证实，机械专业女生成绩再好，企业也优先要男生，多数女生最终都通过读研转向了自动化或计算机方向。<br/><br/>
+                                    3. <b>以终为始，结合未来规划</b><br/>
+<b>蓉么么不扎蒸</b>分享了为自己妹妹报考的成功案例，体现了“以终为始”的规划思路。考虑到妹妹成绩普通，且山东地区考公考编意愿强烈，最终选择了“食品科学与工程”专业。这个选择的逻辑是：“<b>考公还行，有岗位，竞争也不大，如果去就业的话，不会像机械和能动这种会有性别差异。</b>”这为分数不占优但追求稳定职业的考生提供了宝贵的参考。<br/><br/>
+<b>三、结论与启发</b><br/>
+                                    高考志愿填报是一个复杂决策，不能简单地一刀切。群友的讨论给出了一个清晰的决策框架：<br/>
                                     - <b>高分段</b>：优先选择顶尖院校（如985），享受学校平台带来的光环和资源。
                                     - <b>中等分数段</b>：<b>专业的重要性凸显</b>。应优先选择未来就业前景好、竞争压力相对小、符合自身兴趣和性别优势的专业。
                                     - <b>未来规划是关键</b>：无论是考公、考研还是直接就业，都应提前考虑，并将此作为选择专业和学校的重要依据。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-5 pt-4 border-t border-gray-200">
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">高考志愿</span>
-                            <span class="tag-item">专业选择</span>
-                            <span class="tag-item">职业规划</span>
-                            <span class="tag-item">性别与就业</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- === 模块四：解惑一点通・有问必答 结束 === -->
-
-        <!-- === 模块五：智慧火花匣・每日精选 开始 === -->
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-5 pt-4 border-t border-gray-200">
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">高考志愿</span>
+<span class="tag-item">专业选择</span>
+<span class="tag-item">职业规划</span>
+<span class="tag-item">性别与就业</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- === 模块四：解惑一点通・有问必答 结束 === -->
+<!-- === 模块五：智慧火花匣・每日精选 开始 === -->
+<section class="w-full mb-12 anchor-target" id="section-daily-picks">
+<h2 class="section-title">
                 五、智慧火花匣・每日精选
             </h2>
-            <div class="space-y-8">
-                <!-- 知识卡片 1 -->
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
-                    <h4 class="text-xl font-semibold text-black mb-3">
+<div class="space-y-8">
+<!-- 知识卡片 1 -->
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<h4 class="text-xl font-semibold text-black mb-3">
                         一代人的家国情怀与红色记忆
                     </h4>
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             某只柿子🍅：今天看宇哥说小时候读课文的事情我想到了小时候另一则趣事...
                         </p>
-                    </div>
-                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
-                        <div class="expandable-content" data-char-limit="200">
-                            <div class="content-preview">
-                                <b>一、推荐内容</b><br>
-                                由群友<b>某只柿子🍅</b>分享的童年趣事引发，群内开启了一场关于家国情怀与红色记忆的集体追忆。这不仅仅是故事分享，更是一次深刻的情感共鸣与精神洗礼。<br><br>
-                                <b>二、核心价值与特点</b><br>
-                                - <b>纯粹的爱国情感</b>：<b>某只柿子🍅</b>分享自己小学时看刘胡兰故事后写下“努力学习，为刘胡兰报仇”的观后感，展现了孩童时期最朴素、真挚的爱憎分明。<br>
-                                - <b>长辈的言传身教</b>：多位群友分享了祖辈的故事。<b>桃乐丝</b>的太爷爷被日本人折磨致死，让她对“国仇家恨”有切身体会；<b>苏朵真（十一点不睡挨大嘴巴子抽）</b>的姥爷是二等功臣；<b>极品小学生（权威版）</b>的外婆会自己唱“东方红”并朴素地批判美国霸权。这些故事生动地展示了革命精神和爱国情感在一代代人之间的传承。<br>
-                                - <b>对领袖的深厚感情</b>：<b>阿戒</b>的奶奶瞻仰主席遗容时拼命抹泪，<b>砂糖橘🍊（酸甜）</b>的奶奶到店里第一件事是“去楼上看看毛主席”。这些细节描绘了老一辈人对领袖发自内心的崇敬与爱戴。<br>
-                                - <b>红色歌曲的集体共鸣</b>：从《我的祖国》、《我们是共产主义接班人》到《国际歌》，群友们自发地接龙歌词，许多人表示唱起这些歌曲时会“哽咽”、“鼻子发酸”。这些歌曲已成为一代人共同的文化基因和精神图腾。<br><br>
-                                <b>三、适用场景或补充信息</b><br>
+</div>
+<div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、推荐内容</b><br/>
+                                由群友<b>某只柿子🍅</b>分享的童年趣事引发，群内开启了一场关于家国情怀与红色记忆的集体追忆。这不仅仅是故事分享，更是一次深刻的情感共鸣与精神洗礼。<br/><br/>
+<b>二、核心价值与特点</b><br/>
+                                - <b>纯粹的爱国情感</b>：<b>某只柿子🍅</b>分享自己小学时看刘胡兰故事后写下“努力学习，为刘胡兰报仇”的观后感，展现了孩童时期最朴素、真挚的爱憎分明。<br/>
+                                - <b>长辈的言传身教</b>：多位群友分享了祖辈的故事。<b>桃乐丝</b>的太爷爷被日本人折磨致死，让她对“国仇家恨”有切身体会；<b>苏朵真（十一点不睡挨大嘴巴子抽）</b>的姥爷是二等功臣；<b>极品小学生（权威版）</b>的外婆会自己唱“东方红”并朴素地批判美国霸权。这些故事生动地展示了革命精神和爱国情感在一代代人之间的传承。<br/>
+                                - <b>对领袖的深厚感情</b>：<b>阿戒</b>的奶奶瞻仰主席遗容时拼命抹泪，<b>砂糖橘🍊（酸甜）</b>的奶奶到店里第一件事是“去楼上看看毛主席”。这些细节描绘了老一辈人对领袖发自内心的崇敬与爱戴。<br/>
+                                - <b>红色歌曲的集体共鸣</b>：从《我的祖国》、《我们是共产主义接班人》到《国际歌》，群友们自发地接龙歌词，许多人表示唱起这些歌曲时会“哽咽”、“鼻子发酸”。这些歌曲已成为一代人共同的文化基因和精神图腾。<br/><br/>
+<b>三、适用场景或补充信息</b><br/>
                                 这场讨论不仅是一次怀旧，更是对当下的一种提醒。在和平年代，重温这些充满激情与信念的故事和歌曲，有助于我们理解老一辈人的精神世界，并从中汲取继续前行的力量。正如<b>归舟</b>所说：“<b>我外公外婆看正剧，看到新中国成立的时候会跟着电视剧一起唱国歌，两个八十岁的老人在家里专注的小声唱国歌的情景，我永远都没办法忘记。</b>”
                             </div>
-                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                <span class="expand-text">展开全文</span>
-                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="tag-item">家国情怀</span>
-                        <span class="tag-item">红色记忆</span>
-                        <span class="tag-item">集体共鸣</span>
-                        <span class="tag-item">爱国主义教育</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- === 模块五：智慧火花匣・每日精选 结束 === -->
-
-        <!-- === 文件底部 开始 === -->
-        <footer class="w-full mt-16">
-            <div class="bento-card p-8">
-                <div class="text-center text-gray-700 space-y-3">
-                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-base">
-                        <div class="flex items-center">
-                            <i class="fas fa-database mr-2 text-[#4D6BFE]"></i>
-                            <span>微信群聊记录</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-robot mr-2 text-[#4D6BFE]"></i>
-                            <span>2024-06-27 03:00:00</span>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-500 max-w-2xl mx-auto leading-relaxed">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">家国情怀</span>
+<span class="tag-item">红色记忆</span>
+<span class="tag-item">集体共鸣</span>
+<span class="tag-item">爱国主义教育</span>
+</div>
+</div>
+</div>
+</section>
+<!-- === 模块五：智慧火花匣・每日精选 结束 === -->
+<!-- === 文件底部 开始 === -->
+<nav class="w-full mt-12 daily-nav">
+<div class="bento-card p-4">
+<div class="flex justify-between items-center">
+<button class="nav-button day-nav-prev" type="button">
+<i class="fas fa-chevron-left"></i>
+                        上一天
+                    </button>
+<div class="text-center">
+<span class="text-sm text-gray-600">日报导航</span>
+</div>
+<button class="nav-button day-nav-next" type="button">
+                        下一天
+                        <i class="fas fa-chevron-right"></i>
+</button>
+</div>
+</div>
+</nav><footer class="w-full mt-16">
+<div class="bento-card p-8">
+<div class="text-center text-gray-700 space-y-3">
+<div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-base">
+<div class="flex items-center">
+<i class="fas fa-database mr-2 text-[#4D6BFE]"></i>
+<span>微信群聊记录</span>
+</div>
+<div class="flex items-center">
+<i class="fas fa-robot mr-2 text-[#4D6BFE]"></i>
+<span>2024-06-27 03:00:00</span>
+</div>
+</div>
+<p class="text-sm text-gray-500 max-w-2xl mx-auto leading-relaxed">
                         本报告基于群聊数据自动生成，仅供参考。内容可能包含个人观点，不代表群组官方立场。数据处理过程中已尽量匿名化处理敏感信息。
                     </p>
-                </div>
-            </div>
-        </footer>
-        <!-- === 文件底部 结束 === -->
-    </div>
-
+</div>
+</div>
+</footer>
+<!-- === 文件底部 结束 === -->
+</div><div aria-label="页面快捷操作" class="floating-actions">
+<div class="directory-wrapper">
+<button aria-controls="directory-panel" aria-expanded="false" aria-label="打开内容导航" class="floating-button" id="directory-toggle" type="button">
+<i class="fas fa-list-ul"></i>
+</button>
+<div aria-hidden="true" aria-modal="false" class="directory-panel" id="directory-panel" role="dialog">
+<div class="directory-header">
+<span class="directory-title">内容导航</span>
+<button aria-label="关闭内容导航" class="directory-close" id="directory-close" type="button">
+<i class="fas fa-times"></i>
+</button>
+</div>
+<div class="directory-list" id="directory-list">
+<!-- HTML注释: 目录项由脚本在运行时自动生成，支持主模块与子模块锚点 -->
+</div>
+</div>
+</div>
+<button aria-label="返回顶部" class="floating-button floating-button--hidden" id="scroll-top-btn" type="button">
+<i class="fas fa-arrow-up"></i>
+</button>
+</div>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Bento card hover effect is handled by CSS :hover pseudo-class
+        // HTML注释: 定义基础URL常量
+        const BASE_URL = 'https://xinjian-bot.github.io/-/';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Bento card hover effect is handled by CSS :hover pseudo-class
 
-        // Number animation effect
-        const numberElements = document.querySelectorAll('.number-display');
-        numberElements.forEach(element => {
-            const finalValueText = element.textContent.replace(/,/g, '');
-            const finalValue = parseInt(finalValueText, 10);
+            // Number animation effect
+            const numberElements = document.querySelectorAll('.number-display');
+            numberElements.forEach(element => {
+                const finalValueText = element.textContent.replace(/,/g, '');
+                const finalValue = parseInt(finalValueText, 10);
 
-            if (isNaN(finalValue)) return;
+                if (isNaN(finalValue)) return;
 
-            let currentValue = 0;
-            const duration = 1500; // Animation duration in ms
-            const frameRate = 1000 / 60; // 60fps
-            const totalFrames = Math.round(duration / frameRate);
-            const increment = finalValue / totalFrames;
+                let currentValue = 0;
+                const duration = 1500; // Animation duration in ms
+                const frameRate = 1000 / 60; // 60fps
+                const totalFrames = Math.round(duration / frameRate);
+                const increment = finalValue / totalFrames;
 
-            let currentFrame = 0;
-            const timer = setInterval(() => {
-                currentFrame++;
-                currentValue += increment;
+                let currentFrame = 0;
+                const timer = setInterval(() => {
+                    currentFrame++;
+                    currentValue += increment;
 
-                if (currentFrame >= totalFrames) {
-                    currentValue = finalValue;
-                    clearInterval(timer);
-                }
-                // Format number with commas for display
-                element.textContent = Math.floor(currentValue).toLocaleString('en-US');
-            }, frameRate);
+                    if (currentFrame >= totalFrames) {
+                        currentValue = finalValue;
+                        clearInterval(timer);
+                    }
+                    // Format number with commas for display
+                    element.textContent = Math.floor(currentValue).toLocaleString('en-US');
+                }, frameRate);
+            });
+
+            // HTML注释: 初始化日报导航功能
+            initDailyNavigation();
+
+            // HTML注释: 初始化展开功能
+            initExpandableContent();
+
+            // HTML注释: 初始化浮动按钮与目录互动
+            initFloatingActions();
+            
+            // HTML注释: 设置历史日报链接
+            const historyLink = document.getElementById('history-link');
+            if (historyLink) {
+                historyLink.href = BASE_URL + '新茧历史日报汇总.html';
+            }
         });
 
-        // HTML注释: 初始化日报导航功能
-        initDailyNavigation();
+        // HTML注释: 这个函数实现了日报间的导航功能，包括：
+        // 1. 从当前页面URL或内容中提取日期
+        // 2. 检查前后日期的日报文件是否存在
+        // 3. 设置"上一天"和"下一天"按钮的状态和链接
+        // 4. 实现"下一天"按钮的动态显示逻辑
+        async function initDailyNavigation() {
+            try {
+                // HTML注释: 获取当前页面的日期
+                const currentDate = getCurrentDateFromPage();
+                if (!currentDate) {
+                    console.warn('无法从页面中提取日期信息');
+                    return;
+                }
+
+                // HTML注释: 设置导航按钮
+                await setupNavigationButtons(currentDate);
+
+            } catch (error) {
+                console.error('初始化日报导航时出错:', error);
+            }
+        }
+
+        // HTML注释: 从页面中提取当前日期
+        // HTML注释: 支持多种方式提取日期：优先从页面元素、URL文件名或页面标题
+        function getCurrentDateFromPage() {
+            // HTML注释: 方法1：从报告日期元素中提取（优先级最高）
+            const dateElement = document.getElementById('report-date');
+            if (dateElement) {
+                const dateText = dateElement.textContent;
+                const dateMatch = dateText.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
+                if (dateMatch) {
+                    const year = dateMatch[1];
+                    const month = dateMatch[2].padStart(2, '0');
+                    const day = dateMatch[3].padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                }
+            }
+
+            // HTML注释: 方法2：从URL文件名中提取日期
+            const pathname = window.location.pathname;
+            const filenameMatch = pathname.match(/新茧群日报_(\d{4}-\d{2}-\d{2})\.html/);
+            if (filenameMatch) {
+                return filenameMatch[1];
+            }
+
+            // HTML注释: 方法3：从页面标题中提取日期
+            const titleMatch = document.title.match(/(\d{4}-\d{2}-\d{2})/);
+            if (titleMatch) {
+                return titleMatch[1];
+            }
+
+            return null;
+        }
+
+        // HTML注释: 设置导航按钮的状态和链接
+         // HTML注释: 根据当前日期，检查前后日期的日报文件是否存在
+         async function setupNavigationButtons(currentDate) {
+             const prevButtons = document.querySelectorAll('.day-nav-prev');
+             const nextButtons = document.querySelectorAll('.day-nav-next');
+             const navContainers = document.querySelectorAll('.daily-nav');
+
+             if (!prevButtons.length && !nextButtons.length) {
+                 return;
+             }
+             
+             // HTML注释: 计算前一天和后一天的日期
+             const currentDateObj = new Date(currentDate);
+             const prevDateObj = new Date(currentDateObj);
+             prevDateObj.setDate(prevDateObj.getDate() - 1);
+             const nextDateObj = new Date(currentDateObj);
+             nextDateObj.setDate(nextDateObj.getDate() + 1);
+             
+             const prevDate = formatDate(prevDateObj);
+             const nextDate = formatDate(nextDateObj);
+             
+             // HTML注释: 检查前一天和后一天的日报是否存在
+             const prevExists = await checkReportExists(prevDate);
+             const nextExists = await checkReportExists(nextDate);
+             
+             // HTML注释: 如果前后日期的日报都不存在，隐藏所有导航栏容器
+             if (!prevExists && !nextExists) {
+                 navContainers.forEach(container => {
+                     container.style.display = 'none';
+                 });
+                 return;
+             }
+             
+             // HTML注释: 显示所有导航栏容器
+             navContainers.forEach(container => {
+                 container.style.display = 'block';
+             });
+             
+             // HTML注释: 设置前一天按钮
+             prevButtons.forEach(button => {
+                 if (prevExists) {
+                     button.disabled = false;
+                     button.onclick = () => {
+                         window.location.href = BASE_URL + `新茧群日报_${prevDate}.html`;
+                     };
+                 } else {
+                     button.disabled = true;
+                     button.onclick = null;
+                 }
+             });
+
+             // HTML注释: 设置后一天按钮
+             nextButtons.forEach(button => {
+                 if (nextExists) {
+                     button.disabled = false;
+                     button.onclick = () => {
+                         window.location.href = BASE_URL + `新茧群日报_${nextDate}.html`;
+                     };
+                 } else {
+                     button.disabled = true;
+                     button.onclick = null;
+                 }
+             });
+         }
+
+        // HTML注释: 检查指定日期的日报文件是否存在
+        async function checkReportExists(date) {
+            try {
+                const response = await fetch(BASE_URL + `新茧群日报_${date}.html`, { method: 'HEAD' });
+                return response.ok;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        // HTML注释: 格式化日期为YYYY-MM-DD格式
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
 
         // HTML注释: 初始化展开功能
-        initExpandableContent();
-    });
+        function initExpandableContent() {
+            const expandableContents = document.querySelectorAll('.expandable-content');
+            
+            expandableContents.forEach(container => {
+                const charLimit = parseInt(container.getAttribute('data-char-limit')) || 200;
+                const contentPreview = container.querySelector('.content-preview');
+                const expandBtn = container.querySelector('.expand-btn');
+                
+                if (!contentPreview || !expandBtn) return;
+                
+                const fullContent = contentPreview.innerHTML;
+                const fullText = contentPreview.textContent || contentPreview.innerText;
+                
+                // HTML注释: 如果内容长度超过限制，则显示展开按钮
+                if (fullText.length > charLimit) {
+                    // HTML注释: 创建一个临时元素来正确截取HTML内容
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = fullContent;
+                    
+                    // HTML注释: 截取文本内容到指定长度
+                    const truncatedText = fullText.substring(0, charLimit);
+                    
+                    // HTML注释: 使用更简单可靠的方法截取内容
+                    let truncatedContent = '';
+                    let charCount = 0;
+                    
+                    // HTML注释: 逐字符遍历，保持简单的HTML结构
+                    const walker = document.createTreeWalker(
+                        tempDiv,
+                        NodeFilter.SHOW_TEXT,
+                        null,
+                        false
+                    );
+                    
+                    let node;
+                    const textNodes = [];
+                    while (node = walker.nextNode()) {
+                        textNodes.push(node);
+                    }
+                    
+                    // HTML注释: 计算需要保留的文本内容
+                    for (let textNode of textNodes) {
+                        const text = textNode.textContent;
+                        if (charCount + text.length <= charLimit) {
+                            charCount += text.length;
+                        } else {
+                            const remainingChars = charLimit - charCount;
+                            textNode.textContent = text.substring(0, remainingChars) + '...';
+                            charCount = charLimit;
+                            
+                            // HTML注释: 新的、更干净的移除后续所有节点的逻辑
+                            let currentNodeToClearAfter = textNode;
+                            while (currentNodeToClearAfter && currentNodeToClearAfter !== tempDiv) {
+                                let sibling = currentNodeToClearAfter.nextSibling;
+                                while (sibling) {
+                                    const nodeToRemove = sibling;
+                                    sibling = sibling.nextSibling;
+                                    nodeToRemove.remove();
+                                }
+                                currentNodeToClearAfter = currentNodeToClearAfter.parentElement;
+                            }
+                            break; // 完成截断和清理，跳出 textNodes 循环
+                        }
+                    }
+                    
+                    const previewContent = tempDiv.innerHTML;
+                    
+                    contentPreview.innerHTML = previewContent;
+                    contentPreview.classList.add('collapsed');
+                    expandBtn.style.display = 'flex';
+                    
+                    // HTML注释: 绑定展开/收起事件
+                    expandBtn.addEventListener('click', function() {
+                        const isExpanded = expandBtn.classList.contains('expanded');
+                        
+                        if (isExpanded) {
+                            // HTML注释: 收起内容
+                            contentPreview.innerHTML = previewContent;
+                            contentPreview.classList.add('collapsed');
+                            expandBtn.querySelector('.expand-text').textContent = '展开全文';
+                            expandBtn.classList.remove('expanded');
+                        } else {
+                            // HTML注释: 展开内容
+                            contentPreview.innerHTML = fullContent;
+                            contentPreview.classList.remove('collapsed');
+                            expandBtn.querySelector('.expand-text').textContent = '收起';
+                            expandBtn.classList.add('expanded');
+                        }
+                    });
+                } else {
+                    // HTML注释: 内容较短，隐藏展开按钮
+                    expandBtn.style.display = 'none';
+                }
+            });
+        }
 
-    // HTML注释: 这个函数实现了日报间的导航功能，包括：
-    // 1. 从当前页面URL或内容中提取日期
-    // 2. 检查前后日期的日报文件是否存在
-    // 3. 设置"上一天"和"下一天"按钮的状态和链接
-    // 4. 实现"下一天"按钮的动态显示逻辑
-    async function initDailyNavigation() {
-        try {
-            // HTML注释: 获取当前页面的日期
-            const currentDate = getCurrentDateFromPage();
-            if (!currentDate) {
-                console.warn('无法从页面中提取日期信息');
+        // HTML注释: 构建目录数据，统一扫描主模块与子级卡片生成锚点
+        function buildDirectory(panelElement) {
+            const listElement = panelElement.querySelector('#directory-list');
+            if (!listElement) {
                 return;
             }
 
-            // HTML注释: 设置导航按钮
-            await setupNavigationButtons(currentDate);
+            listElement.innerHTML = '';
 
-        } catch (error) {
-            console.error('初始化日报导航时出错:', error);
-        }
-    }
+            const directoryConfigs = [
+                { id: 'section-overview', icon: 'fa-chart-column' },
+                { id: 'section-hot-topics', icon: 'fa-fire' },
+                { id: 'section-meeting', icon: 'fa-users' },
+                { id: 'section-qa', icon: 'fa-circle-question' },
+                { id: 'section-daily-picks', icon: 'fa-lightbulb' }
+            ];
 
-    // HTML注释: 从页面中提取当前日期
-    // HTML注释: 支持多种方式提取日期：优先从页面元素、URL文件名或页面标题
-    function getCurrentDateFromPage() {
-        // HTML注释: 方法1：从报告日期元素中提取（优先级最高）
-        const dateElement = document.getElementById('report-date');
-        if (dateElement) {
-            const dateText = dateElement.textContent;
-            const dateMatch = dateText.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
-            if (dateMatch) {
-                const year = dateMatch[1];
-                const month = dateMatch[2].padStart(2, '0');
-                const day = dateMatch[3].padStart(2, '0');
-                return `${year}-${month}-${day}`;
-            }
-        }
-
-        // HTML注释: 方法2：从URL文件名中提取日期
-        const pathname = window.location.pathname;
-        const filenameMatch = pathname.match(/新茧群日报_(\d{4}-\d{2}-\d{2})\.html/);
-        if (filenameMatch) {
-            return filenameMatch[1];
-        }
-
-        // HTML注释: 方法3：从页面标题中提取日期
-        const titleMatch = document.title.match(/(\d{4}-\d{2}-\d{2})/);
-        if (titleMatch) {
-            return titleMatch[1];
-        }
-
-        return null;
-    }
-
-    // HTML注释: 设置导航按钮的状态和链接
-     // HTML注释: 根据当前日期，检查前后日期的日报文件是否存在
-     async function setupNavigationButtons(currentDate) {
-         const prevButton = document.getElementById('prev-day');
-         const nextButton = document.getElementById('next-day');
-         const navContainer = document.querySelector('nav');
-         
-         // HTML注释: 计算前一天和后一天的日期
-         const currentDateObj = new Date(currentDate);
-         const prevDateObj = new Date(currentDateObj);
-         prevDateObj.setDate(prevDateObj.getDate() - 1);
-         const nextDateObj = new Date(currentDateObj);
-         nextDateObj.setDate(nextDateObj.getDate() + 1);
-         
-         const prevDate = formatDate(prevDateObj);
-         const nextDate = formatDate(nextDateObj);
-         
-         // HTML注释: 检查前一天和后一天的日报是否存在
-         const prevExists = await checkReportExists(prevDate);
-         const nextExists = await checkReportExists(nextDate);
-         
-         // HTML注释: 如果前后日期的日报都不存在，隐藏整个导航栏容器
-         if (!prevExists && !nextExists) {
-             navContainer.style.display = 'none';
-             return;
-         }
-         
-         // HTML注释: 显示导航栏容器
-         navContainer.style.display = 'block';
-         
-         // HTML注释: 设置前一天按钮
-         if (prevExists) {
-             prevButton.onclick = () => {
-                 window.location.href = `https://xinjian-bot.github.io/-/新茧群日报_${prevDate}.html`;
-             };
-             prevButton.disabled = false;
-         } else {
-             prevButton.disabled = true;
-             prevButton.onclick = null;
-         }
-
-         // HTML注释: 设置后一天按钮
-         if (nextExists) {
-             nextButton.onclick = () => {
-                 window.location.href = `https://xinjian-bot.github.io/-/新茧群日报_${nextDate}.html`;
-             };
-             nextButton.disabled = false;
-         } else {
-             // HTML注释: 后一天的日报不存在，禁用"下一天"按钮
-             nextButton.disabled = true;
-             nextButton.onclick = null;
-         }
-     }
-
-    // HTML注释: 检查指定日期的日报文件是否存在
-    async function checkReportExists(date) {
-        try {
-            const response = await fetch(`https://xinjian-bot.github.io/-/新茧群日报_${date}.html`, { method: 'HEAD' });
-            return response.ok;
-        } catch (error) {
-            return false;
-        }
-    }
-
-    // HTML注释: 格式化日期为YYYY-MM-DD格式
-    function formatDate(date) {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    }
-
-    // HTML注释: 初始化展开功能
-    function initExpandableContent() {
-        const expandableContents = document.querySelectorAll('.expandable-content');
-        
-        expandableContents.forEach(container => {
-            const charLimit = parseInt(container.getAttribute('data-char-limit')) || 200;
-            const contentPreview = container.querySelector('.content-preview');
-            const expandBtn = container.querySelector('.expand-btn');
-            
-            if (!contentPreview || !expandBtn) return;
-            
-            const fullContent = contentPreview.innerHTML;
-            const fullText = contentPreview.textContent || contentPreview.innerText;
-            
-            // HTML注释: 如果内容长度超过限制，则显示展开按钮
-            if (fullText.length > charLimit) {
-                // HTML注释: 创建一个临时元素来正确截取HTML内容
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = fullContent;
-                
-                // HTML注释: 截取文本内容到指定长度
-                const truncatedText = fullText.substring(0, charLimit);
-                
-                // HTML注释: 使用更简单可靠的方法截取内容
-                let truncatedContent = '';
-                let charCount = 0;
-                
-                // HTML注释: 逐字符遍历，保持简单的HTML结构
-                const walker = document.createTreeWalker(
-                    tempDiv,
-                    NodeFilter.SHOW_TEXT,
-                    null,
-                    false
-                );
-                
-                let node;
-                const textNodes = [];
-                while (node = walker.nextNode()) {
-                    textNodes.push(node);
+            directoryConfigs.forEach((config) => {
+                const sectionElement = document.getElementById(config.id);
+                if (!sectionElement) {
+                    return;
                 }
-                
-                // HTML注释: 计算需要保留的文本内容
-                for (let textNode of textNodes) {
-                    const text = textNode.textContent;
-                    if (charCount + text.length <= charLimit) {
-                        charCount += text.length;
-                    } else {
-                        const remainingChars = charLimit - charCount;
-                        textNode.textContent = text.substring(0, remainingChars) + '...';
-                        charCount = charLimit;
-                        
-                        // HTML注释: 新的、更干净的移除后续所有节点的逻辑
-                        let currentNodeToClearAfter = textNode;
-                        while (currentNodeToClearAfter && currentNodeToClearAfter !== tempDiv) {
-                            let sibling = currentNodeToClearAfter.nextSibling;
-                            while (sibling) {
-                                const nodeToRemove = sibling;
-                                sibling = sibling.nextSibling;
-                                nodeToRemove.remove();
-                            }
-                            currentNodeToClearAfter = currentNodeToClearAfter.parentElement;
+
+                const sectionTitleElement = sectionElement.querySelector('.section-title');
+                const sectionTitle = sectionTitleElement ? sectionTitleElement.textContent.trim() : config.id;
+
+                const itemWrapper = document.createElement('div');
+                itemWrapper.className = 'directory-item';
+
+                const entryButton = document.createElement('button');
+                entryButton.type = 'button';
+                entryButton.className = 'directory-entry';
+                entryButton.setAttribute('data-target', config.id);
+                entryButton.innerHTML = `<span class="directory-icon"><i class="fas ${config.icon}"></i></span><span class="directory-text">${sectionTitle}</span>`;
+                itemWrapper.appendChild(entryButton);
+
+                const subHeadings = sectionElement.querySelectorAll('.bento-card h4');
+                if (subHeadings.length > 0) {
+                    const sublistElement = document.createElement('div');
+                    sublistElement.className = 'directory-sublist';
+
+                    subHeadings.forEach((heading, index) => {
+                        const cardElement = heading.closest('.bento-card');
+                        if (!cardElement) {
+                            return;
                         }
-                        break; // 完成截断和清理，跳出 textNodes 循环
-                    }
+
+                        if (!cardElement.classList.contains('anchor-target')) {
+                            cardElement.classList.add('anchor-target');
+                        }
+
+                        if (!cardElement.id) {
+                            cardElement.id = `${config.id}-item-${index + 1}`;
+                        }
+
+                        const subButton = document.createElement('button');
+                        subButton.type = 'button';
+                        subButton.className = 'directory-subitem';
+                        subButton.setAttribute('data-target', cardElement.id);
+                        subButton.innerHTML = `<span class="directory-text">${heading.textContent.trim()}</span>`;
+                        sublistElement.appendChild(subButton);
+                    });
+
+                    itemWrapper.appendChild(sublistElement);
                 }
-                
-                const previewContent = tempDiv.innerHTML;
-                
-                contentPreview.innerHTML = previewContent;
-                contentPreview.classList.add('collapsed');
-                expandBtn.style.display = 'flex';
-                
-                // HTML注释: 绑定展开/收起事件
-                expandBtn.addEventListener('click', function() {
-                    const isExpanded = expandBtn.classList.contains('expanded');
-                    
-                    if (isExpanded) {
-                        // HTML注释: 收起内容
-                        contentPreview.innerHTML = previewContent;
-                        contentPreview.classList.add('collapsed');
-                        expandBtn.querySelector('.expand-text').textContent = '展开全文';
-                        expandBtn.classList.remove('expanded');
+
+                listElement.appendChild(itemWrapper);
+            });
+        }
+
+        // HTML注释: 初始化浮动按钮与目录交互
+        function initFloatingActions() {
+            const scrollTopBtn = document.getElementById('scroll-top-btn');
+            const directoryToggle = document.getElementById('directory-toggle');
+            const directoryPanel = document.getElementById('directory-panel');
+            const directoryClose = document.getElementById('directory-close');
+
+            if (scrollTopBtn) {
+                const toggleScrollButton = () => {
+                    if (window.scrollY > 240) {
+                        scrollTopBtn.classList.remove('floating-button--hidden');
                     } else {
-                        // HTML注释: 展开内容
-                        contentPreview.innerHTML = fullContent;
-                        contentPreview.classList.remove('collapsed');
-                        expandBtn.querySelector('.expand-text').textContent = '收起';
-                        expandBtn.classList.add('expanded');
+                        scrollTopBtn.classList.add('floating-button--hidden');
                     }
+                };
+
+                toggleScrollButton();
+                window.addEventListener('scroll', toggleScrollButton, { passive: true });
+
+                scrollTopBtn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
-            } else {
-                // HTML注释: 内容较短，隐藏展开按钮
-                expandBtn.style.display = 'none';
             }
-        });
-    }
-</script>
+
+            if (!directoryPanel) {
+                return;
+            }
+
+            buildDirectory(directoryPanel);
+
+            if (!directoryToggle) {
+                return;
+            }
+
+            const closePanel = () => {
+                directoryPanel.classList.remove('open');
+                directoryToggle.setAttribute('aria-expanded', 'false');
+                directoryPanel.setAttribute('aria-hidden', 'true');
+            };
+
+            const openPanel = () => {
+                directoryPanel.classList.add('open');
+                directoryToggle.setAttribute('aria-expanded', 'true');
+                directoryPanel.setAttribute('aria-hidden', 'false');
+            };
+
+            const togglePanel = () => {
+                if (directoryPanel.classList.contains('open')) {
+                    closePanel();
+                } else {
+                    openPanel();
+                }
+            };
+
+            directoryToggle.addEventListener('click', (event) => {
+                event.stopPropagation();
+                togglePanel();
+            });
+
+            if (directoryClose) {
+                directoryClose.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    closePanel();
+                });
+            }
+
+            const directoryItems = directoryPanel.querySelectorAll('[data-target]');
+            directoryItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const targetId = item.getAttribute('data-target');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                    closePanel();
+                });
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!directoryPanel.contains(event.target) && !directoryToggle.contains(event.target)) {
+                    closePanel();
+                }
+            });
+
+            window.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closePanel();
+                }
+            });
+        }
+    </script>
 </body>
 </html>

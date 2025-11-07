@@ -1,22 +1,23 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>新茧日报 2025-07-26</title>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6C9T7FPDT2"></script>
-    <script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>新茧日报 2025-07-26</title>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-6C9T7FPDT2"></script>
+<script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
       gtag('config', 'G-6C9T7FPDT2');
     </script>
-    <!-- 正常标题格式应为：新茧日报 yyyy-mm-dd，以便外部链接查看时了解日报日期 -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
+<!-- 正常标题格式应为：新茧日报 yyyy-mm-dd，以便外部链接查看时了解日报日期 -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
         * {
@@ -26,6 +27,11 @@
         body {
             background-color: #ffffff;
             color: #000000;
+        }
+
+        :root {
+            --directory-main-font-size: clamp(0.85rem, 0.9vw + 0.6rem, 0.95rem);
+            --directory-sub-font-size: clamp(0.78rem, 0.75vw + 0.5rem, 0.88rem);
         }
 
         .bento-card {
@@ -49,7 +55,7 @@
         }
 
         .section-title {
-            font-weight: 800; /* extrold */
+            font-weight: 800; /* extrabold */
             font-size: 2.25rem; /* 36px */
             color: #000000;
             margin-bottom: 2rem; /* 32px, consistent with Tailwind mb-8 */
@@ -130,7 +136,7 @@
             left: 0;
             right: 0;
             height: 30px;
-            background: linear-gradient(transparent, rgba(255, 255, 255, 0.9));
+            background: linear-gradient(transparent, rgba(248, 250, 252, 0.9));
             pointer-events: none;
         }
 
@@ -153,492 +159,704 @@
         .expand-btn.expanded .expand-icon {
             transform: rotate(180deg);
         }
+
+        /* HTML注释: 目录锚点滚动偏移，避免标题被遮挡 */
+        .anchor-target {
+            scroll-margin-top: 120px;
+        }
+
+        .anchor-placeholder {
+            height: 0;
+        }
+
+        /* HTML注释: 右下角浮动快捷按钮区域样式 */
+        .floating-actions {
+            position: fixed;
+            right: 1.25rem;
+            bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            z-index: 50;
+        }
+
+        .floating-button {
+            background: linear-gradient(135deg, #4D6BFE 0%, #6B8BFF 100%);
+            color: #ffffff;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px -5px rgba(77, 107, 254, 0.35);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .floating-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -6px rgba(77, 107, 254, 0.45);
+        }
+
+        .floating-button:focus-visible {
+            outline: 2px solid rgba(77, 107, 254, 0.45);
+            outline-offset: 2px;
+        }
+
+        .floating-button--hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            pointer-events: none;
+        }
+
+        .directory-wrapper {
+            position: relative;
+        }
+
+        .directory-panel {
+            position: absolute;
+            right: 0;
+            bottom: 3.5rem;
+            width: 18rem;
+            background: #ffffff;
+            border: 1px solid rgba(77, 107, 254, 0.2);
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 40px -15px rgba(77, 107, 254, 0.35);
+            padding: 1rem;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            max-height: min(75vh, 30rem);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+
+        .directory-panel.open {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .directory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .directory-title {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: var(--directory-main-font-size);
+        }
+
+        .directory-close {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 9999px;
+           transition: color 0.2s ease;
+        }
+
+        .directory-close:hover {
+            color: #4D6BFE;
+        }
+
+        .directory-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .directory-list button {
+            width: 100%;
+            text-align: left;
+            background: rgba(77, 107, 254, 0.08);
+            color: #1f2937;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.55rem 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: var(--directory-main-font-size);
+        }
+
+        .directory-list button:hover {
+            background: rgba(77, 107, 254, 0.18);
+            color: #1d4ed8;
+        }
+
+        /* HTML注释: 二级导航容器样式，支持主模块与子模块层级展示 */
+        .directory-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .directory-entry {
+            background: rgba(77, 107, 254, 0.08);
+        }
+
+        .directory-sublist {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-left: 2.5rem;
+            padding-left: 0.75rem;
+            border-left: 1px solid rgba(77, 107, 254, 0.2);
+        }
+
+        .directory-subitem {
+            background: rgba(77, 107, 254, 0.04);
+            padding-top: 0.45rem;
+            padding-bottom: 0.45rem;
+            font-size: var(--directory-sub-font-size);
+        }
+
+        .directory-subitem:hover {
+            background: rgba(77, 107, 254, 0.14);
+        }
+
+        .directory-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 9999px;
+            background: rgba(77, 107, 254, 0.12);
+            color: #4D6BFE;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .directory-text {
+            flex: 1;
+            color: inherit;
+        }
+
+        @media (max-width: 640px) {
+            .floating-actions {
+                right: 0.75rem;
+                bottom: 1rem;
+            }
+
+            .directory-panel {
+                width: min(80vw, 15rem);
+                bottom: 3.25rem;
+                max-height: min(70vh, 20rem);
+            }
+            :root {
+                --directory-main-font-size: 0.8rem;
+                --directory-sub-font-size: 0.72rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-white text-black min-h-screen">
-    <!-- HTML注释: 整体宽度通过 max-w-4xl 控制，实现日报宽度调小并保持响应式。-->
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-
-        <!-- === "新茧日报" 文件头区域 开始 === -->
-        <!-- HTML注释: 此模块作为单独一行，占据整行宽度。包含日报主标题、报告日期和时间范围。 -->
-        <!-- HTML注释: 新增了"新茧历史日报"链接，样式与整体设计保持统一协调 -->
-        <header class="w-full mb-8">
-            <div class="bento-card p-8">
-                <div class="text-center">
-                    <h1 class="text-5xl font-black text-black mb-6">
+<!-- HTML注释: 整体宽度通过 max-w-4xl 控制，实现日报宽度调小并保持响应式。-->
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+<!-- === "新茧日报" 文件头区域 开始 === -->
+<!-- HTML注释: 此模块作为单独一行，占据整行宽度。包含日报主标题、报告日期和时间范围。 -->
+<!-- HTML注释: 新增了"新茧历史日报"链接，样式与整体设计保持统一协调 -->
+<header class="w-full mb-8">
+<div class="bento-card p-8">
+<div class="text-center">
+<h1 class="text-5xl font-black text-black mb-6">
                         新茧日报
                     </h1>
-                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-lg mb-4">
-                        <div class="flex items-center text-gray-700">
-                            <i class="fas fa-calendar-alt mr-2 text-[#4D6BFE]"></i>
-                            <span id="report-date">2025年7月26日</span>
-                        </div>
-                        <div class="flex items-center text-gray-700">
-                            <i class="fas fa-clock mr-2 text-[#4D6BFE]"></i>
-                            <span>02:00 - 02:00（次日）</span>
-                        </div>
-                    </div>
-                    <!-- HTML注释: 新增历史日报链接，位置合理且样式协调 -->
-                    <div class="flex justify-center">
-                        <a id="history-link" href="#" class="history-link">
-                            <i class="fas fa-history"></i>
+<div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-lg mb-4">
+<div class="flex items-center text-gray-700">
+<i class="fas fa-calendar-alt mr-2 text-[#4D6BFE]"></i>
+<span id="report-date">2025年7月26日</span>
+</div>
+<div class="flex items-center text-gray-700">
+<i class="fas fa-clock mr-2 text-[#4D6BFE]"></i>
+<span>02:00 - 02:00（次日）</span>
+</div>
+</div>
+<!-- HTML注释: 新增历史日报链接，位置合理且样式协调 -->
+<div class="flex justify-center">
+<a class="history-link" href="#" id="history-link">
+<i class="fas fa-history"></i>
                             新茧历史日报
                         </a>
-                    </div>
-                </div>
-            </div>
-        </header>
-        <!-- === "新茧日报" 文件头区域 结束 === -->
-
-        <!-- HTML注释: 新增导航区域，包含"上一天"和"下一天"按钮 -->
-        <!-- HTML注释: 导航逻辑说明：
+</div>
+</div>
+</div>
+</header>
+<!-- === "新茧日报" 文件头区域 结束 === -->
+<!-- HTML注释: 新增导航区域，包含"上一天"和"下一天"按钮 -->
+<!-- HTML注释: 导航逻辑说明：
              1. 通过JavaScript检查前后日期的日报文件是否存在
              2. 根据当前页面日期确定前后日期
              3. "下一天"按钮动态显示逻辑：仅当不是最新日报时显示
              4. 兼容处理历史日报文件命名格式
         -->
-        <nav class="w-full mb-8">
-            <div class="bento-card p-4">
-                <div class="flex justify-between items-center">
-                    <button id="prev-day" class="nav-button">
-                        <i class="fas fa-chevron-left"></i>
+<nav class="w-full mb-8 daily-nav">
+<div class="bento-card p-4">
+<div class="flex justify-between items-center">
+<button class="nav-button day-nav-prev" type="button">
+<i class="fas fa-chevron-left"></i>
                         上一天
                     </button>
-                    
-                    <div class="text-center">
-                        <span class="text-sm text-gray-600">日报导航</span>
-                    </div>
-                    
-                    <button id="next-day" class="nav-button">
+<div class="text-center">
+<span class="text-sm text-gray-600">日报导航</span>
+</div>
+<button class="nav-button day-nav-next" type="button">
                         下一天
                         <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-        </nav>
-
-        <!-- === 模块一：总消息概览 开始 === -->
-        <!-- HTML注释: 此模块作为单独一行，占据整行宽度。显示当日群聊总消息数量。 -->
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+</button>
+</div>
+</div>
+</nav>
+<!-- === 模块一：总消息概览 开始 === -->
+<!-- HTML注释: 此模块作为单独一行，占据整行宽度。显示当日群聊总消息数量。 -->
+<section class="w-full mb-12 anchor-target" id="section-overview">
+<h2 class="section-title">
                 一、总消息概览
             </h2>
-            <div class="bento-card p-8 bg-gradient-to-br from-[#4D6BFE]/20 via-[#4D6BFE]/10 to-[#4D6BFE]/5 text-center rounded-2xl">
-                <div class="number-display text-[#4D6BFE]">
+<div class="bento-card p-8 bg-gradient-to-br from-[#4D6BFE]/20 via-[#4D6BFE]/10 to-[#4D6BFE]/5 text-center rounded-2xl">
+<div class="number-display text-[#4D6BFE]">
                     3501
                 </div>
-                <p class="text-xl font-semibold text-black mt-3">总消息数量</p>
-            </div>
-        </section>
-        <!-- === 模块一：总消息概览 结束 === -->
-
-        <!-- === 模块二：火花碰撞时刻・热点话题 开始 === -->
-        <!-- HTML注释: 此模块作为单独一行，占据整行宽度。用于展示群内讨论的热点话题。 -->
-        <!-- HTML注释: 模块二内容结构说明: -->
-        <!-- 1. 话题: 作为卡片的主标题 -->
-        <!-- 2. 关键结论: 每个话题下可以包含多个关键结论 (模板结构示例展示支持最多3个关键结论，如需更多可复制结构)；关键结论应按照话题讨论的时间线来编写。 -->
-        <!-- 3. **金句时刻**: 每个关键结论下对应约3个**金句时刻**金句必须是让人获得“啊哈”或恍然大悟的发言。 -->
-        <!-- HTML注释: "爬楼关键词"说明: 每个话题卡片中包含爬楼关键词区域，话题讨论起始句，用于用户快速定位到群聊记录中的对应讨论位置。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+<p class="text-xl font-semibold text-black mt-3">总消息数量</p>
+</div>
+</section>
+<!-- === 模块一：总消息概览 结束 === -->
+<!-- === 模块二：火花碰撞时刻・热点话题 开始 === -->
+<!-- HTML注释: 此模块作为单独一行，占据整行宽度。用于展示群内讨论的热点话题。 -->
+<!-- HTML注释: 模块二内容结构说明: -->
+<!-- 1. 话题: 作为卡片的主标题 -->
+<!-- 2. 关键结论: 每个话题下可以包含多个关键结论 (模板结构示例展示支持最多3个关键结论，如需更多可复制结构)；关键结论应按照话题讨论的时间线来编写。 -->
+<!-- 3. **金句时刻**: 每个关键结论下对应约3个**金句时刻**金句必须是让人获得“啊哈”或恍然大悟的发言。 -->
+<!-- HTML注释: "爬楼关键词"说明: 每个话题卡片中包含爬楼关键词区域，话题讨论起始句，用于用户快速定位到群聊记录中的对应讨论位置。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
+<section class="w-full mb-12 anchor-target" id="section-hot-topics">
+<h2 class="section-title">
                 二、火花碰撞时刻・热点话题
             </h2>
-            <!-- 列表容器: 讨论话题 -->
-            <div class="space-y-8">
-                <!-- 热点话题卡片 开始：《南京照相馆》深度解析 -->
-                <div class="bento-card p-6 rounded-xl">
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+<!-- 列表容器: 讨论话题 -->
+<div class="space-y-8">
+<!-- 热点话题卡片 开始：《南京照相馆》深度解析 -->
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             《南京照相馆》深度解析：一部真正的主旋律电影
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             15:16 - 21:51
                         </span>
-                    </div>
-
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                            INSULAR.12138：刚看完南京照相馆😭
                         </p>
-                    </div>
-
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">南京照相馆</span>
-                            <span class="tag-item">电影分析</span>
-                            <span class="tag-item">主旋律</span>
-                            <span class="tag-item">历史叙事</span>
-                            <span class="tag-item">阶级视角</span>
-                        </div>
-                    </div>
-
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、话题背景与起因</b><br>
-                                    由群友 <b>INSULAR.12138</b> 观影后的感慨引发，群内迅速掀起了对电影《南京照相馆》的深度讨论。成员们普遍认为这是一部近年来难得的优秀主旋律电影，其克制而深刻的叙事手法获得了高度评价。<br><br>
-                                    <b>二、主要观点与讨论详情</b><br>
-                                    群友们从多个角度对影片的细节和深层含义进行了挖掘，形成了一场高质量的影评交流。<br><br>
-                                    <b>1. 对日本侵略者内部矛盾的刻画：</b><br>
-                                    <b>AA昍</b> 提供了一段极为精彩的分析，他指出影片开创性地展现了日军内部的阶级斗争。例如，贵族出身的军官呵斥农民出身的下属“你一个农民出身敢打贵族”，以及最终对摄影师的处决方式，都深刻揭示了日军内部的阶级矛盾和工具人属性。<b>这一分析视角被群友广泛认可，认为是用敌人的逻辑来证伪敌人，手法极其高明。</b><br><br>
-                                    <b>2. 对日本人伪善与残暴的揭露：</b><br>
-                                    <b>柿子</b> 提到日本人切腹仪式需要“介错人”的虚伪性，电影中摄影师连划开肚子的勇气都没有，最终被长官一枪从背后击毙，死得毫无“武士道”尊严，极具讽刺意味。同时，群友们也讨论了影片中日军对“仁义礼智信”的歪曲解读，以及抚摸小狗却对遍地尸骸视而不见的伪善。<br><br>
-                                    <b>3. 汉奸角色的悲剧性：</b><br>
-                                    讨论中提到，王传君饰演的汉奸角色及其家人的悲惨结局，有力地证明了投降主义的破产。正如高叶饰演的歌女所言：“日本人是畜生啊！如果他们真的赢了，会把我们中国人当人吗？”<b>日军连自己的“贵族”都弃之如敝屣，更不可能善待被他们视为“狗”的汉奸。</b><br><br>
-                                    <b>4. 电影的艺术手法与象征意义：</b><br>
-                                    群友们对影片中的象征手法赞不绝口。例如，摄影师被“显影液”泼面毁容，被解读为“照妖镜”，使其鬼子本性显现。而日本军官强迫中国人拆解南京城墙的砖石去建造所谓的“八纮一宇塔”，其文化侵略和精神压迫的歹毒用心也被深入探讨。<br><br>
-                                    <b>四、结论与启发</b><br>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">南京照相馆</span>
+<span class="tag-item">电影分析</span>
+<span class="tag-item">主旋律</span>
+<span class="tag-item">历史叙事</span>
+<span class="tag-item">阶级视角</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、话题背景与起因</b><br/>
+                                    由群友 <b>INSULAR.12138</b> 观影后的感慨引发，群内迅速掀起了对电影《南京照相馆》的深度讨论。成员们普遍认为这是一部近年来难得的优秀主旋律电影，其克制而深刻的叙事手法获得了高度评价。<br/><br/>
+<b>二、主要观点与讨论详情</b><br/>
+                                    群友们从多个角度对影片的细节和深层含义进行了挖掘，形成了一场高质量的影评交流。<br/><br/>
+<b>1. 对日本侵略者内部矛盾的刻画：</b><br/>
+<b>AA昍</b> 提供了一段极为精彩的分析，他指出影片开创性地展现了日军内部的阶级斗争。例如，贵族出身的军官呵斥农民出身的下属“你一个农民出身敢打贵族”，以及最终对摄影师的处决方式，都深刻揭示了日军内部的阶级矛盾和工具人属性。<b>这一分析视角被群友广泛认可，认为是用敌人的逻辑来证伪敌人，手法极其高明。</b><br/><br/>
+<b>2. 对日本人伪善与残暴的揭露：</b><br/>
+<b>柿子</b> 提到日本人切腹仪式需要“介错人”的虚伪性，电影中摄影师连划开肚子的勇气都没有，最终被长官一枪从背后击毙，死得毫无“武士道”尊严，极具讽刺意味。同时，群友们也讨论了影片中日军对“仁义礼智信”的歪曲解读，以及抚摸小狗却对遍地尸骸视而不见的伪善。<br/><br/>
+<b>3. 汉奸角色的悲剧性：</b><br/>
+                                    讨论中提到，王传君饰演的汉奸角色及其家人的悲惨结局，有力地证明了投降主义的破产。正如高叶饰演的歌女所言：“日本人是畜生啊！如果他们真的赢了，会把我们中国人当人吗？”<b>日军连自己的“贵族”都弃之如敝屣，更不可能善待被他们视为“狗”的汉奸。</b><br/><br/>
+<b>4. 电影的艺术手法与象征意义：</b><br/>
+                                    群友们对影片中的象征手法赞不绝口。例如，摄影师被“显影液”泼面毁容，被解读为“照妖镜”，使其鬼子本性显现。而日本军官强迫中国人拆解南京城墙的砖石去建造所谓的“八纮一宇塔”，其文化侵略和精神压迫的歹毒用心也被深入探讨。<br/><br/>
+<b>四、结论与启发</b><br/>
                                     群友一致认为，《南京照相馆》的成功在于其扎实的剧本、克制的镜头语言和深刻的历史洞察。它不再是脸谱化地描绘敌人，而是深入敌人内部，用阶级分析和人性剖析的方式，揭示了侵略战争的荒谬与残酷。这部电影的出现，被视为中国文艺界的一次觉醒，为如何讲述中国故事、拍好主旋律电影提供了新的范本。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             影片通过揭示日军内部的阶级矛盾，深刻地解构了侵略者的虚伪本质，证明了投降主义的彻底失败。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 伟大的革命一旦成功，就会让革命的原因消失，进而让革命本身变得不可理解。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>不AABBCDD也能起来</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 你都要切了，为什么还要介错人呢，横竖都要死。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>柿子</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 用敌人的理论来证伪敌人，这也是近几十年的所有此类作品都没有做到过的，也是开创性的，非常牛逼。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>AA昍</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- 热点话题卡片 结束 -->
-
-                <!-- 热点话题卡片 开始：职场困境 -->
-                <div class="bento-card p-6 rounded-xl">
-                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
-                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 热点话题卡片 结束 -->
+<!-- 热点话题卡片 开始：职场困境 -->
+<div class="bento-card p-6 rounded-xl">
+<div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+<h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
                             职场困境求助：如何与“健忘又黏人”的领导相处？
                         </h4>
-                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
-                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+<span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+<i class="fas fa-clock mr-1.5 text-gray-500"></i>
                             17:02 - 17:50
                         </span>
-                    </div>
-
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             kiki：我最近有点拿捏不好和直属领导相处的度…
                         </p>
-                    </div>
-
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">职场关系</span>
-                            <span class="tag-item">向上管理</span>
-                            <span class="tag-item">情绪管理</span>
-                            <span class="tag-item">工作SOP</span>
-                            <span class="tag-item">职业发展</span>
-                        </div>
-                    </div>
-
-                    <div class="mb-5">
-                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
-                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、话题背景与起因</b><br>
-                                    群友 <b>kiki</b> 详细描述了她在工作中的困境：直属领导健忘、有阅读障碍，导致反复确认工作；职责划分模糊，常让她承担额外的沟通和监督责任；领导还会通过“姐妹情谊”和“共同敌人”等方式进行情感操纵。这些问题导致 <b>kiki</b> 产生了严重的负面情绪和工作倦怠感，并向群友求助。<br><br>
-                                    <b>二、主要观点与讨论详情</b><br>
-                                    群友们迅速响应，从心态、策略和职业规划等多个层面给出了富有建设性的建议。<br><br>
-                                    <b>1. 心态调整与角色认知：</b><br>
-                                    <b>qiqi</b> 和 <b>桃乐丝</b> 指出，<b>kiki</b> 的问题根源在于情绪先行，被“拿一样多的钱，干更多的活”的心态所困。他们提醒，领导就是领导，工作安排本身就是其职责，不应过多代入个人情绪。<b>豆浆大法师</b> 则从阶级视角分析，指出领导与下属在完成工作这件事上目标天然不一致，领导追求成果最大化，而执行层追求效率，因此将领导视为“钱包”而非“姐妹”是更健康的心态。<br><br>
-                                    <b>2. 策略应对与向上管理：</b><br>
-                                    <b>AA昍</b> 提出了具体的向上管理策略。他建议，对于需求多变的领导，应预判其变化并准备多套方案，主动沟通可能性，将“被动接活”转变为“引导领导如何安排活”。对于职责模糊的问题，他认为这恰恰是成为“事实上的小领导”的机会，可以借机掌握工作安排的主动权，架空领导。<br><br>
-                                    <b>3. 识别机会与职业规划：</b><br>
-                                    <b>豆浆大法师</b> 和 <b>qiqi</b> 敏锐地指出，领导让 <b>kiki</b> 对接和汇报其他同事的工作，实际上是一种提拔的信号，是将其置于“半个领导”的位置。<b>kiki</b> 的第一反应是抗拒，这可能错失了职业发展的机会。他们建议 <b>kiki</b> 抓住这个机会，主动承担更多责任，并适时开口要求升职加薪。<br><br>
-                                    <b>4. 建立流程与规范：</b><br>
-                                    <b>举糕糕</b> 建议，针对团队工作流程混乱的问题，应主动推动建立SOP（标准作业程序），通过开会讨论、明确职责，从根本上解决沟通冗余和职责模糊的问题。<br><br>
-                                    <b>四、结论与启发</b><br>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">职场关系</span>
+<span class="tag-item">向上管理</span>
+<span class="tag-item">情绪管理</span>
+<span class="tag-item">工作SOP</span>
+<span class="tag-item">职业发展</span>
+</div>
+</div>
+<div class="mb-5">
+<p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+<div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、话题背景与起因</b><br/>
+                                    群友 <b>kiki</b> 详细描述了她在工作中的困境：直属领导健忘、有阅读障碍，导致反复确认工作；职责划分模糊，常让她承担额外的沟通和监督责任；领导还会通过“姐妹情谊”和“共同敌人”等方式进行情感操纵。这些问题导致 <b>kiki</b> 产生了严重的负面情绪和工作倦怠感，并向群友求助。<br/><br/>
+<b>二、主要观点与讨论详情</b><br/>
+                                    群友们迅速响应，从心态、策略和职业规划等多个层面给出了富有建设性的建议。<br/><br/>
+<b>1. 心态调整与角色认知：</b><br/>
+<b>qiqi</b> 和 <b>桃乐丝</b> 指出，<b>kiki</b> 的问题根源在于情绪先行，被“拿一样多的钱，干更多的活”的心态所困。他们提醒，领导就是领导，工作安排本身就是其职责，不应过多代入个人情绪。<b>豆浆大法师</b> 则从阶级视角分析，指出领导与下属在完成工作这件事上目标天然不一致，领导追求成果最大化，而执行层追求效率，因此将领导视为“钱包”而非“姐妹”是更健康的心态。<br/><br/>
+<b>2. 策略应对与向上管理：</b><br/>
+<b>AA昍</b> 提出了具体的向上管理策略。他建议，对于需求多变的领导，应预判其变化并准备多套方案，主动沟通可能性，将“被动接活”转变为“引导领导如何安排活”。对于职责模糊的问题，他认为这恰恰是成为“事实上的小领导”的机会，可以借机掌握工作安排的主动权，架空领导。<br/><br/>
+<b>3. 识别机会与职业规划：</b><br/>
+<b>豆浆大法师</b> 和 <b>qiqi</b> 敏锐地指出，领导让 <b>kiki</b> 对接和汇报其他同事的工作，实际上是一种提拔的信号，是将其置于“半个领导”的位置。<b>kiki</b> 的第一反应是抗拒，这可能错失了职业发展的机会。他们建议 <b>kiki</b> 抓住这个机会，主动承担更多责任，并适时开口要求升职加薪。<br/><br/>
+<b>4. 建立流程与规范：</b><br/>
+<b>举糕糕</b> 建议，针对团队工作流程混乱的问题，应主动推动建立SOP（标准作业程序），通过开会讨论、明确职责，从根本上解决沟通冗余和职责模糊的问题。<br/><br/>
+<b>四、结论与启发</b><br/>
                                     这场讨论为面临相似职场困境的群友提供了宝贵的思路。核心结论是：面对职场中的不公和混乱，与其陷入情绪内耗，不如转换视角，将挑战视为机遇。通过积极的心态调整、主动的向上管理和清晰的职业规划，可以将看似不利的局面转化为个人成长的阶梯。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
-                        <div class="space-y-6">
-                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                <div class="mb-4">
-                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
-                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
-                                        <p class="text-black text-base">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+<div class="space-y-6">
+<div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+<div class="mb-4">
+<h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+<div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+<p class="text-black text-base">
                                             在职场中，应警惕领导的情感操纵，将挑战视为成长机会，通过向上管理和主动建立流程来掌握工作主动权。
                                         </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
-                                    <div class="space-y-2">
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</div>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+<div class="space-y-2">
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 不是领导给我安排活，是我给领导安排怎么给我安排活。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>AA昍</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 领导是不太可能做朋友的~朋友之间如果能有上下级关系，只有一种，那就是父子：叫爸爸。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>豆浆大法师</b>
-                                            </p>
-                                        </div>
-                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
-                                            <p class="text-gray-800 italic text-sm">
+</p>
+</div>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+<p class="text-gray-800 italic text-sm">
                                                 心理上摆正位置，制度上落实流程。
                                             </p>
-                                            <p class="text-gray-600 text-xs mt-1 self-end">
+<p class="text-gray-600 text-xs mt-1 self-end">
                                                 - <b>桃乐丝</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- 热点话题卡片 结束 -->
-            </div>
-            <!-- 列表容器结束: 讨论话题 -->
-        </section>
-        <!-- === 模块二：火花碰撞时刻・热点话题 结束 === -->
-
-        <!-- === 模块三：解惑一点通・有问必答 开始 === -->
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 热点话题卡片 结束 -->
+</div>
+<!-- 列表容器结束: 讨论话题 -->
+</section>
+<!-- === 模块二：火花碰撞时刻・热点话题 结束 === -->
+<!-- === 模块三：解惑一点通・有问必答 开始 === -->
+<section class="w-full mb-12 anchor-target" id="section-qa">
+<h2 class="section-title">
                 三、解惑一点通・有问必答
             </h2>
-            <div class="space-y-8">
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
-                    <div class="mb-4">
-                        <h4 class="text-xl font-semibold text-black flex items-center">
-                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+<div class="space-y-8">
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<div class="mb-4">
+<h4 class="text-xl font-semibold text-black flex items-center">
+<i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
                             近期赴广州旅行，如何防范基孔肯雅热？
                         </h4>
-                    </div>
-
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+</div>
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             糯米：问个问题。 9. 广东佛山基孔肯雅热累计确诊超4000例...
                         </p>
-                    </div>
-
-                    <div class="border-t border-gray-200 pt-4">
-                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
-                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+</div>
+<div class="border-t border-gray-200 pt-4">
+<h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+<i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
                             解答
                         </h5>
-                        <div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
-                            <div class="expandable-content" data-char-limit="200">
-                                <div class="content-preview">
-                                    <b>一、问题背景</b><br>
-                                    群友 <b>糯米</b> 看到新闻“广东佛山基孔肯雅热累计确诊超4000例”，因其儿子下周要去广州游玩，故向群内广东地区的成员询问当地情况及防护建议。<br><br>
-                                    <b>二、核心原因分析</b><br>
-                                    基孔肯雅热是通过蚊子叮咬传播的急性传染病。近期广东地区天气湿热，蚊虫滋生，导致疫情在部分地区集中爆发。群友们指出，目前疫情主要集中在佛山，广州虽有零星病例但情况相对较好。<br><br>
-                                    <b>三、解决方案与建议</b><br>
-                                    群内多位成员提供了实用且高效的防蚊建议，核心是做好个人防护：<br>
-                                    1. <b>常规防护：</b> <b>为中华崛起运动喵</b> 强调，最关键的是<b>防蚊</b>，建议随身携带防蚊喷雾。<br>
-                                    2. <b>土法高效配方：</b> <b>柿子</b> 分享了一个简易又强效的“邪招”——将<b>风油精</b>倒入驱蚊花露水中摇匀后喷洒。他强调这个方法方便、省钱且效果显著。<br>
-                                    3. <b>成分选择：</b> <b>为中华崛起运动喵</b> 补充提到，含有<b>避蚊胺</b>成分的驱蚊产品效果也很好。<br><br>
+<div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、问题背景</b><br/>
+                                    群友 <b>糯米</b> 看到新闻“广东佛山基孔肯雅热累计确诊超4000例”，因其儿子下周要去广州游玩，故向群内广东地区的成员询问当地情况及防护建议。<br/><br/>
+<b>二、核心原因分析</b><br/>
+                                    基孔肯雅热是通过蚊子叮咬传播的急性传染病。近期广东地区天气湿热，蚊虫滋生，导致疫情在部分地区集中爆发。群友们指出，目前疫情主要集中在佛山，广州虽有零星病例但情况相对较好。<br/><br/>
+<b>三、解决方案与建议</b><br/>
+                                    群内多位成员提供了实用且高效的防蚊建议，核心是做好个人防护：<br/>
+                                    1. <b>常规防护：</b> <b>为中华崛起运动喵</b> 强调，最关键的是<b>防蚊</b>，建议随身携带防蚊喷雾。<br/>
+                                    2. <b>土法高效配方：</b> <b>柿子</b> 分享了一个简易又强效的“邪招”——将<b>风油精</b>倒入驱蚊花露水中摇匀后喷洒。他强调这个方法方便、省钱且效果显著。<br/>
+                                    3. <b>成分选择：</b> <b>为中华崛起运动喵</b> 补充提到，含有<b>避蚊胺</b>成分的驱蚊产品效果也很好。<br/><br/>
                                     总结来说，前往广州旅行无需过度恐慌，但务必做好全面的防蚊措施，尤其是在户外活动时。
                                 </div>
-                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                    <span class="expand-text">展开全文</span>
-                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-5 pt-4 border-t border-gray-200">
-                        <div class="flex flex-wrap gap-2">
-                            <span class="tag-item">健康防护</span>
-                            <span class="tag-item">旅游安全</span>
-                            <span class="tag-item">基孔肯雅热</span>
-                            <span class="tag-item">防蚊技巧</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- === 模块三：解惑一点通・有问必答 结束 === -->
-
-        <!-- === 模块四：智慧火花匣・每日精选 开始 === -->
-        <section class="w-full mb-12">
-            <h2 class="section-title">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-5 pt-4 border-t border-gray-200">
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">健康防护</span>
+<span class="tag-item">旅游安全</span>
+<span class="tag-item">基孔肯雅热</span>
+<span class="tag-item">防蚊技巧</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- === 模块三：解惑一点通・有问必答 结束 === -->
+<!-- === 模块四：智慧火花匣・每日精选 开始 === -->
+<section class="w-full mb-12 anchor-target" id="section-daily-picks">
+<h2 class="section-title">
                 四、智慧火花匣・每日精选
             </h2>
-            <div class="space-y-8">
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
-                    <h4 class="text-xl font-semibold text-black mb-3">
+<div class="space-y-8">
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<h4 class="text-xl font-semibold text-black mb-3">
                         行家指南：如何吃好一顿潮汕牛肉火锅
                     </h4>
-
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             可有可吴工头：宇哥，八合里最近出品好不稳定啊，忠实粉丝已经受不了了，我都开始吃潮发了
                         </p>
-                    </div>
-
-                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
-                        <div class="expandable-content" data-char-limit="200">
-                            <div class="content-preview">
-                                <b>一、推荐内容</b><br>
-                                针对潮汕牛肉火锅连锁店品质不稳定的问题，群友 <b>宇世无争</b> 分享了一套从选店、烹饪到蘸料的专业吃法，旨在帮助大家体验到最正宗的牛肉风味。<br><br>
-                                <b>二、核心价值与特点</b><br>
-                                1. <b>选店秘诀：</b> <b>宇世无争</b> 建议避开连锁店，优先选择<b>“肉能按斤卖的”</b>小店，这类店铺通常品质更有保障。他推荐了深圳八卦岭附近的<b>“汕头阿彬牛肉火锅”</b>。<br><br>
-                                2. <b>科学涮肉法：</b> 他分享了详尽的物理化学原理，指出持续沸腾的100℃水会使肉类蛋白质过度变性、水分流失导致口感变柴。<b>最佳涮肉水温应为90-95℃的微沸状态</b>，这样能温和加热，减少细胞破坏，保留更多肉汁，从而获得最嫩的口感。<br><br>
-                                3. <b>蘸料哲学：</b> 他极力推荐<b>酱油/海鲜汁 + 小米辣</b>的简单组合，认为这最能凸显牛肉本身的鲜香。对于广受欢迎的沙茶酱，他给出了一个绝妙的比喻——<b>“就跟唢呐似的”</b>，形容其味道过于霸道，会掩盖所有食材的原味，甚至“吃鞋底也是那个味儿”。<br><br>
-                                <b>三、适用场景或补充信息</b><br>
+</div>
+<div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、推荐内容</b><br/>
+                                针对潮汕牛肉火锅连锁店品质不稳定的问题，群友 <b>宇世无争</b> 分享了一套从选店、烹饪到蘸料的专业吃法，旨在帮助大家体验到最正宗的牛肉风味。<br/><br/>
+<b>二、核心价值与特点</b><br/>
+                                1. <b>选店秘诀：</b> <b>宇世无争</b> 建议避开连锁店，优先选择<b>“肉能按斤卖的”</b>小店，这类店铺通常品质更有保障。他推荐了深圳八卦岭附近的<b>“汕头阿彬牛肉火锅”</b>。<br/><br/>
+                                2. <b>科学涮肉法：</b> 他分享了详尽的物理化学原理，指出持续沸腾的100℃水会使肉类蛋白质过度变性、水分流失导致口感变柴。<b>最佳涮肉水温应为90-95℃的微沸状态</b>，这样能温和加热，减少细胞破坏，保留更多肉汁，从而获得最嫩的口感。<br/><br/>
+                                3. <b>蘸料哲学：</b> 他极力推荐<b>酱油/海鲜汁 + 小米辣</b>的简单组合，认为这最能凸显牛肉本身的鲜香。对于广受欢迎的沙茶酱，他给出了一个绝妙的比喻——<b>“就跟唢呐似的”</b>，形容其味道过于霸道，会掩盖所有食材的原味，甚至“吃鞋底也是那个味儿”。<br/><br/>
+<b>三、适用场景或补充信息</b><br/>
                                 这套方法适用于所有追求极致美食体验的食客，尤其是在品尝高品质食材时，更能体会到其中精髓。无论是家庭聚餐还是朋友小酌，掌握这些技巧都能显著提升火锅的美味等级。
                             </div>
-                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                <span class="expand-text">展开全文</span>
-                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="tag-item">美食</span>
-                        <span class="tag-item">潮汕牛肉火锅</span>
-                        <span class="tag-item">烹饪技巧</span>
-                        <span class="tag-item">餐厅推荐</span>
-                    </div>
-                    <div class="flex justify-end">
-                        <a href="https://m.dianping.com/shopshare/k4td5mjzkLRy7a8w?msource=Appshare2021&utm_source=shop_share&shoptype=10&shopcategoryid=210&cityid=7&isoversea=0&shareid=tCnF9sg5Pj_1753492981895" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-[#4D6BFE] hover:text-blue-700 hover:underline flex items-center">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="tag-item">美食</span>
+<span class="tag-item">潮汕牛肉火锅</span>
+<span class="tag-item">烹饪技巧</span>
+<span class="tag-item">餐厅推荐</span>
+</div>
+<div class="flex justify-end">
+<a class="text-sm font-medium text-[#4D6BFE] hover:text-blue-700 hover:underline flex items-center" href="https://m.dianping.com/shopshare/k4td5mjzkLRy7a8w?msource=Appshare2021&amp;utm_source=shop_share&amp;shoptype=10&amp;shopcategoryid=210&amp;cityid=7&amp;isoversea=0&amp;shareid=tCnF9sg5Pj_1753492981895" rel="noopener noreferrer" target="_blank">
                             推荐店铺链接
                             <i class="fas fa-external-link-alt ml-1.5 text-xs"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
-                    <h4 class="text-xl font-semibold text-black mb-3">
+</a>
+</div>
+</div>
+<div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+<h4 class="text-xl font-semibold text-black mb-3">
                         云南旅居参考：酒店选择与消费体感分享
                     </h4>
-
-                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
-                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
-                        <p class="text-sm text-purple-600 italic">
+<div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+<p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+<p class="text-sm text-purple-600 italic">
                             柿子：我本来能来大理的
                         </p>
-                    </div>
-
-                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
-                        <div class="expandable-content" data-char-limit="200">
-                            <div class="content-preview">
-                                <b>一、推荐内容</b><br>
-                                群友 <b>柿子</b> 和 <b>土豆</b> 等人就云南的旅行和旅居展开了讨论，分享了关于住宿选择、消费水平和购房的实用信息。<br><br>
-                                <b>二、核心价值与特点</b><br>
-                                1. <b>住宿选择核心：</b>对于不爱逛景点的“酒店躺平式”旅行，<b>柿子</b> 和 <b>良猫</b> 达成共识：<b>住宿地点的风景必须顶级</b>，能够提供让人放松发呆的自然风光。<b>柿子</b> 推荐了腾冲的<b>“月泊半山”</b>酒店，称其“风景顶级服务好，有私汤”，且是真正的地热温泉。<br><br>
-                                2. <b>消费水平对比：</b>根据群友们的经验，<b>腾冲的消费高于大理</b>。<b>柿子</b> 表示在大理感觉很亲切，而在腾冲则有被“宰”的感觉。<b>土豆</b> 补充，大理的房价已从高点回落，目前海景房价格约在8000元/平米，而城中村的月租金最低可至500元，风景好的地方月租约2000元，这让大理成为一个有吸引力的旅居和养老选择。<br><br>
-                                3. <b>旅行方式：</b>在大理，<b>包一辆商务车并配有司机兼导游</b>是一种便捷的旅行方式。<b>柿子</b> 分享了他遇到的靠谱司机，不仅价格实惠（约200元/天），还能带去地道便宜的餐馆和村寨购买雪花银。<br><br>
-                                <b>三、注意事项</b><br>
-                                <b>土豆</b> 提醒，在大理古城购买银器和玉石需谨慎，假货较多，不建议游客购买。包车导游的服务水平参差不齐，遇到好的司机需要运气。
+</div>
+<div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+<div class="expandable-content" data-char-limit="200">
+<div class="content-preview">
+<b>一、推荐内容</b><br/>
+                                群友 <b>柿子</b> 和 <b>土豆</b> 等人就云南的旅行和旅居展开了讨论，分享了关于住宿选择、消费水平和购房的实用信息。<br/><br/>
+<b>二、核心价值与特点</b><br/>
+                                1. <b>住宿选择核心：</b>对于不爱逛景点的“酒店躺平式”旅行，<b>柿子</b> 和 <b>良猫</b> 达成共识：<b>住宿地点的风景必须顶级</b>，能够提供让人放松发呆的自然风光。<b>柿子</b> 推荐了腾冲的<b>“月泊半山”</b>酒店，称其“风景顶级服务好，有私汤”，且是真正的地热温泉。<br/><br/>
+                                2. <b>消费水平对比：</b>根据群友们的经验，<b>腾冲的消费高于大理</b>。<b>柿子</b> 表示在大理感觉很亲切，而在腾冲则有被“宰”的感觉。<b>土豆</b> 补充，大理的房价已从高点回落，目前海景房价格约在8000元/平米，而城中村的月租金最低可至500元，风景好的地方月租约2000元，这让大理成为一个有吸引力的旅居和养老选择。<br/><br/>
+                                3. <b>旅行方式：</b>在大理，<b>包一辆商务车并配有司机兼导游</b>是一种便捷的旅行方式。<b>柿子</b> 分享了他遇到的靠谱司机，不仅价格实惠（约200元/天），还能带去地道便宜的餐馆和村寨购买雪花银。<br/><br/>
+<b>三、注意事项</b><br/>
+<b>土豆</b> 提醒，在大理古城购买银器和玉石需谨慎，假货较多，不建议游客购买。包车导游的服务水平参差不齐，遇到好的司机需要运气。
                             </div>
-                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
-                                <span class="expand-text">展开全文</span>
-                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="tag-item">旅游</span>
-                        <span class="tag-item">云南</span>
-                        <span class="tag-item">大理</span>
-                        <span class="tag-item">酒店推荐</span>
-                        <span class="tag-item">旅居</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- === 模块四：智慧火花匣・每日精选 结束 === -->
-
-        <!-- === 文件底部 开始 === -->
-        <!-- HTML注释: 此模块作为文件底部，包含数据来源、报告生成时间及免责声明。 -->
-        <footer class="w-full mt-16">
-            <div class="bento-card p-8">
-                <div class="text-center text-gray-700 space-y-3">
-                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-base">
-                        <div class="flex items-center">
-                            <i class="fas fa-database mr-2 text-[#4D6BFE]"></i>
-                            <span>微信群聊记录</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-robot mr-2 text-[#4D6BFE]"></i>
-                            <span>2025-07-27 03:00:00</span>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-500 max-w-2xl mx-auto leading-relaxed">
+<button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+<span class="expand-text">展开全文</span>
+<i class="fas fa-chevron-down ml-1 expand-icon"></i>
+</button>
+</div>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="tag-item">旅游</span>
+<span class="tag-item">云南</span>
+<span class="tag-item">大理</span>
+<span class="tag-item">酒店推荐</span>
+<span class="tag-item">旅居</span>
+</div>
+</div>
+</div>
+</section>
+<!-- === 模块四：智慧火花匣・每日精选 结束 === -->
+<!-- === 文件底部 开始 === -->
+<!-- HTML注释: 此模块作为文件底部，包含数据来源、报告生成时间及免责声明。 -->
+<nav class="w-full mt-12 daily-nav">
+<div class="bento-card p-4">
+<div class="flex justify-between items-center">
+<button class="nav-button day-nav-prev" type="button">
+<i class="fas fa-chevron-left"></i>
+                        上一天
+                    </button>
+<div class="text-center">
+<span class="text-sm text-gray-600">日报导航</span>
+</div>
+<button class="nav-button day-nav-next" type="button">
+                        下一天
+                        <i class="fas fa-chevron-right"></i>
+</button>
+</div>
+</div>
+</nav><footer class="w-full mt-16">
+<div class="bento-card p-8">
+<div class="text-center text-gray-700 space-y-3">
+<div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-base">
+<div class="flex items-center">
+<i class="fas fa-database mr-2 text-[#4D6BFE]"></i>
+<span>微信群聊记录</span>
+</div>
+<div class="flex items-center">
+<i class="fas fa-robot mr-2 text-[#4D6BFE]"></i>
+<span>2025-07-27 03:00:00</span>
+</div>
+</div>
+<p class="text-sm text-gray-500 max-w-2xl mx-auto leading-relaxed">
                         本报告基于群聊数据自动生成，仅供参考。内容可能包含个人观点，不代表群组官方立场。数据处理过程中已尽量匿名化处理敏感信息。
                     </p>
-                </div>
-            </div>
-        </footer>
-        <!-- === 文件底部 结束 === -->
-    </div>
-
-    <script>
-        // HTML注释: 定义基础URL常量
-        const BASE_URL = 'https://xinjian-bot.github.io/-/';
+</div>
+</div>
+</footer>
+<!-- === 文件底部 结束 === -->
+</div><div aria-label="页面快捷操作" class="floating-actions">
+<div class="directory-wrapper">
+<button aria-controls="directory-panel" aria-expanded="false" aria-label="打开内容导航" class="floating-button" id="directory-toggle" type="button">
+<i class="fas fa-list-ul"></i>
+</button>
+<div aria-hidden="true" aria-modal="false" class="directory-panel" id="directory-panel" role="dialog">
+<div class="directory-header">
+<span class="directory-title">内容导航</span>
+<button aria-label="关闭内容导航" class="directory-close" id="directory-close" type="button">
+<i class="fas fa-times"></i>
+</button>
+</div>
+<div class="directory-list" id="directory-list">
+<!-- HTML注释: 目录列表由脚本自动填充，确保多层级锚点保持同步 -->
+</div>
+</div>
+</div>
+<button aria-label="返回顶部" class="floating-button floating-button--hidden" id="scroll-top-btn" type="button">
+<i class="fas fa-arrow-up"></i>
+</button>
+</div>
+<script>
+        // 定义基础URL常量
+        const BASE_URL = 'https://xinjian-bot.github.io/-';
         
         document.addEventListener('DOMContentLoaded', function() {
             // Bento card hover effect is handled by CSS :hover pseudo-class
@@ -676,11 +894,14 @@
 
             // HTML注释: 初始化展开功能
             initExpandableContent();
+
+            // HTML注释: 初始化浮动按钮与目录互动
+            initFloatingActions();
             
-            // HTML注释: 设置历史日报链接
+            // 初始化历史汇总链接
             const historyLink = document.getElementById('history-link');
             if (historyLink) {
-                historyLink.href = BASE_URL + '新茧历史日报汇总.html';
+                historyLink.href = BASE_URL + '/新茧历史日报汇总.html';
             }
         });
 
@@ -741,9 +962,13 @@
         // HTML注释: 设置导航按钮的状态和链接
          // HTML注释: 根据当前日期，检查前后日期的日报文件是否存在
          async function setupNavigationButtons(currentDate) {
-             const prevButton = document.getElementById('prev-day');
-             const nextButton = document.getElementById('next-day');
-             const navContainer = document.querySelector('nav');
+             const prevButtons = document.querySelectorAll('.day-nav-prev');
+             const nextButtons = document.querySelectorAll('.day-nav-next');
+             const navContainers = document.querySelectorAll('.daily-nav');
+
+             if (!prevButtons.length && !nextButtons.length) {
+                 return;
+             }
              
              // HTML注释: 计算前一天和后一天的日期
              const currentDateObj = new Date(currentDate);
@@ -759,43 +984,50 @@
              const prevExists = await checkReportExists(prevDate);
              const nextExists = await checkReportExists(nextDate);
              
-             // HTML注释: 如果前后日期的日报都不存在，隐藏整个导航栏容器
+             // HTML注释: 如果前后日期的日报都不存在，隐藏所有导航栏容器
              if (!prevExists && !nextExists) {
-                 navContainer.style.display = 'none';
+                 navContainers.forEach(container => {
+                     container.style.display = 'none';
+                 });
                  return;
              }
              
-             // HTML注释: 显示导航栏容器
-             navContainer.style.display = 'block';
+             // HTML注释: 显示所有导航栏容器
+             navContainers.forEach(container => {
+                 container.style.display = 'block';
+             });
              
              // HTML注释: 设置前一天按钮
-             if (prevExists) {
-                 prevButton.onclick = () => {
-                     window.location.href = BASE_URL + `新茧群日报_${prevDate}.html`;
-                 };
-                 prevButton.disabled = false;
-             } else {
-                 prevButton.disabled = true;
-                 prevButton.onclick = null;
-             }
+             prevButtons.forEach(button => {
+                 if (prevExists) {
+                     button.disabled = false;
+                     button.onclick = () => {
+                         window.location.href = `${BASE_URL}/新茧群日报_${prevDate}.html`;
+                     };
+                 } else {
+                     button.disabled = true;
+                     button.onclick = null;
+                 }
+             });
 
              // HTML注释: 设置后一天按钮
-             if (nextExists) {
-                 nextButton.onclick = () => {
-                     window.location.href = BASE_URL + `新茧群日报_${nextDate}.html`;
-                 };
-                 nextButton.disabled = false;
-             } else {
-                 // HTML注释: 后一天的日报不存在，禁用"下一天"按钮
-                 nextButton.disabled = true;
-                 nextButton.onclick = null;
-             }
+             nextButtons.forEach(button => {
+                 if (nextExists) {
+                     button.disabled = false;
+                     button.onclick = () => {
+                         window.location.href = `${BASE_URL}/新茧群日报_${nextDate}.html`;
+                     };
+                 } else {
+                     button.disabled = true;
+                     button.onclick = null;
+                 }
+             });
          }
 
         // HTML注释: 检查指定日期的日报文件是否存在
         async function checkReportExists(date) {
             try {
-                const response = await fetch(BASE_URL + `新茧群日报_${date}.html`, { method: 'HEAD' });
+                const response = await fetch(`${BASE_URL}/新茧群日报_${date}.html`, { method: 'HEAD' });
                 return response.ok;
             } catch (error) {
                 return false;
@@ -903,6 +1135,167 @@
                 } else {
                     // HTML注释: 内容较短，隐藏展开按钮
                     expandBtn.style.display = 'none';
+                }
+            });
+        }
+
+        // HTML注释: 构建目录，统一扫描模块及其子卡片生成锚点
+        function buildDirectory(panelElement) {
+            const listElement = panelElement.querySelector('#directory-list');
+            if (!listElement) {
+                return;
+            }
+
+            listElement.innerHTML = '';
+
+            const directoryConfigs = [
+                { id: 'section-overview', icon: 'fa-chart-column' },
+                { id: 'section-hot-topics', icon: 'fa-fire' },
+                { id: 'section-meeting', icon: 'fa-users' },
+                { id: 'section-qa', icon: 'fa-circle-question' },
+                { id: 'section-daily-picks', icon: 'fa-lightbulb' }
+            ];
+
+            directoryConfigs.forEach((config) => {
+                const sectionElement = document.getElementById(config.id);
+                if (!sectionElement) {
+                    return;
+                }
+
+                const sectionTitleElement = sectionElement.querySelector('.section-title');
+                const sectionTitle = sectionTitleElement ? sectionTitleElement.textContent.trim() : config.id;
+
+                const itemWrapper = document.createElement('div');
+                itemWrapper.className = 'directory-item';
+
+                const entryButton = document.createElement('button');
+                entryButton.type = 'button';
+                entryButton.className = 'directory-entry';
+                entryButton.setAttribute('data-target', config.id);
+                entryButton.innerHTML = `<span class="directory-icon"><i class="fas ${config.icon}"></i></span><span class="directory-text">${sectionTitle}</span>`;
+                itemWrapper.appendChild(entryButton);
+
+                const subHeadings = sectionElement.querySelectorAll('.bento-card h4');
+                if (subHeadings.length > 0) {
+                    const sublistElement = document.createElement('div');
+                    sublistElement.className = 'directory-sublist';
+
+                    subHeadings.forEach((heading, index) => {
+                        const cardElement = heading.closest('.bento-card');
+                        if (!cardElement) {
+                            return;
+                        }
+
+                        if (!cardElement.classList.contains('anchor-target')) {
+                            cardElement.classList.add('anchor-target');
+                        }
+
+                        if (!cardElement.id) {
+                            cardElement.id = `${config.id}-item-${index + 1}`;
+                        }
+
+                        const subButton = document.createElement('button');
+                        subButton.type = 'button';
+                        subButton.className = 'directory-subitem';
+                        subButton.setAttribute('data-target', cardElement.id);
+                        subButton.innerHTML = `<span class="directory-text">${heading.textContent.trim()}</span>`;
+                        sublistElement.appendChild(subButton);
+                    });
+
+                    itemWrapper.appendChild(sublistElement);
+                }
+
+                listElement.appendChild(itemWrapper);
+            });
+        }
+
+        // HTML注释: 初始化浮动按钮与目录交互
+        function initFloatingActions() {
+            const scrollTopBtn = document.getElementById('scroll-top-btn');
+            const directoryToggle = document.getElementById('directory-toggle');
+            const directoryPanel = document.getElementById('directory-panel');
+            const directoryClose = document.getElementById('directory-close');
+
+            if (scrollTopBtn) {
+                const toggleScrollButton = () => {
+                    if (window.scrollY > 240) {
+                        scrollTopBtn.classList.remove('floating-button--hidden');
+                    } else {
+                        scrollTopBtn.classList.add('floating-button--hidden');
+                    }
+                };
+
+                toggleScrollButton();
+                window.addEventListener('scroll', toggleScrollButton, { passive: true });
+
+                scrollTopBtn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+
+            if (!directoryPanel) {
+                return;
+            }
+
+            buildDirectory(directoryPanel);
+
+            if (!directoryToggle) {
+                return;
+            }
+
+            const closePanel = () => {
+                directoryPanel.classList.remove('open');
+                directoryToggle.setAttribute('aria-expanded', 'false');
+                directoryPanel.setAttribute('aria-hidden', 'true');
+            };
+
+            const openPanel = () => {
+                directoryPanel.classList.add('open');
+                directoryToggle.setAttribute('aria-expanded', 'true');
+                directoryPanel.setAttribute('aria-hidden', 'false');
+            };
+
+            const togglePanel = () => {
+                if (directoryPanel.classList.contains('open')) {
+                    closePanel();
+                } else {
+                    openPanel();
+                }
+            };
+
+            directoryToggle.addEventListener('click', (event) => {
+                event.stopPropagation();
+                togglePanel();
+            });
+
+            if (directoryClose) {
+                directoryClose.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    closePanel();
+                });
+            }
+
+            const directoryItems = directoryPanel.querySelectorAll('[data-target]');
+            directoryItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const targetId = item.getAttribute('data-target');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                    closePanel();
+                });
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!directoryPanel.contains(event.target) && !directoryToggle.contains(event.target)) {
+                    closePanel();
+                }
+            });
+
+            window.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closePanel();
                 }
             });
         }
