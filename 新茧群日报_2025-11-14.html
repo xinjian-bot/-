@@ -1,0 +1,2252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新茧日报</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6C9T7FPDT2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-6C9T7FPDT2');
+    </script>
+    <!-- 正常标题格式应为：新茧日报 yyyy-mm-dd，以便外部链接查看时了解日报日期 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * {
+            font-family: 'Inter', ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        :root {
+            --directory-main-font-size: clamp(0.85rem, 0.9vw + 0.6rem, 0.95rem);
+            --directory-sub-font-size: clamp(0.78rem, 0.75vw + 0.5rem, 0.88rem);
+        }
+
+        .bento-card {
+            background-color: #ffffff;
+            border: 1px solid #e9e9eb;
+            border-radius: 1rem; /* 16px */
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .bento-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.07), 0 4px 6px -4px rgba(0,0,0,0.05);
+            transform: translateY(-3px);
+        }
+
+        .number-display {
+            font-weight: 900; /* black */
+            font-size: 4rem;
+            line-height: 1;
+            /* Color will be set by Tailwind, e.g., text-[#4D6BFE] or text-black */
+        }
+
+        .section-title {
+            font-weight: 800; /* extrabold */
+            font-size: 2.25rem; /* 36px */
+            color: #000000;
+            margin-bottom: 2rem; /* 32px, consistent with Tailwind mb-8 */
+        }
+
+        .tag-item {
+            background-color: rgba(77, 107, 254, 0.1); /* bg-[#4D6BFE] bg-opacity-10 */
+            color: #4D6BFE;
+            padding: 0.25rem 0.75rem; /* py-1 px-3 */
+            border-radius: 9999px; /* rounded-full */
+            font-size: 0.75rem; /* text-xs */
+            font-weight: 500; /* medium */
+        }
+
+        /* HTML注释: 新增导航按钮样式，与现有设计保持一致 */
+        .nav-button {
+            background: linear-gradient(135deg, #4D6BFE 0%, #6B8BFF 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(77, 107, 254, 0.1);
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px -3px rgba(77, 107, 254, 0.2);
+        }
+
+        .nav-button:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .history-link {
+            background: rgba(77, 107, 254, 0.1);
+            color: #4D6BFE;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            border: 1px solid rgba(77, 107, 254, 0.2);
+        }
+
+        .history-link:hover {
+            background: rgba(77, 107, 254, 0.15);
+            transform: translateY(-1px);
+        }
+
+        /* HTML注释: 展开功能相关样式 */
+        .expandable-content {
+            position: relative;
+        }
+
+        .content-preview.collapsed {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .content-preview.collapsed::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(transparent, rgba(248, 250, 252, 0.9));
+            pointer-events: none;
+        }
+
+        .expand-btn {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0;
+        }
+
+        .expand-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .expand-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .expand-btn.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        /* HTML注释: 目录锚点滚动偏移，避免标题被遮挡 */
+        .anchor-target {
+            scroll-margin-top: 120px;
+        }
+
+        .anchor-placeholder {
+            height: 0;
+        }
+
+        /* HTML注释: 右下角浮动快捷按钮区域样式 */
+        .floating-actions {
+            position: fixed;
+            right: 1.25rem;
+            bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            z-index: 50;
+        }
+
+        .floating-button {
+            background: linear-gradient(135deg, #4D6BFE 0%, #6B8BFF 100%);
+            color: #ffffff;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px -5px rgba(77, 107, 254, 0.35);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .floating-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -6px rgba(77, 107, 254, 0.45);
+        }
+
+        .floating-button:focus-visible {
+            outline: 2px solid rgba(77, 107, 254, 0.45);
+            outline-offset: 2px;
+        }
+
+        .floating-button--hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            pointer-events: none;
+        }
+
+        .directory-wrapper {
+            position: relative;
+        }
+
+        .directory-panel {
+            position: absolute;
+            right: 0;
+            bottom: 3.5rem;
+            width: 18rem;
+            background: #ffffff;
+            border: 1px solid rgba(77, 107, 254, 0.2);
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 40px -15px rgba(77, 107, 254, 0.35);
+            padding: 1rem;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            max-height: min(75vh, 30rem);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+
+        .directory-panel.open {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .directory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .directory-title {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: var(--directory-main-font-size);
+        }
+
+        .directory-close {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 9999px;
+           transition: color 0.2s ease;
+        }
+
+        .directory-close:hover {
+            color: #4D6BFE;
+        }
+
+        .directory-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .directory-list button {
+            width: 100%;
+            text-align: left;
+            background: rgba(77, 107, 254, 0.08);
+            color: #1f2937;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.55rem 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: var(--directory-main-font-size);
+        }
+
+        .directory-list button:hover {
+            background: rgba(77, 107, 254, 0.18);
+            color: #1d4ed8;
+        }
+
+        /* HTML注释: 二级导航容器样式，支持主模块与子模块层级展示 */
+        .directory-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .directory-entry {
+            background: rgba(77, 107, 254, 0.08);
+        }
+
+        .directory-sublist {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-left: 2.5rem;
+            padding-left: 0.75rem;
+            border-left: 1px solid rgba(77, 107, 254, 0.2);
+        }
+
+        .directory-subitem {
+            background: rgba(77, 107, 254, 0.04);
+            padding-top: 0.45rem;
+            padding-bottom: 0.45rem;
+            font-size: var(--directory-sub-font-size);
+        }
+
+        .directory-subitem:hover {
+            background: rgba(77, 107, 254, 0.14);
+        }
+
+        .directory-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 9999px;
+            background: rgba(77, 107, 254, 0.12);
+            color: #4D6BFE;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .directory-text {
+            flex: 1;
+            color: inherit;
+        }
+
+        @media (max-width: 640px) {
+            .floating-actions {
+                right: 0.75rem;
+                bottom: 1rem;
+            }
+
+            .directory-panel {
+                width: min(80vw, 15rem);
+                bottom: 3.25rem;
+                max-height: min(70vh, 20rem);
+            }
+            :root {
+                --directory-main-font-size: 0.8rem;
+                --directory-sub-font-size: 0.72rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-white text-black min-h-screen">
+    <!-- HTML注释: 整体宽度通过 max-w-4xl 控制，实现日报宽度调小并保持响应式。-->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- === "新茧日报" 文件头区域 开始 === -->
+        <!-- HTML注释: 此模块作为单独一行，占据整行宽度。包含日报主标题、报告日期和时间范围。 -->
+        <!-- HTML注释: 新增了"新茧历史日报"链接，样式与整体设计保持统一协调 -->
+        <header class="w-full mb-8">
+            <div class="bento-card p-8">
+                <div class="text-center">
+                    <h1 class="text-5xl font-black text-black mb-6">
+                        新茧日报
+                    </h1>
+                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-lg mb-4">
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-calendar-alt mr-2 text-[#4D6BFE]"></i>
+                            <span id="report-date">2025年11月14日</span>
+                        </div>
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-clock mr-2 text-[#4D6BFE]"></i>
+                            <span>02:00 - 02:00（次日）</span>
+                        </div>
+                    </div>
+                    <!-- HTML注释: 新增历史日报链接，位置合理且样式协调 -->
+                    <div class="flex justify-center">
+                        <a id="history-link" href="#" class="history-link">
+                            <i class="fas fa-history"></i>
+                            新茧历史日报
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- === "新茧日报" 文件头区域 结束 === -->
+
+        <!-- HTML注释: 新增导航区域，包含"上一天"和"下一天"按钮 -->
+        <!-- HTML注释: 导航逻辑说明：
+             1. 通过JavaScript检查前后日期的日报文件是否存在
+             2. 根据当前页面日期确定前后日期
+             3. "下一天"按钮动态显示逻辑：仅当不是最新日报时显示
+             4. 兼容处理历史日报文件命名格式
+        -->
+        <nav class="w-full mb-8 daily-nav">
+            <div class="bento-card p-4">
+                <div class="flex justify-between items-center">
+                    <button type="button" class="nav-button day-nav-prev">
+                        <i class="fas fa-chevron-left"></i>
+                        上一天
+                    </button>
+                    
+                    <div class="text-center">
+                        <span class="text-sm text-gray-600">日报导航</span>
+                    </div>
+                    
+                    <button type="button" class="nav-button day-nav-next">
+                        下一天
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- === 模块一：总消息概览 开始 === -->
+        <!-- HTML注释: 此模块作为单独一行，占据整行宽度。显示当日群聊总消息数量。 -->
+        <section id="section-overview" class="w-full mb-12 anchor-target">
+            <h2 class="section-title">
+                一、总消息概览
+            </h2>
+            <div class="bento-card p-8 bg-gradient-to-br from-[#4D6BFE]/20 via-[#4D6BFE]/10 to-[#4D6BFE]/5 text-center rounded-2xl">
+                <div class="number-display text-[#4D6BFE]">
+                    3638
+                </div>
+                <p class="text-xl font-semibold text-black mt-3">总消息数量</p>
+            </div>
+        </section>
+        <!-- === 模块一：总消息概览 结束 === -->
+
+        <!-- === 模块二：火花碰撞时刻・热点话题 开始 === -->
+        <!-- HTML注释: 此模块作为单独一行，占据整行宽度。用于展示群内讨论的热点话题。 -->
+        <!-- HTML注释: 模块二内容结构说明: -->
+        <!-- 1. 话题: 作为卡片的主标题 -->
+        <!-- 2. 关键结论: 每个话题下可以包含多个关键结论 (模板结构示例展示支持最多3个关键结论，如需更多可复制结构)；关键结论应按照话题讨论的时间线来编写。 -->
+        <!-- 3. <b>金句时刻</b>: 每个关键结论下对应约3个<b>金句时刻</b>金句必须是让人获得“啊哈”或恍然大悟的发言。 -->
+        <!-- HTML注释: "爬楼关键词"说明: 每个话题卡片中包含爬楼关键词区域，话题讨论起始句，用于用户快速定位到群聊记录中的对应讨论位置。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
+        <section id="section-hot-topics" class="w-full mb-12 anchor-target">
+            <h2 class="section-title">
+                二、火花碰撞时刻・热点话题
+            </h2>
+            <!-- 列表容器: 讨论话题 -->
+            <div class="space-y-8">
+                <!-- HTML注释: 每个热点话题卡片应包含: -->
+                <!-- 1. 讨论时间段 (例如: 10:00 - 10:45) -->
+                <!-- 2. 话题标题 (例如: AI在创意产业的应用前景) -->
+                <!-- 3. 爬楼关键词 (话题讨论起始句，例如: "大家觉得ChatGPT...") -->
+                <!-- 4. 相关关键词 (例如: 人工智能, 创意设计, 内容生成 - 作为多个 span.tag-item) -->
+                <!-- 5. 详细内容 (请基于提供的微信群聊记录，以清晰的结构化方式总结本次话题讨论。目标是让读者能够迅速理解讨论的来龙去脉、各方观点及最终的启发。<br><br>请按照以下结构进行组织和呈现，可考虑使用换行符号<br>来分隔各个部分：<br><br><b>一、话题背景与起因</b><br> 清晰说明该话题是如何被提出的（例如，由谁在什么情境下首次提及或引发）。<br> 简述讨论开始时的初始情况或问题。<br><br> <b>二、主要观点与讨论详情</b><br> 详细列出群成员针对此话题发表的主要观点和看法。<br> 引用群成员的关键发言来支持每个观点。发言时，务必将发言者昵称使用<b>标签加粗</b>（例如：<b>张三</b>认为：“AI写作的辅助作用不容忽视，尤其在...”<br>接着他补充道：“...”）。<br> 可以使用列表（<ul><li>...</li></ul>）或清晰的段落（段落间使用<br><br>分隔）来呈现不同成员或不同角度的观点。<br> 客观记录讨论的演进过程，包括观点的碰撞、补充和深化。<br><br> <b>三、争议焦点（若有)</b><br> 如果讨论中出现了明显的分歧或争议点，请明确指出。<br> 简述争议的双方或多方的主要论据。<br><br> <b>四、结论与启发</b><br> 总结本次讨论得出的主要结论、共识（若有）或仍存在的疑问。<br> 提炼讨论中富有启发性的观点或思考，对读者有何借鉴意义。<br><br> 通用要求： <br> 确保引用的发言准确无误。<br> 除昵称外，其他核心概念、重要论点或特别值得关注的细节，亦可酌情使用<b>标签</b>进行强调。<br> 全文应逻辑清晰，语言精炼，便于快速阅读和理解。) -->
+                <!-- 6. 关键结论: 每个话题下可包含多个关键结论，关键结论应按照话题讨论的时间线顺序进行编写。 -->
+                <!-- 7. <b>金句时刻</b>: 每个关键结论下对应大约3个<b>金句时刻</b> 金句必须是让人获得“啊哈”或恍然大悟的发言-->
+
+                <!-- 热点话题卡片 开始：复制以下 <div class="bento-card p-6 rounded-xl">...</div> 结构以添加更多热点话题 -->
+                <div class="bento-card p-6 rounded-xl"> <!-- 其他模块（如热点话题）的卡片边框颜色和样式不得更改 -->
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            向上管理：如何与领导有效沟通及应对职场困境
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            08:06 - 13:12
+                        </span>
+                    </div>
+
+                    <!-- HTML注释: 爬楼关键词区域 - 讨论起始句，用于快速定位群聊记录中的对应讨论。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            嘟嘟车：记笔记 1.「哪些信息最重要？领导的意图这个信息最重要。...
+                        </p>
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <!-- 列表容器: 相关关键词 -->
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">职场沟通</span>
+                            <span class="tag-item">向上管理</span>
+                            <span class="tag-item">领导力</span>
+                            <span class="tag-item">情绪价值</span>
+                            <span class="tag-item">职场PUA</span>
+                        </div>
+                        <!-- 列表容器结束: 相关关键词 -->
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、话题背景与起因</b><br>
+                                    讨论由群友<b>嘟嘟车</b>分享的一段关于“领导思维”的笔记引发。该笔记强调了理解领导意图、有效汇报以及警惕“公开指点”的重要性。这迅速点燃了群友们对职场沟通与向上管理的深入探讨，多位成员结合自身经历，分享了在与领导相处过程中的困惑、挫折与成长。
+                                    <br><br>
+                                    <b>二、主要观点与讨论详情</b><br>
+                                    <b>1. 沟通与汇报的艺术：</b><br>
+                                    群友们普遍认同，理解领导意图是高效工作的前提。<b>小月半皮</b>指出：“不把领导意思搞清楚很容易越干越错啊。”<b>小韩姐</b>补充道，主动沟通至关重要：“在领导眼里，默默放上去的内容不好分辨你的立场...如果知道可能有误会，何必有误会？大大方方走上去，领导，我有个问题有点拿不准，来请教一下。”这打破了“亲近领导”的羞耻感，强调了坦诚沟通的价值。对于如何提问，<b>Olivia</b>表达了普遍的担忧：“有时候我担心我问的问题太傻逼领导觉得我没动脑子思考。”对此，<b>川枫</b>提供了动态成长的视角，认为领导更看重的是员工在提问后的进步和改进，而非单次问题的“傻”与“不傻”。
+                                    <br><br>
+                                    <b>2. 应对负面反馈与职场PUA：</b><br>
+                                    面对领导的批评，群友们分享了从内耗到成长的转变。<b>小韩姐</b>坦言年轻时会因批评而沮丧，但现在意识到那是“上赤道找极光”的错误努力方向。<b>Olivia</b>分享了被前领导全盘否定、夸大失误的PUA经历，导致了长期的自我怀疑和内耗。对此，群友<b>策策</b>和<b>小韩姐</b>都指出这是典型的职场PUA行为，并分享了自己遇到的“傻逼领导”案例。<b>AA昍</b>提供了一个应对策略：当遭遇负面反馈时，应先换位思考对方的动机（可能是项目黄了需要人背锅），然后将具体问题发到群里寻求外部视角，从而找到现实的锚点，避免陷入“一会儿觉得是PUA，一会儿又怀疑自己”的内耗循环。
+                                    <br><br>
+                                    <b>3. “公开指点”与“私人指点”的辨析：</b><br>
+                                    <b>嘟嘟车</b>对“警惕公开指点”的理解得到了广泛认同，他认为公开指点的目的可能并非帮助，而是立威或做给他人看，真正的指点往往是私下进行的。<b>糯米</b>补充道，在健康的组织文化中，民主生活会上的公开批评也可能带来收获，这为“公开批评”的性质增添了组织环境的变量。
+                                    <br><br>
+                                    <b>4. 与“王八领导”的相处之道：</b><br>
+                                    面对推卸责任、习惯抱怨的“王八领导”，群友<b>李猪猪我在这</b>分享了主动汇报后被甩锅的经历。<b>小韩姐</b>给出了实用建议：“等着她抱怨结束，把问题拉回来，哎，真是不容易，所以领导，我们接下来这样做可以吗，那样执行可以吗。”这是一种将谈话焦点从情绪宣泄拉回解决问题的有效策略。<b>AA昍</b>也指出，提前预判领导的反应，可以使自己在现场不被动，保持情绪稳定。
+                                    <br><br>
+                                    <b>三、结论与启发</b><br>
+                                    本次讨论深入剖析了职场向上管理的核心要素，从理解领导意图、主动沟通，到应对负面反馈和复杂人际关系，形成了一套富有实践价值的方法论。核心启发在于：
+                                    <ul>
+                                        <li><b>打破沟通壁垒：</b>克服“怕问傻问题”的恐惧，将主动沟通视为减少误会、建立信任的必要途径。</li>
+                                        <li><b>建立外部视角：</b>当遭遇PUA或不公正批评时，及时寻求外部支持（如群聊），可以帮助自己跳出情绪内耗，客观分析问题。</li>
+                                        <li><b>变被动为主动：</b>面对困难领导，通过预判和引导性提问，可以将局面从被动承受转为主动管理。</li>
+                                        <li><b>动态成长思维：</b>职场表现应看作成长曲线，而非孤立事件。单次的“犯错”或“提问”并不可怕，关键在于后续的持续进步。</li>
+                                    </ul>
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HTML注释: 关键结论和<b>金句时刻</b>区域 -->
+                    <!-- HTML注释: 每个话题可以包含多个关键结论（模板结构示例展示支持3个，如需更多可复制）。关键结论应按照话题讨论的时间线顺序进行编写，每个结论下对应约3个<b>金句时刻</b>。金句必须是让人获得“啊哈”或恍然大悟的发言<b>金句时刻</b>的填写格式应为：先填写"金句内容"，然后换行，并在该金句区域内右下角注明"- 群成员昵称"（<b>群成员昵称需要加粗</b>，使用<b>标签，例如：- <b>张三</b>）。特别强调金句内容本身不应包含群成员昵称，昵称只应出现在右下角指定位置。 -->
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+
+                        <!-- 列表容器: 关键结论列表 -->
+                        <div class="space-y-6">
+                            <!-- 关键结论 1 开始 -->
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            向上管理的核心是<b>主动沟通，明确意图</b>，避免因误解导致“越干越错”的局面。
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- 对应<b>金句时刻</b>列表 -->
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <!-- HTML注释: <b>金句时刻</b>金句必须是让人获得“啊哈”或恍然大悟的发言填写格式说明: 先填写"金句内容"，然后换行，并在该金句区域内（卡片的右下角）注明"- 群成员昵称"（<b>群成员昵称需要加粗</b>，使用<b>标签，例如：- <b>张三</b>）。特别强调金句内容本身不要包含群成员昵称，昵称只应出现在右下角指定位置。 -->
+                                    <div class="space-y-2">
+                                        <!-- 金句卡片 1 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                不把领导意思搞清楚很容易越干越错啊。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>小月半皮</b>
+                                            </p>
+                                        </div>
+                                        <!-- 金句卡片 2 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                傻逼但能把事情完成，比聪明但做的全错好。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>小月半皮</b>
+                                            </p>
+                                        </div>
+                                        <!-- 金句卡片 3 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                在领导眼里，默默放上去的内容不好分辨你的立场，这人是在回避我？还是反抗我？如果知道可能有误会，何必有误会？
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>小韩姐</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 关键结论 1 结束 -->
+
+                            <!-- 关键结论 2 开始 -->
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            面对负面反馈或PUA，应<b>跳出情绪内耗</b>，客观看待批评，从中汲取成长养分，并将领导视为可学习的“教材”。
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- 对应<b>金句时刻</b>列表 -->
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <!-- HTML注释: <b>金句时刻</b>填写格式说明: 先填写"金句内容"，然后换行，并在该金句区域内（卡片的右下角）注明"- 群成员昵称"（<b>群成员昵称需要加粗</b>，使用<b>标签，例如：- <b>张三</b>）。特别强调金句内容本身不要包含群成员昵称，昵称只应出现在右下角指定位置。 -->
+                                    <div class="space-y-2">
+                                        <!-- 金句卡片 1 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                其实所有批评都可以有收获。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>小韩姐</b>
+                                            </p>
+                                        </div>
+                                        <!-- 金句卡片 2 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                要真是王八领导，不值得拥护，起码【要看起来不和他们对立】。他们拿你当牛马，你拿他们当教材。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>李猪猪我在这</b>
+                                            </p>
+                                        </div>
+                                        <!-- 金句卡片 3 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                给领导真正留下印象的，是你的动态成长，就算这个问题傻逼到极点，但只要后面看出了进步，他都会觉得你真不错。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>川枫</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 关键结论 2 结束 -->
+
+                            <!-- 关键结论 3 开始 -->
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            主动寻求“私人指点”而非被动接受“公开指点”，是争取真正成长机会的关键一步。
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- 对应<b>金句时刻</b>列表 -->
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <!-- HTML注释: <b>金句时刻</b>填写格式说明: 先填写"金句内容"，然后换行，并在该金句区域内（卡片的右下角）注明"- 群成员昵称"（<b>群成员昵称需要加粗</b>，使用<b>标签，例如：- <b>张三</b>）。特别强调金句内容本身不要包含群成员昵称，昵称只应出现在右下角指定位置。 -->
+                                    <div class="space-y-2">
+                                        <!-- 金句卡片 1 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                公开指点的首要目的不是帮助，可能是立威，可能是试探反应，可能是说或是做给在场的其他人听。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>嘟嘟车</b>
+                                            </p>
+                                        </div>
+                                        <!-- 金句卡片 2 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                真正的指点往往是私下指点，要主动创造机会，主动争取。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>嘟嘟车</b>
+                                            </p>
+                                        </div>
+                                        <!-- 金句卡片 3 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                自我暴露不一定完全是坏事，只要不停留在那个水准，就是好事，说明在进步。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>小韩姐</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 关键结论 3 结束 -->
+
+                            <!-- HTML注释: 如需添加更多关键结论，请复制上面的 "关键结论 1 开始" 到 "关键结论 1 结束" 之间的整个 div 结构 -->
+                            <!-- HTML注释: 每个关键结论可对应约3个<b>金句时刻</b>，根据实际需要调整金句数量 -->
+                        </div>
+                        <!-- 列表容器结束: 关键结论列表 -->
+                    </div>
+                </div>
+                <!-- 热点话题卡片 结束 -->
+                <!-- HTML注释: 如需更多热点话题，请复制粘贴以上 "热点话题卡片 开始" ... "热点话题卡片 结束" 的整个 <div class="bento-card ..."> 结构。建议至少包含4个话题卡片，实际数量可根据需要增加。 -->
+                <div class="bento-card p-6 rounded-xl"> <!-- 其他模块（如热点话题）的卡片边框颜色和样式不得更改 -->
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            关于小学英语教材内容的文化敏感性探讨
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            09:36 - 10:30
+                        </span>
+                    </div>
+
+                    <!-- HTML注释: 爬楼关键词区域 - 讨论起始句，用于快速定位群聊记录中的对应讨论。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            小韩姐：我想问大家一个问题，不知道是不是我想多了
+                        </p>
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <!-- 列表容器: 相关关键词 -->
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">教材内容</span>
+                            <span class="tag-item">文化自信</span>
+                            <span class="tag-item">教育引导</span>
+                            <span class="tag-item">意识形态</span>
+                            <span class="tag-item">语言学习</span>
+                        </div>
+                        <!-- 列表容器结束: 相关关键词 -->
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、话题背景与起因</b><br>
+                                    群友<b>小韩姐</b>分享了一张小学三年级英语教材的图片，并提到孩子背诵时让她感到“不爽”。教材中的对话为“I like Chinese. It's interesting but it's hard.”，而她的孩子误背成“I don't like Chinese”，这个小小的乌龙触发了群内一场关于教材内容、文化敏感性与教育引导的深度讨论。
+                                    <br><br>
+                                    <b>二、主要观点与讨论详情</b><br>
+                                    <b>1. 教材内容的潜在影响：</b><br>
+                                    讨论的焦点首先集中在教材中表达的“不喜欢”或“困难”是否妥当。<b>小韩姐</b>的核心观点是：“这种会刻进孩子脑子的东西应该谨慎编写。”她认为，私下孩子吐槽不喜欢某学科很正常，但写进教材会起到强化作用。<b>Olivia</b>和<b>高大壮喝了冰露真的永不痛风</b>也表达了同样的敏感，特别是“Chinese”一词具有多义性，除了“语文”还有“中国人”的意思，在需要背诵的英语课本中出现“don't like Chinese”的句式，容易引起不适。
+                                    <br><br>
+                                    <b>2. 语言表达的微妙之处：</b><br>
+                                    <b>AA昍</b>从语言学角度深入分析，指出在英语口语中，“interesting”一词常带有贬义，约等于“呵呵”，因此“中文是 interesting，但太难了”的实际含义更接近于“老子才不学中文”。他进一步补充，如果真心想表达，完全可以用更精确的“Mandarin”来指代语言，或设计更巧妙的对话，直言教材编写水平“很次”。<b>熊，熊，xióng，熊</b>也认为，可以有更高明的设计方式，比如改成“我喜欢xx，但我更喜欢xx”，而不是直接使用否定句式。
+                                    <br><br>
+                                    <b>3. 家长与教师的责任：</b><br>
+                                    讨论延伸至家庭教育和学校教育的角色。<b>桃乐丝</b>认为，相比教材，家长的解释风格更重要，并分享了自己以词典为准纠正老师笔顺错误的例子。<b>高大壮喝了冰露真的永不痛风</b>则提出了一个引人深思的观点，认为“所有父母要默认老师出问题”，强调家长是孩子教育的第一责任人。这一观点得到了<b>小韩姐</b>和<b>豆子</b>的认同，她们都认为“宝不能押在老师那儿”。<b>AA昍</b>对此进行了辩证分析，认为能意识到老师会出问题的家长，其水平本身已高于教师群体的平均水平，但对于大多数家长而言，老师是够用的。他总结道，有余力的家长通读教材，是和孩子建立良好沟通的一部分。
+                                    <br><br>
+                                    <b>三、结论与启发</b><br>
+                                    本次讨论从一个教材细节出发，层层深入，揭示了语言、文化与教育之间复杂的联系。
+                                    <br>1. <b>保持高度敏感性：</b>在教育内容上，尤其是面向低龄儿童的教材，应保持高度的文化和政治敏感性，避免使用有歧义或可能产生负面心理暗示的表述。
+                                    <br>2. <b>家长的主体责任：</b>家长作为孩子教育的第一责任人，应保持警觉，不能完全依赖学校和老师。在发现教材或教学中的潜在问题时，需及时为孩子补充和修正，进行正向引导。
+                                    <br>3. <b>辩证看待问题：</b>虽然教材编写存在瑕疵，但老师和教研组的集体教学可以在一定程度上纠正误解。家长应以“改造世界”而非仅仅“解释世界”的心态，积极介入孩子的教育过程。
+                                    <br>4. <b>文化自信的体现：</b>在当前国际形势下，教材内容应体现文化自信。如<b>AA昍</b>所言，一个更有远见的教材可以表达为：“中文很难，但我必须学好它，因为未来全世界都会说中国话。”
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HTML注释: 关键结论和<b>金句时刻</b>区域 -->
+                    <!-- HTML注释: 每个话题可以包含多个关键结论（模板结构示例展示支持3个，如需更多可复制）。关键结论应按照话题讨论的时间线顺序进行编写，每个结论下对应约3个<b>金句时刻</b>。金句必须是让人获得“啊哈”或恍然大悟的发言<b>金句时刻</b>的填写格式应为：先填写"金句内容"，然后换行，并在该金句区域内右下角注明"- 群成员昵称"（<b>群成员昵称需要加粗</b>，使用<b>标签，例如：- <b>张三</b>）。特别强调金句内容本身不应包含群成员昵称，昵称只应出现在右下角指定位置。 -->
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+
+                        <!-- 列表容器: 关键结论列表 -->
+                        <div class="space-y-6">
+                            <!-- 关键结论 1 开始 -->
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            面向儿童的教材内容应<b>极其谨慎</b>，避免因语言歧义或不当排版引发文化误解和负面心理暗示。
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- 对应<b>金句时刻</b>列表 -->
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <!-- HTML注释: <b>金句时刻</b>金句必须是让人获得“啊哈”或恍然大悟的发言填写格式说明: 先填写"金句内容"，然后换行，并在该金句区域内（卡片的右下角）注明"- 群成员昵称"（<b>群成员昵称需要加粗</b>，使用<b>标签，例如：- <b>张三</b>）。特别强调金句内容本身不要包含群成员昵称，昵称只应出现在右下角指定位置。 -->
+                                    <div class="space-y-2">
+                                        <!-- 金句卡片 1 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                私下里娃吐槽不喜欢语文我就没反应，很正常。但是有的东西写进教材太强化了。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>小韩姐</b>
+                                            </p>
+                                        </div>
+                                        <!-- 金句卡片 2 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                教材有强烈的示范、规范的效应，确实不能当做和其他的比如小说啊，微信推文啊，这种载体来看，是有特殊性的。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>熊，熊，xióng，熊</b>
+                                            </p>
+                                        </div>
+                                        <!-- 金句卡片 3 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                这个教材能让我们这样讨论其实就可以下定义了。它有争议，所以不对。针对启蒙小孩的教材就不该这么编。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>是工工不是公公</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 关键结论 1 结束 -->
+
+                            <!-- 关键结论 2 开始 -->
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            家长是孩子教育的<b>第一责任人</b>，应保持高度敏感性，不能将教育责任完全寄托于学校。
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- 对应<b>金句时刻</b>列表 -->
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <!-- HTML注释: <b>金句时刻</b>填写格式说明: 先填写"金句内容"，然后换行，并在该金句区域内（卡片的右下角）注明"- 群成员昵称"（<b>群成员昵称需要加粗</b>，使用<b>标签，例如：- <b>张三</b>）。特别强调金句内容本身不要包含群成员昵称，昵称只应出现在右下角指定位置。 -->
+                                    <div class="space-y-2">
+                                        <!-- 金句卡片 1 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我认真认为，毒教材本身不是大事。但他必须是大事，敲打一下，提醒一下父母。每个人都是自己孩子的第一责任人。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>高大壮喝了冰露真的永不痛风</b>
+                                            </p>
+                                        </div>
+                                        <!-- 金句卡片 2 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                宝不能押在老师那儿。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>小韩姐</b>
+                                            </p>
+                                        </div>
+                                        <!-- 金句卡片 3 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                比起老师，家长的解释风格是最要紧的。尤其是在孩子小的时候。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>桃乐丝</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 关键结论 2 结束 -->
+
+                            <!-- 关键结论 3 开始 -->
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            语言学习不仅是技能，更是文化认同的体现。在当前环境下，教材应更有文化自信，避免使用在英语语境中可能带有贬义的词汇。
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- 对应<b>金句时刻</b>列表 -->
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <!-- HTML注释: <b>金句时刻</b>填写格式说明: 先填写"金句内容"，然后换行，并在该金句区域内（卡片的右下角）注明"- 群成员昵称"（<b>群成员昵称需要加粗</b>，使用<b>标签，例如：- <b>张三</b>）。特别强调金句内容本身不要包含群成员昵称，昵称只应出现在右下角指定位置。 -->
+                                    <div class="space-y-2">
+                                        <!-- 金句卡片 1 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                在口语里，interesting本身是个贬义词，约等于呵呵。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>AA昍</b>
+                                            </p>
+                                        </div>
+                                        <!-- 金句卡片 2 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我觉得让老外说出中文太难了我会很爽。哈哈哈哈难吗？难就对了。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>桃乐丝</b>
+                                            </p>
+                                        </div>
+                                        <!-- 金句卡片 3 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                学它也不是为了爱它，是拿它当工具。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>小韩姐</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 关键结论 3 结束 -->
+                        </div>
+                        <!-- 列表容器结束: 关键结论列表 -->
+                    </div>
+                </div>
+                <div class="bento-card p-6 rounded-xl"> <!-- 其他模块（如热点话题）的卡片边框颜色和样式不得更改 -->
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            关于ADHD与精神健康的群体互助探讨
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            15:00 - 15:52
+                        </span>
+                    </div>
+
+                    <!-- HTML注释: 爬楼关键词区域 - 讨论起始句，用于快速定位群聊记录中的对应讨论。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            亮晶晶：家人们，我的药好像开始起效了（不知道是不是安慰剂效应），这两天注意力开始有所提升了...
+                        </p>
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <!-- 列表容器: 相关关键词 -->
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">ADHD</span>
+                            <span class="tag-item">精神健康</span>
+                            <span class="tag-item">注意力缺陷</span>
+                            <span class="tag-item">药物治疗</span>
+                            <span class="tag-item">共存之道</span>
+                        </div>
+                        <!-- 列表容器结束: 相关关键词 -->
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、话题背景与起因</b><br>
+                                    群友<b>亮晶晶</b>分享了自己开始ADHD药物治疗后的积极变化，如注意力提升、烦躁减少，由此开启了群内关于ADHD及相关精神健康问题的深入交流。多位群友分享了自身的困扰、求医经历和应对策略，形成了一场充满关怀与智慧的互助讨论。
+                                    <br><br>
+                                    <b>二、主要观点与讨论详情</b><br>
+                                    <b>1. ADHD症状与共病现象：</b><br>
+                                    群友们描述了ADHD的多种症状。<b>亮晶晶</b>提到“走神、忍不住插话、拖延”，<b>Olivia</b>补充了“话题跳转快、没耐心排队”，<b>不知</b>则描述了“截止日期前的重度拖延症”。大家还讨论了ADHD的共病问题，<b>Olivia</b>提到医生指出“ADHD就是很容易抑郁焦虑，情绪阀门很松”。<b>黄云</b>也强调了鉴别诊断的重要性，因为ADHD的症状与双相、精神分裂等有相似之处，需专业医生排除。
+                                    <br><br>
+                                    <b>2. 药物治疗的经验与风险：</b><br>
+                                    <b>亮晶晶</b>分享了择思达（仿制药）带来的“降噪”效果，副作用是口渴。<b>Olivia</b>也服用同类药物，但副作用表现为嗜睡。<b>黄云</b>和<b>非洲吴有日</b>则提醒，另一类ADHD药物如专注达含有类冰毒成分，属于严格管制的精神药品，私下买卖属违法行为，告诫大家切勿乱试。<b>亮晶晶</b>也补充了药物可能存在的其他风险，如增加青少年自杀风险和焦虑抑郁情绪。
+                                    <br><br>
+                                    <b>3. 求医与共存的正确心态：</b><br>
+                                    讨论中反复强调了专业诊断的必要性。<b>黄云</b>指出，不要轻易给自己“对号入座”，因为这可能是一种逃避现实的心理防御机制。<b>AA昍</b>提供了一个实用的三步自测法来判断是否需要就医：<b>a. 是否意识到问题并想改变？ b. 是否影响正常生活？ c. 是否持续超过一年？</b>若三者皆是，则应积极就医。对于确诊后的心态，<b>亮晶晶</b>和<b>阿南plus（早睡输出）</b>都提到了“与症状共存”的理念，将其视为一种慢性病，寻找与之和谐相处的方式，而不是强求“痊愈”。
+                                    <br><br>
+                                    <b>三、结论与启发</b><br>
+                                    这场讨论不仅普及了ADHD的相关知识，更体现了社群作为支持系统的重要价值。
+                                    <br>1. <b>科学就医，拒绝自诊：</b>精神健康问题症状复杂，切忌自行对号入座。寻求专业医生的全面诊断和指导是唯一正确的途径。
+                                    <br>2. <b>理性看待药物：</b>药物是重要的治疗工具，但需在医生指导下使用，充分了解其效果与风险。切不可自行购买或尝试管制类精神药品。
+                                    <br>3. <b>从“对抗”到“共存”：</b>对于ADHD等慢性精神状况，寻找与之共存的生活方式，比追求不切实际的“根治”更为现实和健康。这需要调整生活习惯（如睡眠、饮食）和心态。
+                                    <br>4. <b>社群支持的力量：</b>通过在群内分享经历、交流信息、互相鼓励，成员们获得了宝贵的情绪支持和实用建议，有效缓解了独自面对困境的焦虑与孤独。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HTML注释: 关键结论和<b>金句时刻</b>区域 -->
+                    <!-- HTML注释: 每个话题可以包含多个关键结论（模板结构示例展示支持3个，如需更多可复制）。关键结论应按照话题讨论的时间线顺序进行编写，每个结论下对应约3个<b>金句时刻</b>。金句必须是让人获得“啊哈”或恍然大悟的发言<b>金句时刻</b>的填写格式应为：先填写"金句内容"，然后换行，并在该金句区域内右下角注明"- 群成员昵称"（<b>群成员昵称需要加粗</b>，使用<b>标签，例如：- <b>张三</b>）。特别强调金句内容本身不应包含群成员昵称，昵称只应出现在右下角指定位置。 -->
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+
+                        <!-- 列表容器: 关键结论列表 -->
+                        <div class="space-y-6">
+                            <!-- 关键结论 1 开始 -->
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            面对疑似精神健康问题，应<b>寻求专业医疗诊断</b>，避免自行“对号入座”，因为这可能是一种逃避现实的心理防御。
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- 对应<b>金句时刻</b>列表 -->
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <!-- HTML注释: <b>金句时刻</b>金句必须是让人获得“啊哈”或恍然大悟的发言填写格式说明: 先填写"金句内容"，然后换行，并在该金句区域内（卡片的右下角）注明"- 群成员昵称"（<b>群成员昵称需要加粗</b>，使用<b>标签，例如：- <b>张三</b>）。特别强调金句内容本身不要包含群成员昵称，昵称只应出现在右下角指定位置。 -->
+                                    <div class="space-y-2">
+                                        <!-- 金句卡片 1 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                不要自己对号入座，对号入座了之后很容易在自我怀疑中，主动去向自己倾向于认为的那个病靠拢，心理下意识觉得好像抓住了救命稻草，就没那么焦虑。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>黄云</b>
+                                            </p>
+                                        </div>
+                                        <!-- 金句卡片 2 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                有时候自己套一个东西，本质是一种逃避现实的方式。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>阿南plus（早睡输出）</b>
+                                            </p>
+                                        </div>
+                                        <!-- 金句卡片 3 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                还是过段时间去看医生吧，不然感觉像失恋了听歌，哪首都在说我。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>不知</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 关键结论 1 结束 -->
+
+                            <!-- 关键结论 2 开始 -->
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            确诊后，应将ADHD等状况视为一种<b>慢性病</b>，学会与之共存，而非追求无法实现的“痊愈”。
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- 对应<b>金句时刻</b>列表 -->
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <!-- HTML注释: <b>金句时刻</b>填写格式说明: 先填写"金句内容"，然后换行，并在该金句区域内（卡片的右下角）注明"- 群成员昵称"（<b>群成员昵称需要加粗</b>，使用<b>标签，例如：- <b>张三</b>）。特别强调金句内容本身不要包含群成员昵称，昵称只应出现在右下角指定位置。 -->
+                                    <div class="space-y-2">
+                                        <!-- 金句卡片 1 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                成人后无法痊愈了，现在正在找共存的方式。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>亮晶晶</b>
+                                            </p>
+                                        </div>
+                                        <!-- 金句卡片 2 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                共存是正常的，就像焦虑，属于长期共存，就是一个镜像的东西，你尽可能忽略他，他就忽略你。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>尼克干中学休息中</b>
+                                            </p>
+                                        </div>
+                                        <!-- 金句卡片 3 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                很多事情，你不接受，也没办法，就是发生了。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>阿南plus（早睡输出）</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 关键结论 2 结束 -->
+                        </div>
+                        <!-- 列表容器结束: 关键结论列表 -->
+                    </div>
+                </div>
+                <div class="bento-card p-6 rounded-xl"> <!-- 其他模块（如热点话题）的卡片边框颜色和样式不得更改 -->
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            居家健身指南：如何确保动作正确与有效训练
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            21:30 - 21:52
+                        </span>
+                    </div>
+
+                    <!-- HTML注释: 爬楼关键词区域 - 讨论起始句，用于快速定位群聊记录中的对应讨论。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            小b（很少看群 有事直接艾特）：家人们，有个问题想问问，情况是自己在家健身，我在做力量训练的时候...
+                        </p>
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <!-- 列表容器: 相关关键词 -->
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">居家健身</span>
+                            <span class="tag-item">力量训练</span>
+                            <span class="tag-item">动作纠正</span>
+                            <span class="tag-item">运动损伤</span>
+                            <span class="tag-item">健身入门</span>
+                        </div>
+                        <!-- 列表容器结束: 相关关键词 -->
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、话题背景与起因</b><br>
+                                    群友<b>小b（很少看群 有事直接艾特）</b>提出了一个居家健身的核心痛点：在没有专业指导的情况下，如何确保自己的力量训练动作正确，避免受伤并有效达到训练目的。这个问题引发了群内健身达人们的热烈回应，大家从各自的经验出发，提供了一系列实用且可操作的建议。
+                                    <br><br>
+                                    <b>二、主要观点与讨论详情</b><br>
+                                    <b>1. 自我校准的核心方法——录像反馈：</b><br>
+                                    <b>熊，熊，xióng，熊</b>提出了最核心且被广泛认同的方法：“给自己拍视频然后看。”他进一步解释道：“自己的问题不好找，但挑别人毛病很容易的。”通过录像，训练者可以跳出主观感受，以旁观者的视角审视自己的动作，从而发现问题。
+                                    <br><br>
+                                    <b>2. 寻求外部指导的多种途径：</b><br>
+                                    对于新手，<b>阿南plus（早睡输出）</b>直接建议“花钱找教练”，因为教练的核心价值在于纠正动作和帮助找到正确发力感。他还分享了“吃百家饭”的经验，即找多个资深训练者进行交叉验证。<b>小b</b>也延伸出思路，可以去咸鱼等平台花少量费用请教练录制特定动作的指导视频。
+                                    <br><br>
+                                    <b>3. 循序渐进，安全第一：</b><br>
+                                    多位群友强调了安全性和循序渐进的原则。<b>秦关河小羊23</b>指出：“自重基本不会伤”，建议新手从空杆或小重量开始，不应急于加重。<b>熊，熊，xióng，熊</b>也强调“不受伤，不疼痛一定是第一位的”，酸胀是正常肌肉反应，但疼痛就是错误的信号，应立即停止。<b>🍔头🍔脑</b>建议，如果对自由器械（如深蹲、硬拉）的动作没有把握，不如使用固定器械，因为“硬拉太危险了”。
+                                    <br><br>
+                                    <b>4. 建立正确的肌肉感知（念动一致）：</b><br>
+                                    针对“找不到发力感”的问题，群友们分享了经验。<b>不知</b>分析道，训练初期肌肉和神经控制都较弱，感知不明显是正常的，只要动作基本正确，目标肌群就会发力。<b>熊，熊，xióng，熊</b>分享自己推胸上千次才找到感觉，说明肌肉感知需要通过大量重复来建立。<b>阿南plus（早睡输出）</b>也认为需要在重复中找感觉，并分享了硬拉“贴着腿拉”的诀窍。
+                                    <br><br>
+                                    <b>三、结论与启发</b><br>
+                                    这场讨论为居家健身爱好者提供了一份宝贵的行动指南。
+                                    <br>1. <b>反馈是进步的关键：</b>无论是通过录像自我反馈，还是寻求教练、健身前辈的外部反馈，获得客观的动作评价是避免错误和受伤的第一步。
+                                    <br>2. <b>安全永远优先：</b>新手应从自重或小重量开始，优先掌握标准动作和发力感，再逐步增加负重。对于高风险的自由重量动作（如深蹲、硬拉），使用更安全的固定器械是明智的替代选择。
+                                    <br>3. <b>耐心与重复：</b>建立正确的“念动一致”需要时间和大量练习，不要因初期找不到感觉而气馁。“慢就是快”是健身中颠扑不破的真理。
+                                    <br>4. <b>知识储备并行：</b>除了实践，<b>阿南plus（早睡输出）</b>还建议学习人体结构和运动营养学知识，理论与实践相结合，能让训练事半功倍。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HTML注释: 关键结论和<b>金句时刻</b>区域 -->
+                    <!-- HTML注释: 每个话题可以包含多个关键结论（模板结构示例展示支持3个，如需更多可复制）。关键结论应按照话题讨论的时间线顺序进行编写，每个结论下对应约3个<b>金句时刻</b>。金句必须是让人获得“啊哈”或恍然大悟的发言<b>金句时刻</b>的填写格式应为：先填写"金句内容"，然后换行，并在该金句区域内右下角注明"- 群成员昵称"（<b>群成员昵称需要加粗</b>，使用<b>标签，例如：- <b>张三</b>）。特别强调金句内容本身不应包含群成员昵称，昵称只应出现在右下角指定位置。 -->
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+
+                        <!-- 列表容器: 关键结论列表 -->
+                        <div class="space-y-6">
+                            <!-- 关键结论 1 开始 -->
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            居家健身时，<b>录制视频自我检查</b>是校准动作、避免受伤最直接有效的方法。
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- 对应<b>金句时刻</b>列表 -->
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <!-- HTML注释: <b>金句时刻</b>金句必须是让人获得“啊哈”或恍然大悟的发言填写格式说明: 先填写"金句内容"，然后换行，并在该金句区域内（卡片的右下角）注明"- 群成员昵称"（<b>群成员昵称需要加粗</b>，使用<b>标签，例如：- <b>张三</b>）。特别强调金句内容本身不要包含群成员昵称，昵称只应出现在右下角指定位置。 -->
+                                    <div class="space-y-2">
+                                        <!-- 金句卡片 1 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我自己还有一个经验就是看其他人，自己的问题不好找，但挑别人毛病很容易的。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>熊，熊，xióng，熊</b>
+                                            </p>
+                                        </div>
+                                        <!-- 金句卡片 2 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我知道我的问题出在哪里了：既没有明确的动作拆解又没有反馈，所以我才会不知道自己的发力部位对不对。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>小b（很少看群 有事直接艾特）</b>
+                                            </p>
+                                        </div>
+                                        <!-- 金句卡片 3 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                一教就会，一做就废。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>阿南plus（早睡输出）</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 关键结论 1 结束 -->
+
+                            <!-- 关键结论 2 开始 -->
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            <b>安全第一</b>：新手应从自重或小重量开始，不贸然增加重量，对高风险动作可选择固定器械替代。
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- 对应<b>金句时刻</b>列表 -->
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <!-- HTML注释: <b>金句时刻</b>填写格式说明: 先填写"金句内容"，然后换行，并在该金句区域内（卡片的右下角）注明"- 群成员昵称"（<b>群成员昵称需要加粗</b>，使用<b>标签，例如：- <b>张三</b>）。特别强调金句内容本身不要包含群成员昵称，昵称只应出现在右下角指定位置。 -->
+                                    <div class="space-y-2">
+                                        <!-- 金句卡片 1 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                酸胀是正常的，哪怕是代偿。但疼痛就不对了，疼就立即停。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>熊，熊，xióng，熊</b>
+                                            </p>
+                                        </div>
+                                        <!-- 金句卡片 2 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我到现在都不做硬拉，硬拉太危险了。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>🍔头🍔脑</b>
+                                            </p>
+                                        </div>
+                                        <!-- 金句卡片 3 -->
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                初学者不要自己练自由器械。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>阿南plus（早睡输出）</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 关键结论 2 结束 -->
+                        </div>
+                        <!-- 列表容器结束: 关键结论列表 -->
+                    </div>
+                </div>
+            </div>
+            <!-- 列表容器结束: 讨论话题 -->
+        </section>
+        <!-- === 模块二：火花碰撞时刻・热点话题 结束 === -->
+
+        <!-- === 模块三：解惑一点通・有问必答 开始 === -->
+        <!-- HTML注释: 此模块已调整顺序。此模块作为单独一行，占据整行宽度。用于展示群内的问答内容。每个问答为一个卡片。卡片边框颜色已修改为淡蓝色 (border-[#93c5fd])。 -->
+        <!-- HTML注释: "爬楼关键词"说明: 每个问答卡片中包含爬楼关键词区域，讨论起始句，用于用户快速定位到群聊记录中的对应讨论位置。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
+        <section id="section-qa" class="w-full mb-12 anchor-target">
+            <h2 class="section-title">
+                三、解惑一点通・有问必答
+            </h2>
+            <!-- 列表容器: 问题解答条目 -->
+            <div class="space-y-8">
+                <!-- HTML注释: 每个问题解答条目应包含: -->
+                <!-- 1. 问题 (带图标，例如: Tailwind CSS自定义配置的最佳实践是什么？) -->
+                <!-- 2. 爬楼关键词 (讨论起始句，例如: "请问如何自定义tailwind...") -->
+                <!-- 3. 解答 (请根据群聊记录，总结问题解答过程。） -->
+                <!-- 4. 相关标签 (例如: TailwindCSS, 前端开发 - 作为多个 span.tag-item) -->
+                <!-- 注意: 不包含参与成员列表 -->
+
+                <!-- 问答卡片 开始：复制以下 <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">...</div> 结构以添加更多问答条目 -->
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]"> <!-- 边框颜色修改为 border-[#93c5fd] -->
+                    <div class="mb-4">
+                        <h4 class="text-xl font-semibold text-black flex items-center">
+                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+                            如何为骑行场景选择合适的运动相机？
+                        </h4>
+                    </div>
+
+                    <!-- HTML注释: 爬楼关键词区域 - 讨论起始句，用于快速定位群聊记录中的对应讨论。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            宇世无争：同志们早，有没有运动/骑行相机推荐
+                        </p>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-4">
+                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+                            解答
+                        </h5>
+                        <div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、问题背景</b><br>
+                                    群友<b>宇世无争</b>在早上提出需求，希望群友们推荐一款适合运动，特别是用于骑行记录的相机。
+                                    <br><br>
+                                    <b>二、核心解决方案与建议</b><br>
+                                    群友<b>黄云</b>提供了非常详尽和结构化的选购指南，针对不同需求和预算，对比了三款主流运动相机：
+                                    <br><br>
+                                    <b>1. 全能性价比之选：大疆 Osmo Action 5 Pro</b>
+                                    <ul>
+                                    <li><b>核心优势：</b>超旗舰级防抖（360°地平线增稳）、轻量化设计（约200g）、夜景模式出色。</li>
+                                    <li><b>性能亮点：</b>搭载1/1.3英寸大底传感器，支持4K/120fps录制，裸机20米防水，续航能力强（单电池4小时），支持磁吸快充。</li>
+                                    <li><b>适用人群：</b>预算中等，追求“全能体验”的用户。如果追求更高性价比，可以选择上一代产品大疆 Osmo Action 4。</li>
+                                    </ul>
+                                    <br>
+                                    <b>2. 极限性能之选：GoPro Hero 11 Black</b>
+                                    <ul>
+                                    <li><b>核心优势：</b>极致画质（5.3K超高分辨率）、行业领先的配件生态。广告和剧组拍摄运动画面的首选。</li>
+                                    <li><b>性能亮点：</b>HyperSmooth 5.0防抖技术针对高速运动优化，色彩还原和动态范围领先同级，机身轻便（153g）。</li>
+                                    <li><b>适用人群：</b>预算充足，追求“电影级画面”和丰富拍摄场景的骑行玩家。</li>
+                                    </ul>
+                                    <br>
+                                    <b>3. AI智能之选：Insta360 Ace Pro 2</b>
+                                    <ul>
+                                    <li><b>核心优势：</b>强大的AI影像引擎，主打“智能化拍摄+后期效率”。</li>
+                                    <li><b>性能亮点：</b>支持8K超清视频，FlowState防抖，具备“AI跟随构图”功能，无需手动调整即可锁定主体。语音控制和自动剪辑功能大幅降低后期门槛。</li>
+                                    <li><b>适用人群：</b>偏好快速产出Vlog，希望简化拍摄和后期流程的用户。<b>宇世无争</b>在看到介绍后，也对这款相机的自动剪辑功能表现出浓厚兴趣。</li>
+                                    </ul>
+                                    <br>
+                                    <b>三、结论与启发</b><br>
+                                    <b>黄云</b>的解答清晰地展示了当前运动相机市场的三大主流方向：大疆主打均衡与性价比，GoPro坚守画质与专业生态，而Insta360则以AI智能化开辟新赛道。这份详尽的对比为有类似需求的群友提供了极具价值的决策参考。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 列表容器: 问题解答卡片标签 -->
+                    <div class="mt-5 pt-4 border-t border-gray-200">
+                        <div class="flex flex-wrap gap-2">
+                            <!-- HTML注释: 为每个标签重复以下 span.tag-item 结构。 -->
+                            <span class="tag-item">运动相机</span>
+                            <span class="tag-item">骑行装备</span>
+                            <span class="tag-item">数码产品</span>
+                            <span class="tag-item">大疆</span>
+                            <span class="tag-item">GoPro</span>
+                            <span class="tag-item">Insta360</span>
+                        </div>
+                    </div>
+                    <!-- 列表容器结束: 问题解答卡片标签 -->
+                </div>
+                <!-- 问答卡片 结束 -->
+                <!-- HTML注释: 如需更多问答条目，请复制粘贴以上 "问答卡片 开始" ... "问答卡片 结束" 的整个 <div class="bento-card ..."> 结构。 -->
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]"> <!-- 边框颜色修改为 border-[#93c5fd] -->
+                    <div class="mb-4">
+                        <h4 class="text-xl font-semibold text-black flex items-center">
+                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+                            体制内如何规划职业路线？
+                        </h4>
+                    </div>
+
+                    <!-- HTML注释: 爬楼关键词区域 - 讨论起始句，用于快速定位群聊记录中的对应讨论。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            嘟嘟车：向同志们汇报，昨天被投诉了，以下是我的理解和操作...
+                        </p>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-4">
+                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+                            解答
+                        </h5>
+                        <div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、问题背景</b><br>
+                                    群友<b>嘟嘟车</b>因一次工作投诉主动向领导汇报，意外获得了关于未来职业路线选择的建议。领导提出了四个方向：综合业务（大厅）、纯业务（政策研究）、行政（办公室）和企业管理。面对即将到来的岗位变动，她向群友们分享了自己的思考和困惑。
+                                    <br><br>
+                                    <b>二、核心解决方案与建议</b><br>
+                                    群友们从不同角度给出了富有洞见的分析和建议：
+                                    <br><br>
+                                    <b>1. 路线选择分析：</b>
+                                    <ul>
+                                        <li><b>子蟹</b>初步分析，认为大厅“又累又没钱”，业务路线可能面临博士竞争，行政路线涉及“宫斗”，而企业管理路线虽是“实权扩张线”，但风险高。</li>
+                                        <li><b>萱苏</b>则看好办公室路线，认为这是晋升的“很好的路线”，因为服务领导、写材料是核心技能，加上业务能力打底可以“横行”。</li>
+                                        <li><b>桃子</b>和<b>66</b>则认为纯业务路线更适合<b>嘟嘟车</b>，因为“业务扎实了，后续很多岗都能去”，具有不可替代性。</li>
+                                    </ul>
+                                    <br>
+                                    <b>2. 晋升路径的现实考量：</b>
+                                    <ul>
+                                        <li><b>练剑</b>指出，税务系统晋升慢，需要“熬资历”，并且现在对乡镇基层工作经历有非常严格的考核标准，这是税务系统普遍缺乏的。他以本地为例，很多年轻干部都需要下派到村镇任职才能获得提拔。</li>
+                                        <li><b>萱苏</b>提到，不同地区情况有别，她所在的单位提拔的却全是局机关的，而去扶贫的反而被打压。这提醒<b>嘟嘟车</b>需要结合本地实际情况进行判断。</li>
+                                    </ul>
+                                    <br>
+                                    <b>3. 决策的顶层逻辑：</b>
+                                    <ul>
+                                        <li><b>AA昍</b>提供了“以终为始”的决策框架：首先要明确最终目标（C点），然后评估当前可选的路径（B点）哪个最容易通向C点。如果C点不明确，他给出了三个备选策略：<b>①选择资源更多的路；②选择越走越宽的路；③锚定一条大腿，听其建议。</b>他指出这三条路本质上都指向“更多选择和更大权力”。</li>
+                                        <li><b>小韩姐</b>则引导<b>嘟嘟车</b>思考更根本的问题：“你想做一辈子业务精英无所谓级别还是有晋升计划？”这关系到最终的目标设定。</li>
+                                    </ul>
+                                    <br>
+                                    <b>三、结论与启发</b><br>
+                                    体制内的职业规划是一个复杂的系统工程，需要综合考虑个人性格、能力、目标以及单位的实际环境。本次讨论的核心启发是：<b>规划职业路径不能仅凭直觉和偏好，而应采用“以终为始”的战略思维，明确长期目标，并结合当地的晋升规则和人际生态，选择最有利于实现该目标的路径。</b>同时，无论选择哪条路，持续精进业务能力、考取相关证书，都是增加自身“分量和选择权”的硬通货。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 列表容器: 问题解答卡片标签 -->
+                    <div class="mt-5 pt-4 border-t border-gray-200">
+                        <div class="flex flex-wrap gap-2">
+                            <!-- HTML注释: 为每个标签重复以下 span.tag-item 结构。 -->
+                            <span class="tag-item">职业规划</span>
+                            <span class="tag-item">体制内</span>
+                            <span class="tag-item">公务员</span>
+                            <span class="tag-item">向上管理</span>
+                            <span class="tag-item">晋升路径</span>
+                        </div>
+                    </div>
+                    <!-- 列表容器结束: 问题解答卡片标签 -->
+                </div>
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]"> <!-- 边框颜色修改为 border-[#93c5fd] -->
+                    <div class="mb-4">
+                        <h4 class="text-xl font-semibold text-black flex items-center">
+                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+                            如何在职场中妥善处理与“问题前同事”的意外接触？
+                        </h4>
+                    </div>
+
+                    <!-- HTML注释: 爬楼关键词区域 - 讨论起始句，用于用户快速定位到群聊记录中的对应讨论。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            干中学：刚刚去年离职的人事突然来找我聊天，暗示我离开监控范围跟他说话...
+                        </p>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-4">
+                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+                            解答
+                        </h5>
+                        <div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、问题背景</b><br>
+                                    群友<b>干中学</b>遇到一个棘手的职场社交难题：一位人品和立场存疑、因“犯错”被离职的前同事突然到访，并暗示他到监控范围外进行私下交谈。<b>干中学</b>选择了假装不理解，在监控下与对方公开交谈，并就此决策是否正确以及后续是否需要联系对方，向群友征求意见。
+                                    <br><br>
+                                    <b>二、核心原因分析</b><br>
+                                    <b>干中学</b>的困惑核心在于，如何在保护自己的前提下，处理这种带有潜在风险的非正常社交。他分析了几个关键点：
+                                    <br>1. <b>对方背景复杂：</b>前同事人品一般、立场“反动”，且是被动离职。
+                                    <br>2. <b>关系疏远：</b>双方关系一般，离职后无私下联系，对方突然到访不合常理。
+                                    <br>3. <b>行为诡秘：</b>暗示避开监控谈话，说明内容敏感，不希望被公司知晓。
+                                    <br><br>
+                                    <b>三、解决方案与建议</b><br>
+                                    <b>干中学</b>本人已经做出了初步判断和行动，即“明面上我不能跟犯错的人事有秘密”。他的后续思考是，没有必要再私下联系，因为对方可能只是来抱怨公司，或是提供一些自己可以通过其他渠道获取的信息，而私下接触的风险远大于潜在收益。
+                                    <br><br>
+                                    群友<b>AA昍</b>的提问起到了关键的确认作用，他问：“不懂就问，公司的监控居然能听到所有员工说话的声音吗？”这个问题虽然没有直接给出建议，但它引导<b>干中学</b>进一步确认了公司监控的实际能力（“技术上可行”），从而更加坚定了自己“在监控下公开交谈”这一决策的正确性。因为一旦确认谈话内容可能被记录，那么任何避开监控的行为本身就构成了“有秘密”的嫌疑，这在职场中是非常危险的信号。
+                                    <br><br>
+                                    <b>四、结论与启发</b><br>
+                                    <b>干中学</b>的处理方式堪称职场风险管理的典范。面对背景不明、意图可疑的私下邀约，<b>保持距离、坚守公开透明的原则</b>是保护自己的最佳策略。尤其当对方是因负面原因离职时，与其产生任何“秘密”联系都可能让自己陷入不必要的麻烦。在不确定环境中，<b>“不做”比“做错”更安全</b>。这个案例提醒我们，在职场中，时刻保持警惕，对不寻常的社交邀请多一分审慎，是成熟职场人的必备素质。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 列表容器: 问题解答卡片标签 -->
+                    <div class="mt-5 pt-4 border-t border-gray-200">
+                        <div class="flex flex-wrap gap-2">
+                            <!-- HTML注释: 为每个标签重复以下 span.tag-item 结构。 -->
+                            <span class="tag-item">职场社交</span>
+                            <span class="tag-item">风险管理</span>
+                            <span class="tag-item">人际关系</span>
+                            <span class="tag-item">办公室政治</span>
+                        </div>
+                    </div>
+                    <!-- 列表容器结束: 问题解答卡片标签 -->
+                </div>
+            </div>
+            <!-- 列表容器结束: 问题解答条目 -->
+        </section>
+        <!-- === 模块三：解惑一点通・有问必答 结束 === -->
+
+        <!-- === 模块四：智慧火花匣・每日精选 开始 === -->
+        <!-- HTML注释: 此模块已调整顺序。此模块作为单独一行，占据整行宽度。用于展示群内分享的实用信息、工具或资源。每个条目为一个卡片。新增了可选的资源链接功能。卡片边框颜色已修改为淡蓝色 (border-[#93c5fd])。 -->
+        <!-- HTML注释: "爬楼关键词"说明: 每个精选条目卡片中包含爬楼关键词区域，讨论起始句，用于用户快速定位到群聊记录中的对应讨论位置。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
+        <section id="section-daily-picks" class="w-full mb-12 anchor-target">
+            <h2 class="section-title">
+                四、智慧火花匣・每日精选
+            </h2>
+            <!-- 列表容器: 每日精选条目 -->
+            <div class="space-y-8">
+                <!-- HTML注释: 每个实用信息条目应包含: -->
+                <!-- 1. 条目标题 (例如: React Server Components深度解析) -->
+                <!-- 2. 爬楼关键词 (讨论起始句，例如: "分享一篇关于RSC的文章...") -->
+                <!-- 3. 详细内容或摘要  (请根据群聊记录，总结成员推荐的资源或工具。） -->
+                <!-- 4. 相关标签 (例如: React, 前端架构 - 作为多个 span.tag-item) -->
+                <!-- 5. (可选) 资源链接: 一个对象，包含 "resource_name" (字符串, 链接显示的文本) 和 "resource_url" (字符串, 点击跳转的URL)。 -->
+                <!--    如果提供此对象，则会在卡片右下角显示一个链接。如果数据中此条目的 "resource_link" 字段为 null 或不存在，则不显示链接区域。 -->
+                <!--    期望数据结构示例 for an item with a resource_link:
+                    {
+                      "title": "精选信息标题",
+                      "climb_keyword": "爬楼关键词内容",
+                      "content": "精选信息详细内容/摘要...",
+                      "tags": ["标签1", "标签2"],
+                      "resource_link": {
+                        "resource_name": "示例资源名称",
+                        "resource_url": "https://example.com"
+                      }
+                    }
+                    期望数据结构示例 for an item without a resource_link:
+                    {
+                      "title": "另一条精选信息标题",
+                      "climb_keyword": "另一个爬楼关键词",
+                      "content": "另一条精选信息详细内容/摘要...",
+                      "tags": ["标签3"]
+                      // "resource_link"字段不存在或为 null
+                    }
+                -->
+                <!-- 注意: 不包含参与成员列表 -->
+
+                <!-- 知识卡片 开始：复制以下 <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">...</div> 结构以添加更多知识卡片 (带资源链接示例) -->
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]"> <!-- 边框颜色修改为 border-[#93c5fd] -->
+                    <h4 class="text-xl font-semibold text-black mb-3">
+                        相亲软件的田野调查与方法论总结
+                    </h4>
+
+                    <!-- HTML注释: 爬楼关键词区域 - 讨论起始句，用于快速定位群聊记录中的对应讨论。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            醉嘻嘻泳往直前：同志们，我相亲的田野调查已经完成了。来汇报一下结果。
+                        </p>
+                    </div>
+
+                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+                        <div class="expandable-content" data-char-limit="200">
+                            <div class="content-preview">
+                                <b>一、推荐内容</b> <br>
+                                群友<b>醉嘻嘻泳往直前</b>完成了一项关于相亲软件的深度“田野调查”，并在群内分享了她的宝贵方法论和结论。她在相亲软件上积累了近900个“喜欢”，并与50多位男士进行了交流。
+                                <br><br>
+                                <b>二、核心价值与特点</b> <br>
+                                她将相亲过程类比为“做题”和“招聘”，提出了两个核心观点：
+                                <br><b>1. “题海战术”明确需求：</b>当不清楚自己喜欢什么类型时，可以通过大量接触（类似刷题）来归纳总结。<b>醉嘻嘻泳往直前</b>认为：“当你不知道自己真正的需求是什么的时候，那就通过题海战术，可以通过大量的题目来归纳出，各种常见题目的类型。”通过与大量样本的互动，可以逐渐清晰化自己的偏好。
+                                <br><b>2. “招聘模型”判断诚意：</b>她将相亲视为双向选择的招聘过程，认为严肃认真的对象，其行为模式应与高效的招聘流程类似。<b>她指出：“一个严肃的对待相亲这一件事的对象，基本上合不合适，至多在三次深度面谈之后，都该有个结果。”</b>如果对方反复拖延而不推进关系，其诚意值得怀疑。
+                                <br><br>
+                                <b>三、适用场景或补充信息</b> <br>
+                                <b>醉嘻嘻泳往直前</b>总结道：“相亲软件的匹配机制，不太容易找到真爱。但是相对容易找到一些愿意和你睡觉的人。”她建议，如果目的是严肃脱单，<b>线下多交朋友、多聊天，走到婚姻的概率会比单纯依靠相亲软件更高</b>。这份总结以其严谨的调查过程和清晰的逻辑模型，为正在使用或考虑使用相亲软件的群友提供了极具价值的参考。
+                            </div>
+                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                <span class="expand-text">展开全文</span>
+                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- 列表容器: 实用信息卡片标签 -->
+                    <div class="flex flex-wrap gap-2 mb-4"> <!-- mb-4 added to create space if resource link follows -->
+                        <!-- HTML注释: 为每个标签重复以下 span.tag-item 结构。 -->
+                        <span class="tag-item">相亲</span>
+                        <span class="tag-item">两性关系</span>
+                        <span class="tag-item">方法论</span>
+                        <span class="tag-item">田野调查</span>
+                    </div>
+                    <!-- 列表容器结束: 实用信息卡片标签 -->
+                </div>
+                <!-- 知识卡片 结束 -->
+
+                <!-- 知识卡片 开始：复制以下 <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">...</div> 结构以添加更多知识卡片 (无资源链接示例) -->
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]"> <!-- 边框颜色修改为 border-[#93c5fd] -->
+                    <h4 class="text-xl font-semibold text-black mb-3">
+                        职场观察方法论：三阶视角分析高校博后群体
+                    </h4>
+
+                    <!-- HTML注释: 爬楼关键词区域 - 讨论起始句，用于用户快速定位到群聊记录中的对应讨论位置。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            小月半皮：前面去跟我老公医院的博后当指导专家，再次感受到了这个群体的特别之处。
+                        </p>
+                    </div>
+
+                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+                        <div class="expandable-content" data-char-limit="200">
+                            <div class="content-preview">
+                                <b>一、推荐内容</b><br>
+                                群友<b>小月半皮</b>作为指导专家，在参与一场针对高校博士后的基金指导会后，分享了她对参会人员的精彩观察与三阶思考复盘。
+                                <br><br>
+                                <b>二、核心价值与特点</b><br>
+                                <b>小月半皮</b>将观察对象分为四类，并进行了深入分析：
+                                <br>• <b>A型 (谦虚成长型)：</b>知道自己不足，态度谦虚认真，积极记录指导意见。
+                                <br>• <b>B型 (躺平过场型)：</b>认为只是走形式，不认真准备，错过成长机会。
+                                <br>• <b>C型 (认知失调型)：</b>自我感觉良好，对任何建议都下意识反驳，甚至对权威（主任）翻白眼，情商堪忧。
+                                <br>• <b>D型 (自我中心型)：</b>作为上位者的主任，通过炫耀成果来巩固地位，不考虑他人感受。
+                                <br><br>
+                                她进一步进行了<b>二阶换位思考</b>，分析了每种类型背后的心理动机，并最终形成了<b>三阶实事求是</b>的行动指南：
+                                <br>1. <b>对己：</b>永远要做A类型的人，保持初学者心态，虚心学习，不轻易反驳。
+                                <br>2. <b>对人：</b>快速识人，对A型投入最多时间，对B型走过场，对C型不争论，对D型配合表演。
+                                <br><br>
+                                <b>三、适用场景或补充信息</b> <br>
+                                这套观察与应对策略不仅适用于学术圈，对任何职场环境中的人际交往都具有极高的参考价值。它提供了一个清晰的框架，帮助我们快速识人、高效互动，并时刻反思自身，保持谦逊和成长的姿态。这份宝贵的职场生存智慧，值得每一位群友学习和实践。
+                            </div>
+                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                <span class="expand-text">展开全文</span>
+                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tag-item">职场观察</span>
+                        <span class="tag-item">三阶思考</span>
+                        <span class="tag-item">人际交往</span>
+                        <span class="tag-item">方法论</span>
+                    </div>
+                    <!-- HTML注释: 此条目无资源链接，因此不包含资源链接区域的HTML。 -->
+                    <!-- 如果要为此条目添加资源链接, 请在上方 </div> (包含标签的 div) 之后，本卡片的结束 </div> 之前，添加与上一个卡片中类似的 "资源链接区域" HTML片段, 并填充相应数据。 -->
+                </div>
+                <!-- 知识卡片 结束 -->
+                <!-- HTML注释: 如需更多知识卡片，请复制粘贴以上 "知识卡片 开始" ... "知识卡片 结束" 的整个 <div class="bento-card ..."> 结构。 -->
+                 <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]"> <!-- 边框颜色修改为 border-[#93c5fd] -->
+                    <h4 class="text-xl font-semibold text-black mb-3">
+                        《我们为什么要睡觉》读书精要
+                    </h4>
+
+                    <!-- HTML注释: 爬楼关键词区域 - 讨论起始句，用于用户快速定位到群聊记录中的对应讨论位置。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            糯米：《我们为什么要睡觉》这本书刚看了一点点，有点儿想法分享一下。
+                        </p>
+                    </div>
+
+                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+                        <div class="expandable-content" data-char-limit="200">
+                            <div class="content-preview">
+                                <b>一、推荐内容</b> <br>
+                                群友<b>糯米</b>分享了经典科普书籍《我们为什么要睡觉》的核心观点，为群友们揭示了睡眠的科学奥秘。
+                                <br><br>
+                                <b>二、核心价值与特点</b> <br>
+                                <b>糯米</b>总结了睡眠科学中的几个关键概念：
+                                <br>1. <b>睡眠的两种状态：</b>睡眠分为<b>快速眼动睡眠（REM）</b>和<b>非快速眼动睡眠（NREM）</b>。前者主要功能是强化有用记忆（更容易做梦），后者则是为了清除无用记忆。
+                                <br>2. <b>睡眠周期：</b>一个完整的睡眠周期约为90分钟，由REM和NREM交替构成。书中建议，一晚优质睡眠应包含五个这样的周期，即总时长约7.5小时。
+                                <br>3. <b>睡眠节律：</b>在整个睡眠过程中，前半夜NREM睡眠占主导，而后半夜则是REM睡眠更活跃。
+                                <br><br>
+                                <b>三、重要启发与讨论</b> <br>
+                                基于这些理论，群友们得出了极具实践价值的结论。<b>糯米</b>总结道：“简单说，就是<b>晚睡容易焦虑，早起容易失忆</b>。”<b>阿南plus（早睡输出）</b>结合自身经历验证了90分钟周期的理论，并分享了睡眠技巧：“睡眠时间和早起闹钟要有一些技巧，最好是节点那个时间，避开周期里，不然硬从梦里拽出来，会非常疲惫。”<b>桃乐丝</b>也分享了相似的体会，同样睡6小时，早睡早起比晚睡晚起精神状态更好。这些分享为群友改善睡眠质量提供了科学依据和实用方法。
+                            </div>
+                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                <span class="expand-text">展开全文</span>
+                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- 列表容器: 实用信息卡片标签 -->
+                    <div class="flex flex-wrap gap-2 mb-4"> <!-- mb-4 added to create space if resource link follows -->
+                        <!-- HTML注释: 为每个标签重复以下 span.tag-item 结构。 -->
+                        <span class="tag-item">健康</span>
+                        <span class="tag-item">睡眠科学</span>
+                        <span class="tag-item">读书笔记</span>
+                        <span class="tag-item">生活方式</span>
+                    </div>
+                    <!-- 列表容器结束: 实用信息卡片标签 -->
+                </div>
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]"> <!-- 边框颜色修改为 border-[#93c5fd] -->
+                    <h4 class="text-xl font-semibold text-black mb-3">
+                        文章推荐：毛泽东1922，问苍茫，暮色苍茫看劲松
+                    </h4>
+
+                    <!-- HTML注释: 爬楼关键词区域 - 讨论起始句，用于用户快速定位到群聊记录中的对应讨论位置。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            AA昍：[链接|孔鲤：毛泽东1922，问苍茫，暮色苍茫看劲松]
+                        </p>
+                    </div>
+
+                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+                        <div class="expandable-content" data-char-limit="200">
+                            <div class="content-preview">
+                                <b>一、推荐内容</b> <br>
+                                群友<b>AA昍</b>分享了作者孔鲤的一篇深度文章《毛泽东1922，问苍茫，暮色苍茫看劲松》，该文章分析了教员从“纵横家”到“革命者”的思想转变过程。
+                                <br><br>
+                                <b>二、核心价值与特点</b> <br>
+                                文章通过对比“纵横家”与“革命者”的思维模式，为理解个人成长与时代变革提供了深刻的视角。
+                                <br>• <b>纵横家思维：</b>在既定的世界规则下，寻求如何在夹缝中为自身谋取最大利益。这是一种适应规则、利用规则的生存策略。
+                                <br>• <b>革命者思维：</b>当认识到规则本身存在根本性问题时，不再满足于解释世界或在规则内博弈，而是致力于从根本上改造世界、重塑规则。
+                                <br><br>
+                                <b>三、适用场景或补充信息</b> <br>
+                                <b>AA昍</b>借此文章启发群友思考个人发展路径，指出像Sven这类博主玩流量的模式，本质上是在扮演“纵横家”的角色。而教员的伟大之处在于他完成了从“纵横家”到“革命者”的升华。<b>子蟹</b>在阅读后深受启发，联想到了“重要的不是解释世界，而是改造世界”这句名言，并表示需要多看书学习，才能更深刻地理解其中的历史背景。这篇文章对于希望突破个人局限、实现更高层次价值的群友具有极强的思想启发意义。
+                            </div>
+                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                <span class="expand-text">展开全文</span>
+                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- 列表容器: 实用信息卡片标签 -->
+                    <div class="flex flex-wrap gap-2 mb-4"> <!-- mb-4 added to create space if resource link follows -->
+                        <!-- HTML注释: 为每个标签重复以下 span.tag-item 结构。 -->
+                        <span class="tag-item">历史</span>
+                        <span class="tag-item">人物分析</span>
+                        <span class="tag-item">思想转变</span>
+                        <span class="tag-item">个人成长</span>
+                    </div>
+                    <!-- 列表容器结束: 实用信息卡片标签 -->
+
+                    <!-- HTML注释: 资源链接区域 (可选) -->
+                    <!-- 如果当前精选条目数据中 "resource_link" 对象存在 (包含 "resource_name" 和 "resource_url"), 则生成下面的 'div.flex.justify-end' 结构。 -->
+                    <!-- 否则 (即 "resource_link" 为 null 或未定义), 则不应生成此 div。 -->
+                    <!-- 占位符数据示例: resource_link: { resource_name: "阅读原文", resource_url: "https://react.dev/blog/..." } -->
+                    <div class="flex justify-end">
+                        <a href="https://mp.weixin.qq.com/s/FTZeajLGKl8DOpjLhgJDMg" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-[#4D6BFE] hover:text-blue-700 hover:underline flex items-center">
+                            阅读原文
+                            <i class="fas fa-external-link-alt ml-1.5 text-xs"></i>
+                        </a>
+                    </div>
+                    <!-- HTML注释: 资源链接区域结束 -->
+                </div>
+            </div>
+            <!-- 列表容器结束: 每日精选条目 -->
+        </section>
+        <!-- === 模块四：智慧火花匣・每日精选 结束 === -->
+
+        <!-- HTML注释: 新增底部导航，便于阅读完毕后快速切换日期 -->
+        <nav class="w-full mt-12 daily-nav">
+            <div class="bento-card p-4">
+                <div class="flex justify-between items-center">
+                    <button type="button" class="nav-button day-nav-prev">
+                        <i class="fas fa-chevron-left"></i>
+                        上一天
+                    </button>
+
+                    <div class="text-center">
+                        <span class="text-sm text-gray-600">日报导航</span>
+                    </div>
+
+                    <button type="button" class="nav-button day-nav-next">
+                        下一天
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- === 文件底部 开始 === -->
+        <!-- HTML注释: 此模块作为文件底部，包含数据来源、报告生成时间及免责声明。 -->
+        <footer class="w-full mt-16">
+            <div class="bento-card p-8">
+                <div class="text-center text-gray-700 space-y-3">
+                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-base">
+                        <div class="flex items-center">
+                            <i class="fas fa-database mr-2 text-[#4D6BFE]"></i>
+                            <span>微信群聊记录</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-robot mr-2 text-[#4D6BFE]"></i>
+                            <span>2025-11-15 02:00:00</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                        本报告基于群聊数据自动生成，仅供参考。内容可能包含个人观点，不代表群组官方立场。数据处理过程中已尽量匿名化处理敏感信息。
+                    </p>
+                </div>
+            </div>
+        </footer>
+        <!-- === 文件底部 结束 === -->
+    </div>
+
+    <!-- HTML注释: 右下角浮动按钮，提供返回顶部与目录导航 -->
+    <div class="floating-actions" aria-label="页面快捷操作">
+        <div class="directory-wrapper">
+            <button type="button" class="floating-button" id="directory-toggle" aria-expanded="false" aria-controls="directory-panel" aria-label="打开内容导航">
+                <i class="fas fa-list-ul"></i>
+            </button>
+            <div class="directory-panel" id="directory-panel" role="dialog" aria-modal="false" aria-hidden="true">
+                <div class="directory-header">
+                    <span class="directory-title">内容导航</span>
+                    <button type="button" class="directory-close" id="directory-close" aria-label="关闭内容导航">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="directory-list" id="directory-list">
+                    <!-- HTML注释: 目录列表由脚本自动填充，确保多层级锚点保持同步 -->
+                </div>
+            </div>
+        </div>
+        <button type="button" class="floating-button floating-button--hidden" id="scroll-top-btn" aria-label="返回顶部">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+    </div>
+
+    <script>
+        // 定义基础URL常量
+        const BASE_URL = 'https://xinjian-bot.github.io/-';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Bento card hover effect is handled by CSS :hover pseudo-class
+
+            // Number animation effect
+            const numberElements = document.querySelectorAll('.number-display');
+            numberElements.forEach(element => {
+                const finalValueText = element.textContent.replace(/,/g, '');
+                const finalValue = parseInt(finalValueText, 10);
+
+                if (isNaN(finalValue)) return;
+
+                let currentValue = 0;
+                const duration = 1500; // Animation duration in ms
+                const frameRate = 1000 / 60; // 60fps
+                const totalFrames = Math.round(duration / frameRate);
+                const increment = finalValue / totalFrames;
+
+                let currentFrame = 0;
+                const timer = setInterval(() => {
+                    currentFrame++;
+                    currentValue += increment;
+
+                    if (currentFrame >= totalFrames) {
+                        currentValue = finalValue;
+                        clearInterval(timer);
+                    }
+                    // Format number with commas for display
+                    element.textContent = Math.floor(currentValue).toLocaleString('en-US');
+                }, frameRate);
+            });
+
+            // HTML注释: 初始化日报导航功能
+            initDailyNavigation();
+
+            // HTML注释: 初始化展开功能
+            initExpandableContent();
+
+            // HTML注释: 初始化浮动按钮与目录互动
+            initFloatingActions();
+            
+            // 初始化历史汇总链接
+            const historyLink = document.getElementById('history-link');
+            if (historyLink) {
+                historyLink.href = BASE_URL + '/新茧历史日报汇总.html';
+            }
+        });
+
+        // HTML注释: 这个函数实现了日报间的导航功能，包括：
+        // 1. 从当前页面URL或内容中提取日期
+        // 2. 检查前后日期的日报文件是否存在
+        // 3. 设置"上一天"和"下一天"按钮的状态和链接
+        // 4. 实现"下一天"按钮的动态显示逻辑
+        async function initDailyNavigation() {
+            try {
+                // HTML注释: 获取当前页面的日期
+                const currentDate = getCurrentDateFromPage();
+                if (!currentDate) {
+                    console.warn('无法从页面中提取日期信息');
+                    return;
+                }
+
+                // HTML注释: 设置导航按钮
+                await setupNavigationButtons(currentDate);
+
+            } catch (error) {
+                console.error('初始化日报导航时出错:', error);
+            }
+        }
+
+        // HTML注释: 从页面中提取当前日期
+        // HTML注释: 支持多种方式提取日期：优先从页面元素、URL文件名或页面标题
+        function getCurrentDateFromPage() {
+            // HTML注释: 方法1：从报告日期元素中提取（优先级最高）
+            const dateElement = document.getElementById('report-date');
+            if (dateElement) {
+                const dateText = dateElement.textContent;
+                const dateMatch = dateText.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
+                if (dateMatch) {
+                    const year = dateMatch[1];
+                    const month = dateMatch[2].padStart(2, '0');
+                    const day = dateMatch[3].padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                }
+            }
+
+            // HTML注释: 方法2：从URL文件名中提取日期
+            const pathname = window.location.pathname;
+            const filenameMatch = pathname.match(/新茧群日报_(\d{4}-\d{2}-\d{2})\.html/);
+            if (filenameMatch) {
+                return filenameMatch[1];
+            }
+
+            // HTML注释: 方法3：从页面标题中提取日期
+            const titleMatch = document.title.match(/(\d{4}-\d{2}-\d{2})/);
+            if (titleMatch) {
+                return titleMatch[1];
+            }
+
+            return null;
+        }
+
+        // HTML注释: 设置导航按钮的状态和链接
+         // HTML注释: 根据当前日期，检查前后日期的日报文件是否存在
+         async function setupNavigationButtons(currentDate) {
+             const prevButtons = document.querySelectorAll('.day-nav-prev');
+             const nextButtons = document.querySelectorAll('.day-nav-next');
+             const navContainers = document.querySelectorAll('.daily-nav');
+
+             if (!prevButtons.length && !nextButtons.length) {
+                 return;
+             }
+             
+             // HTML注释: 计算前一天和后一天的日期
+             const currentDateObj = new Date(currentDate);
+             const prevDateObj = new Date(currentDateObj);
+             prevDateObj.setDate(prevDateObj.getDate() - 1);
+             const nextDateObj = new Date(currentDateObj);
+             nextDateObj.setDate(nextDateObj.getDate() + 1);
+             
+             const prevDate = formatDate(prevDateObj);
+             const nextDate = formatDate(nextDateObj);
+             
+             // HTML注释: 检查前一天和后一天的日报是否存在
+             const prevExists = await checkReportExists(prevDate);
+             const nextExists = await checkReportExists(nextDate);
+             
+             // HTML注释: 如果前后日期的日报都不存在，隐藏所有导航栏容器
+             if (!prevExists && !nextExists) {
+                 navContainers.forEach(container => {
+                     container.style.display = 'none';
+                 });
+                 return;
+             }
+             
+             // HTML注释: 显示所有导航栏容器
+             navContainers.forEach(container => {
+                 container.style.display = 'block';
+             });
+             
+             // HTML注释: 设置前一天按钮
+             prevButtons.forEach(button => {
+                 if (prevExists) {
+                     button.disabled = false;
+                     button.onclick = () => {
+                         window.location.href = `${BASE_URL}/新茧群日报_${prevDate}.html`;
+                     };
+                 } else {
+                     button.disabled = true;
+                     button.onclick = null;
+                 }
+             });
+
+             // HTML注释: 设置后一天按钮
+             nextButtons.forEach(button => {
+                 if (nextExists) {
+                     button.disabled = false;
+                     button.onclick = () => {
+                         window.location.href = `${BASE_URL}/新茧群日报_${nextDate}.html`;
+                     };
+                 } else {
+                     button.disabled = true;
+                     button.onclick = null;
+                 }
+             });
+         }
+
+        // HTML注释: 检查指定日期的日报文件是否存在
+        async function checkReportExists(date) {
+            try {
+                const response = await fetch(`${BASE_URL}/新茧群日报_${date}.html`, { method: 'HEAD' });
+                return response.ok;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        // HTML注释: 格式化日期为YYYY-MM-DD格式
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // HTML注释: 初始化展开功能
+        function initExpandableContent() {
+            const expandableContents = document.querySelectorAll('.expandable-content');
+            
+            expandableContents.forEach(container => {
+                const charLimit = parseInt(container.getAttribute('data-char-limit')) || 200;
+                const contentPreview = container.querySelector('.content-preview');
+                const expandBtn = container.querySelector('.expand-btn');
+                
+                if (!contentPreview || !expandBtn) return;
+                
+                const fullContent = contentPreview.innerHTML;
+                const fullText = contentPreview.textContent || contentPreview.innerText;
+                
+                // HTML注释: 如果内容长度超过限制，则显示展开按钮
+                if (fullText.length > charLimit) {
+                    // HTML注释: 创建一个临时元素来正确截取HTML内容
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = fullContent;
+                    
+                    // HTML注释: 截取文本内容到指定长度
+                    const truncatedText = fullText.substring(0, charLimit);
+                    
+                    // HTML注释: 使用更简单可靠的方法截取内容
+                    let truncatedContent = '';
+                    let charCount = 0;
+                    
+                    // HTML注释: 逐字符遍历，保持简单的HTML结构
+                    const walker = document.createTreeWalker(
+                        tempDiv,
+                        NodeFilter.SHOW_TEXT,
+                        null,
+                        false
+                    );
+                    
+                    let node;
+                    const textNodes = [];
+                    while (node = walker.nextNode()) {
+                        textNodes.push(node);
+                    }
+                    
+                    // HTML注释: 计算需要保留的文本内容
+                    for (let textNode of textNodes) {
+                        const text = textNode.textContent;
+                        if (charCount + text.length <= charLimit) {
+                            charCount += text.length;
+                        } else {
+                            const remainingChars = charLimit - charCount;
+                            textNode.textContent = text.substring(0, remainingChars) + '...';
+                            charCount = charLimit;
+                            
+                            // HTML注释: 新的、更干净的移除后续所有节点的逻辑
+                            let currentNodeToClearAfter = textNode;
+                            while (currentNodeToClearAfter && currentNodeToClearAfter !== tempDiv) {
+                                let sibling = currentNodeToClearAfter.nextSibling;
+                                while (sibling) {
+                                    const nodeToRemove = sibling;
+                                    sibling = sibling.nextSibling;
+                                    nodeToRemove.remove();
+                                }
+                                currentNodeToClearAfter = currentNodeToClearAfter.parentElement;
+                            }
+                            break; // 完成截断和清理，跳出 textNodes 循环
+                        }
+                    }
+                    
+                    const previewContent = tempDiv.innerHTML;
+                    
+                    contentPreview.innerHTML = previewContent;
+                    contentPreview.classList.add('collapsed');
+                    expandBtn.style.display = 'flex';
+                    
+                    // HTML注释: 绑定展开/收起事件
+                    expandBtn.addEventListener('click', function() {
+                        const isExpanded = expandBtn.classList.contains('expanded');
+                        
+                        if (isExpanded) {
+                            // HTML注释: 收起内容
+                            contentPreview.innerHTML = previewContent;
+                            contentPreview.classList.add('collapsed');
+                            expandBtn.querySelector('.expand-text').textContent = '展开全文';
+                            expandBtn.classList.remove('expanded');
+                        } else {
+                            // HTML注释: 展开内容
+                            contentPreview.innerHTML = fullContent;
+                            contentPreview.classList.remove('collapsed');
+                            expandBtn.querySelector('.expand-text').textContent = '收起';
+                            expandBtn.classList.add('expanded');
+                        }
+                    });
+                } else {
+                    // HTML注释: 内容较短，隐藏展开按钮
+                    expandBtn.style.display = 'none';
+                }
+            });
+        }
+
+        // HTML注释: 构建目录，统一扫描模块及其子卡片生成锚点
+        function buildDirectory(panelElement) {
+            const listElement = panelElement.querySelector('#directory-list');
+            if (!listElement) {
+                return;
+            }
+
+            listElement.innerHTML = '';
+
+            const directoryConfigs = [
+                { id: 'section-overview', icon: 'fa-chart-column' },
+                { id: 'section-hot-topics', icon: 'fa-fire' },
+                { id: 'section-meeting', icon: 'fa-users' },
+                { id: 'section-qa', icon: 'fa-circle-question' },
+                { id: 'section-daily-picks', icon: 'fa-lightbulb' }
+            ];
+
+            directoryConfigs.forEach((config) => {
+                const sectionElement = document.getElementById(config.id);
+                if (!sectionElement) {
+                    return;
+                }
+
+                const sectionTitleElement = sectionElement.querySelector('.section-title');
+                const sectionTitle = sectionTitleElement ? sectionTitleElement.textContent.trim() : config.id;
+
+                const itemWrapper = document.createElement('div');
+                itemWrapper.className = 'directory-item';
+
+                const entryButton = document.createElement('button');
+                entryButton.type = 'button';
+                entryButton.className = 'directory-entry';
+                entryButton.setAttribute('data-target', config.id);
+                entryButton.innerHTML = `<span class="directory-icon"><i class="fas ${config.icon}"></i></span><span class="directory-text">${sectionTitle}</span>`;
+                itemWrapper.appendChild(entryButton);
+
+                const subHeadings = sectionElement.querySelectorAll('.bento-card h4');
+                if (subHeadings.length > 0) {
+                    const sublistElement = document.createElement('div');
+                    sublistElement.className = 'directory-sublist';
+
+                    subHeadings.forEach((heading, index) => {
+                        const cardElement = heading.closest('.bento-card');
+                        if (!cardElement) {
+                            return;
+                        }
+
+                        if (!cardElement.classList.contains('anchor-target')) {
+                            cardElement.classList.add('anchor-target');
+                        }
+
+                        if (!cardElement.id) {
+                            cardElement.id = `${config.id}-item-${index + 1}`;
+                        }
+
+                        const subButton = document.createElement('button');
+                        subButton.type = 'button';
+                        subButton.className = 'directory-subitem';
+                        subButton.setAttribute('data-target', cardElement.id);
+                        subButton.innerHTML = `<span class="directory-text">${heading.textContent.trim()}</span>`;
+                        sublistElement.appendChild(subButton);
+                    });
+
+                    itemWrapper.appendChild(sublistElement);
+                }
+
+                listElement.appendChild(itemWrapper);
+            });
+        }
+
+        // HTML注释: 初始化浮动按钮与目录交互
+        function initFloatingActions() {
+            const scrollTopBtn = document.getElementById('scroll-top-btn');
+            const directoryToggle = document.getElementById('directory-toggle');
+            const directoryPanel = document.getElementById('directory-panel');
+            const directoryClose = document.getElementById('directory-close');
+
+            if (scrollTopBtn) {
+                const toggleScrollButton = () => {
+                    if (window.scrollY > 240) {
+                        scrollTopBtn.classList.remove('floating-button--hidden');
+                    } else {
+                        scrollTopBtn.classList.add('floating-button--hidden');
+                    }
+                };
+
+                toggleScrollButton();
+                window.addEventListener('scroll', toggleScrollButton, { passive: true });
+
+                scrollTopBtn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+
+            if (!directoryPanel) {
+                return;
+            }
+
+            buildDirectory(directoryPanel);
+
+            if (!directoryToggle) {
+                return;
+            }
+
+            const closePanel = () => {
+                directoryPanel.classList.remove('open');
+                directoryToggle.setAttribute('aria-expanded', 'false');
+                directoryPanel.setAttribute('aria-hidden', 'true');
+            };
+
+            const openPanel = () => {
+                directoryPanel.classList.add('open');
+                directoryToggle.setAttribute('aria-expanded', 'true');
+                directoryPanel.setAttribute('aria-hidden', 'false');
+            };
+
+            const togglePanel = () => {
+                if (directoryPanel.classList.contains('open')) {
+                    closePanel();
+                } else {
+                    openPanel();
+                }
+            };
+
+            directoryToggle.addEventListener('click', (event) => {
+                event.stopPropagation();
+                togglePanel();
+            });
+
+            if (directoryClose) {
+                directoryClose.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    closePanel();
+                });
+            }
+
+            const directoryItems = directoryPanel.querySelectorAll('[data-target]');
+            directoryItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const targetId = item.getAttribute('data-target');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                    closePanel();
+                });
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!directoryPanel.contains(event.target) && !directoryToggle.contains(event.target)) {
+                    closePanel();
+                }
+            });
+
+            window.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closePanel();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
