@@ -1,0 +1,1760 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新茧日报</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6C9T7FPDT2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-6C9T7FPDT2');
+    </script>
+    <!-- 正常标题格式应为：新茧日报 yyyy-mm-dd，以便外部链接查看时了解日报日期 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * {
+            font-family: 'Inter', ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        :root {
+            --directory-main-font-size: clamp(0.85rem, 0.9vw + 0.6rem, 0.95rem);
+            --directory-sub-font-size: clamp(0.78rem, 0.75vw + 0.5rem, 0.88rem);
+        }
+
+        .bento-card {
+            background-color: #ffffff;
+            border: 1px solid #e9e9eb;
+            border-radius: 1rem; /* 16px */
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .bento-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.07), 0 4px 6px -4px rgba(0,0,0,0.05);
+            transform: translateY(-3px);
+        }
+
+        .number-display {
+            font-weight: 900; /* black */
+            font-size: 4rem;
+            line-height: 1;
+            /* Color will be set by Tailwind, e.g., text-[#4D6BFE] or text-black */
+        }
+
+        .section-title {
+            font-weight: 800; /* extrabold */
+            font-size: 2.25rem; /* 36px */
+            color: #000000;
+            margin-bottom: 2rem; /* 32px, consistent with Tailwind mb-8 */
+        }
+
+        .tag-item {
+            background-color: rgba(77, 107, 254, 0.1); /* bg-[#4D6BFE] bg-opacity-10 */
+            color: #4D6BFE;
+            padding: 0.25rem 0.75rem; /* py-1 px-3 */
+            border-radius: 9999px; /* rounded-full */
+            font-size: 0.75rem; /* text-xs */
+            font-weight: 500; /* medium */
+        }
+
+        /* HTML注释: 新增导航按钮样式，与现有设计保持一致 */
+        .nav-button {
+            background: linear-gradient(135deg, #4D6BFE 0%, #6B8BFF 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(77, 107, 254, 0.1);
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px -3px rgba(77, 107, 254, 0.2);
+        }
+
+        .nav-button:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .history-link {
+            background: rgba(77, 107, 254, 0.1);
+            color: #4D6BFE;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            border: 1px solid rgba(77, 107, 254, 0.2);
+        }
+
+        .history-link:hover {
+            background: rgba(77, 107, 254, 0.15);
+            transform: translateY(-1px);
+        }
+
+        /* HTML注释: 展开功能相关样式 */
+        .expandable-content {
+            position: relative;
+        }
+
+        .content-preview.collapsed {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .content-preview.collapsed::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(transparent, rgba(248, 250, 252, 0.9));
+            pointer-events: none;
+        }
+
+        .expand-btn {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0;
+        }
+
+        .expand-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .expand-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .expand-btn.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        /* HTML注释: 目录锚点滚动偏移，避免标题被遮挡 */
+        .anchor-target {
+            scroll-margin-top: 120px;
+        }
+
+        .anchor-placeholder {
+            height: 0;
+        }
+
+        /* HTML注释: 右下角浮动快捷按钮区域样式 */
+        .floating-actions {
+            position: fixed;
+            right: 1.25rem;
+            bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            z-index: 50;
+        }
+
+        .floating-button {
+            background: linear-gradient(135deg, #4D6BFE 0%, #6B8BFF 100%);
+            color: #ffffff;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px -5px rgba(77, 107, 254, 0.35);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .floating-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -6px rgba(77, 107, 254, 0.45);
+        }
+
+        .floating-button:focus-visible {
+            outline: 2px solid rgba(77, 107, 254, 0.45);
+            outline-offset: 2px;
+        }
+
+        .floating-button--hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            pointer-events: none;
+        }
+
+        .directory-wrapper {
+            position: relative;
+        }
+
+        .directory-panel {
+            position: absolute;
+            right: 0;
+            bottom: 3.5rem;
+            width: 18rem;
+            background: #ffffff;
+            border: 1px solid rgba(77, 107, 254, 0.2);
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 40px -15px rgba(77, 107, 254, 0.35);
+            padding: 1rem;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            max-height: min(75vh, 30rem);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+
+        .directory-panel.open {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .directory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .directory-title {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: var(--directory-main-font-size);
+        }
+
+        .directory-close {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 9999px;
+           transition: color 0.2s ease;
+        }
+
+        .directory-close:hover {
+            color: #4D6BFE;
+        }
+
+        .directory-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .directory-list button {
+            width: 100%;
+            text-align: left;
+            background: rgba(77, 107, 254, 0.08);
+            color: #1f2937;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.55rem 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: var(--directory-main-font-size);
+        }
+
+        .directory-list button:hover {
+            background: rgba(77, 107, 254, 0.18);
+            color: #1d4ed8;
+        }
+
+        /* HTML注释: 二级导航容器样式，支持主模块与子模块层级展示 */
+        .directory-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .directory-entry {
+            background: rgba(77, 107, 254, 0.08);
+        }
+
+        .directory-sublist {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-left: 2.5rem;
+            padding-left: 0.75rem;
+            border-left: 1px solid rgba(77, 107, 254, 0.2);
+        }
+
+        .directory-subitem {
+            background: rgba(77, 107, 254, 0.04);
+            padding-top: 0.45rem;
+            padding-bottom: 0.45rem;
+            font-size: var(--directory-sub-font-size);
+        }
+
+        .directory-subitem:hover {
+            background: rgba(77, 107, 254, 0.14);
+        }
+
+        .directory-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 9999px;
+            background: rgba(77, 107, 254, 0.12);
+            color: #4D6BFE;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .directory-text {
+            flex: 1;
+            color: inherit;
+        }
+
+        @media (max-width: 640px) {
+            .floating-actions {
+                right: 0.75rem;
+                bottom: 1rem;
+            }
+
+            .directory-panel {
+                width: min(80vw, 15rem);
+                bottom: 3.25rem;
+                max-height: min(70vh, 20rem);
+            }
+            :root {
+                --directory-main-font-size: 0.8rem;
+                --directory-sub-font-size: 0.72rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-white text-black min-h-screen">
+    <!-- HTML注释: 整体宽度通过 max-w-4xl 控制，实现日报宽度调小并保持响应式。-->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- === "新茧日报" 文件头区域 开始 === -->
+        <!-- HTML注释: 此模块作为单独一行，占据整行宽度。包含日报主标题、报告日期和时间范围。 -->
+        <!-- HTML注释: 新增了"新茧历史日报"链接，样式与整体设计保持统一协调 -->
+        <header class="w-full mb-8">
+            <div class="bento-card p-8">
+                <div class="text-center">
+                    <h1 class="text-5xl font-black text-black mb-6">
+                        新茧日报
+                    </h1>
+                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-lg mb-4">
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-calendar-alt mr-2 text-[#4D6BFE]"></i>
+                            <span id="report-date">2025年11月18日</span>
+                        </div>
+                        <div class="flex items-center text-gray-700">
+                            <i class="fas fa-clock mr-2 text-[#4D6BFE]"></i>
+                            <span>02:00 - 02:00（次日）</span>
+                        </div>
+                    </div>
+                    <!-- HTML注释: 新增历史日报链接，位置合理且样式协调 -->
+                    <div class="flex justify-center">
+                        <a id="history-link" href="#" class="history-link">
+                            <i class="fas fa-history"></i>
+                            新茧历史日报
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- === "新茧日报" 文件头区域 结束 === -->
+
+        <!-- HTML注释: 新增导航区域，包含"上一天"和"下一天"按钮 -->
+        <!-- HTML注释: 导航逻辑说明：
+             1. 通过JavaScript检查前后日期的日报文件是否存在
+             2. 根据当前页面日期确定前后日期
+             3. "下一天"按钮动态显示逻辑：仅当不是最新日报时显示
+             4. 兼容处理历史日报文件命名格式
+        -->
+        <nav class="w-full mb-8 daily-nav">
+            <div class="bento-card p-4">
+                <div class="flex justify-between items-center">
+                    <button type="button" class="nav-button day-nav-prev">
+                        <i class="fas fa-chevron-left"></i>
+                        上一天
+                    </button>
+                    
+                    <div class="text-center">
+                        <span class="text-sm text-gray-600">日报导航</span>
+                    </div>
+                    
+                    <button type="button" class="nav-button day-nav-next">
+                        下一天
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- === 模块一：总消息概览 开始 === -->
+        <!-- HTML注释: 此模块作为单独一行，占据整行宽度。显示当日群聊总消息数量。 -->
+        <section id="section-overview" class="w-full mb-12 anchor-target">
+            <h2 class="section-title">
+                一、总消息概览
+            </h2>
+            <div class="bento-card p-8 bg-gradient-to-br from-[#4D6BFE]/20 via-[#4D6BFE]/10 to-[#4D6BFE]/5 text-center rounded-2xl">
+                <div class="number-display text-[#4D6BFE]">
+                    3541
+                </div>
+                <p class="text-xl font-semibold text-black mt-3">总消息数量</p>
+            </div>
+        </section>
+        <!-- === 模块一：总消息概览 结束 === -->
+
+        <!-- === 模块二：火花碰撞时刻・热点话题 开始 === -->
+        <!-- HTML注释: 此模块作为单独一行，占据整行宽度。用于展示群内讨论的热点话题。 -->
+        <!-- HTML注释: 模块二内容结构说明: -->
+        <!-- 1. 话题: 作为卡片的主标题 -->
+        <!-- 2. 关键结论: 每个话题下可以包含多个关键结论 (模板结构示例展示支持最多3个关键结论，如需更多可复制结构)；关键结论应按照话题讨论的时间线来编写。 -->
+        <!-- 3. <b>金句时刻</b>: 每个关键结论下对应约3个<b>金句时刻</b>金句必须是让人获得“啊哈”或恍然大悟的发言。 -->
+        <!-- HTML注释: "爬楼关键词"说明: 每个话题卡片中包含爬楼关键词区域，话题讨论起始句，用于用户快速定位到群聊记录中的对应讨论位置。填写时需要包含相关用户的昵称，格式示例：[用户昵称]：[关键词内容]，但不要包含微信ID。为便于定位，请勿引用图片、视频、链接、语音等非文本消息作为起始句，应顺延至其后的第一条有效文本消息。 -->
+        <section id="section-hot-topics" class="w-full mb-12 anchor-target">
+            <h2 class="section-title">
+                二、火花碰撞时刻・热点话题
+            </h2>
+            <!-- 列表容器: 讨论话题 -->
+            <div class="space-y-8">
+                
+                <!-- 热点话题卡片 1 -->
+                <div class="bento-card p-6 rounded-xl">
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            育儿责任与现代父亲角色：一场关于爱、本能与行动的深刻探讨
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            10:49 - 11:15
+                        </span>
+                    </div>
+
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            Garrido（拉坨大的：哎感觉自己有个很不好的预设，就是男人一定不会管这些事，都是妈妈操心。
+                        </p>
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">育儿责任</span>
+                            <span class="tag-item">父亲角色</span>
+                            <span class="tag-item">家庭分工</span>
+                            <span class="tag-item">心理弑父</span>
+                            <span class="tag-item">原生家庭</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、话题背景与起因</b><br>
+                                    群友 <b>Garrido（拉坨大的）</b> 在讨论育儿话题时，坦言自己有一个负面预设，即“男人一定不会管这些事，都是妈妈操心”，并认为像群友 <b>高大壮喝了冰露真的永不痛风</b> 这样的好爸爸是极少数。这一观点迅速引发了群内关于现代家庭中父亲角色与育儿责任的深度探讨。<br><br>
+                                    <b>二、主要观点与讨论详情</b><br>
+                                    本次讨论激烈而富有洞见，主要围绕父亲角色转换的动力、障碍及解决方法展开，形成了三大核心观点阵营：<br><br>
+                                    <b>1. “行动派”观点：爱意与责任驱动，主观能动性是关键。</b><br>
+                                    以 <b>今天是叶子</b> 为代表的群友认为，父亲参与育儿的核心驱动力应是“爱老婆”，而非等待所谓的“父爱”自然萌发。她强调：“<b>完全可以出于爱老婆的原因而带孩子，而不是爱孩子而带孩子的。</b>” 只有通过亲自“带孩子”这一行动，父亲才能与孩子建立真正的链接，从而“成为父亲”。将不作为归咎于生理缺陷是“推卸责任”，成年人应有主动推动这一切发生的主观能动性。<br><br>
+                                    <b>2. “生理派”观点：承认天然差异，感官冲击促进角色转换。</b><br>
+                                    <b>高大壮喝了冰露真的永不痛风</b> 从男性视角出发，坦言父亲与母亲在建立亲子链接上存在生理基础的差异，母亲有孕期激素变化，而父亲“天然更难建立连接”。他分享个人经历，认为自己的父亲角色转换得益于“陪产”这一“<b>直接冲击极强的感官刺激</b>”。他认为，承认并了解这种生理上的不足，是男性做好父亲角色的前提，这样才能在婚前与伴侣沟通，提前干预和做好准备。<br><br>
+                                    <b>3. “策略派”观点：打破旧有模式，智慧管理家庭动态。</b><br>
+                                    <b>桃乐丝</b> 的发言一针见血，她指出，很多家庭矛盾的根源在于未能打破旧有模式。她提出金句：“<b>首先不要有一个让你们分房睡的奶奶（甚至是外婆），‘他明天还要上班很累的’。只要睡在一起，就可以把他踢醒，让他起来干活。</b>” 她进一步分析，与公婆同住的男性容易有依赖心理，未能完成“心理弑父”，仍是个“乖宝宝”。因此，建立夫妻统一战线，共同承担责任，是培养合格父亲的关键策略。<br><br>
+                                    群友们还分享了身边“好爸爸”（如 <b>小月半皮</b> 丈夫提前参加育儿培训）和“甩手掌柜”的案例，印证了主观能动性和提前沟通的重要性。<b>不知(话痨三鸽)</b> 补充道，在婚恋关系中，“遇人不淑”这个词把自己摘得太干净了，暗示了在关系初期识别和判断的重要性。<br><br>
+                                    <b>三、结论与启发</b><br>
+                                    这场讨论最终汇聚成一个共识：培养一个合格的现代父亲，是一个需要夫妻双方共同努力、充满智慧与策略的过程。它不仅仅是情感的自然流露，更是责任、行动和相互理解的结合体。女性需要有“底线思维”，认识到育儿的艰辛，并在选择伴侣时就观察其责任感；男性则需要正视自身可能存在的角色转换困难，通过主动学习和实践，积极参与到家庭生活中。正如 <b>桃乐丝</b> 所言，美好的关系不是凭空发生的，而是靠自己争取和经营得来的。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            父亲角色的建立并非天然发生，而是需要通过“爱伴侣”的责任感驱动，并以“主动参与育儿”的实际行动来构建与孩子的深度链接。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                完全可以出于爱老婆的原因而带孩子，而不是爱孩子而带孩子的。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>今天是叶子</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                比起母亲，父亲是难以建立亲子链接，生理基础差远了。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>高大壮喝了冰露真的永不痛风</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                能抽空去上产前课程已经超过99%的男人了。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>桃乐丝</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            在育儿过程中，夫妻应建立统一战线，警惕长辈以“爱”为名的过度干涉。男性需摆脱对原生家庭的依赖，完成“心理弑父”，才能真正承担起家庭核心的责任。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                首先不要有一个让你们分房睡的奶奶（甚至是外婆），“他明天还要上班很累的”。只要睡在一起，就可以把他踢醒，让他起来干活。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>桃乐丝</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                分房睡，本质上就是责任切割。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>醉嘻嘻泳往直前</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                一般跟公婆一起住的男的尤其依赖心理强，说白了根本没有完成“心理弑父”这一步，还是个乖宝宝。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>桃乐丝</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 热点话题卡片 2 -->
+                <div class="bento-card p-6 rounded-xl">
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            弱智吧Geek幽默盛宴：当谐音梗遇上科学与人文
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            15:08 - 16:52
+                        </span>
+                    </div>
+
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            醉嘻嘻泳往直前：[链接|21]
+                        </p>
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">弱智吧</span>
+                            <span class="tag-item">谐音梗</span>
+                            <span class="tag-item">冷笑话</span>
+                            <span class="tag-item">Geek幽默</span>
+                            <span class="tag-item">知识门槛</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、话题背景与起因</b><br>
+                                    由群友 <b>醉嘻嘻泳往直前</b> 分享了一系列来自“弱智吧”的年度笑话评选问卷，其独特的、需要一定知识门槛才能理解的幽默风格，瞬间点燃了群内的创作热情，引发了一场精彩的Geek幽默二次创作与分享大会。<br><br>
+                                    <b>二、主要观点与讨论详情</b><br>
+                                    群友们不仅分享问卷中的精选笑话，更在此基础上进行了即兴发挥和“内卷式”创作，内容横跨物理、化学、生物、历史、数学、语言学等多个领域。<br><br>
+                                    <ul>
+                                        <li><b>物理学与数学梗：</b><b>AA昍</b> 分享了“老光子教新手咋穿过双缝：‘一会看我衍射行事嗷！’”以及关于完全平方公式的笑话：“(c+d)²＝c²+2cd，少了d²是因为没有地方了”，随后还将其升级为CD梗：“因为cd太多，没有地方了。” 这些笑话巧妙地结合了物理和数学概念与中文谐音，引得群友捧腹。</li><br>
+                                        <li><b>生物学与化学梗：</b>“将三角函数的二倍角公式用秋水仙素处理变成四倍角公式”、“一部分人类有胎记会不会是上帝在用标志重捕法统计人类”等笑话，将生物学知识融入其中，展现了独特的幽默感。“《陋室铭》作者刘禹锡的英文名是什么？SnS”更是将化学元素符号与古文人名结合，令人拍案叫绝。</li><br>
+                                        <li><b>历史与人文梗：</b>“西西弗斯也是一种王安石”、“朱元璋是个开明的皇帝”、“文字狱主要是严禁臣悼明”等，通过谐音和双关，对历史人物和事件进行了幽默解构，需要听者对相关历史背景有所了解才能get到笑点。</li><br>
+                                        <li><b>地狱与冒犯梗：</b>群内也出现了如“征服日本让我国多块好省”以及关于犹太人、黑人等刻板印象的经典地狱笑话，展现了本群幽默的多元和“百无禁忌”的氛围。</li>
+                                    </ul>
+                                    <br>
+                                    <b>三、结论与启发</b><br>
+                                    这场讨论不仅是一次简单的笑话分享，更是一场智力与幽默的碰撞。它体现了新茧群成员普遍具有的较高知识水平和独特的幽默品味。这种需要“动脑筋”才能get到的笑话，在带来快乐的同时，也形成了一种独特的社群认同感。正如群友 <b>达娃</b> 观察到的，部分笑话甚至能难倒主流AI大模型，凸显了人类在理解复杂语境、谐音和文化内涵方面的优势。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            “弱智吧”风格的笑话，其核心魅力在于设置了知识门槛，通过巧妙的谐音、双关和跨学科联想，在解谜的“啊哈”瞬间产生高级的幽默感，是高认知水平社群的一种娱乐方式。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                老光子教新手咋穿过双缝：“一会看我衍射行事嗷！”
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>AA昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                抽烟其实是在给自己的灵魂上香。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>AA昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                如果妳每一任老公都是渣男，那妳也算是智能嫁屎。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>AA昍</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 热点话题卡片 3 -->
+                <div class="bento-card p-6 rounded-xl">
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            宇宙的节拍：默冬章与沙罗循环的天文科普
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            01:51 - 02:00
+                        </span>
+                    </div>
+
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            Bazinga：[合并转发|昍: 你的公历和农历生日，每19年会重叠一次，这叫#默冬章，...]
+                        </p>
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">默冬章</span>
+                            <span class="tag-item">沙罗循环</span>
+                            <span class="tag-item">天文周期</span>
+                            <span class="tag-item">历法</span>
+                            <span class="tag-item">日食</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、话题背景与起因</b><br>
+                                    在深夜时分，群友 <b>昍</b> 抛出了一系列关于天文与历法周期的硬核科普，内容被 <b>Bazinga</b> 以合并转发的形式分享，引发了群友的兴趣与学习。<br><br>
+                                    <b>二、主要观点与讨论详情</b><br>
+                                    本次科普主要阐明了两个重要但易混淆的天文周期概念：<br><br>
+                                    <b>1. 默冬章（Metonic Cycle）：</b><br>
+                                    <b>昍</b> 解释道，默冬章是一个19年的周期，其核心原理是早期人类为协调阳历与阴历而采用的“<b>19年7闰</b>”法。这个周期的直接体现是，<b>每个人的公历生日和农历生日大约每19年会重合一次</b>。他还将此概念延伸至日食预测，指出如果只关心“是否有日食”而不关心具体位置，那么每19年也会重复一次，但这个规律大约只应验4轮，然后会跳跃8年再开始新的四轮循环。<br><br>
+                                    <b>2. 沙罗循环（Saros Cycle）：</b><br>
+                                    与默冬章不同，沙罗循环是一个约<b>18年零10天</b>的周期。它描述的是地球、月球、太阳三者在太空中的<b>相对位置</b>会重复一次。因此，如果某日发生日食，18年后同一天（顺延约10天）必定会再次发生，并且观测区域会向西移动约120度，三次循环（约54年）后，日食带便会绕地球完整一圈。<br><br>
+                                    此外，<b>昍</b> 还延伸讲解了<b>复活节</b>与<b>逾越节</b>的渊源，指出复活节本源于犹太人的逾越节，后者是为了纪念上帝降下“长子之死”之灾时“逾越”了希伯来人的家门。后来基督教会为了与犹太教区分，才强行将复活节定义为比较固定的日期，从而与仍遵循犹太历的逾越节分离开来。<br><br>
+                                    <b>三、结论与启发</b><br>
+                                    这次科普清晰地辨析了默冬章与沙罗循环在周期长度、原理和应用上的区别，前者关注历法与事件的重现，后者则聚焦天体的精确相对位置。这不仅让群友们学到了硬核的天文知识，也了解了部分西方节日的历史文化背景，展现了知识分享在群内的核心价值。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            默冬章是基于“19年7闰”的19年历法回归周期，体现为公历与农历生日的重合。而沙罗循环是约18年的天体相对位置重复周期，用于精准预测日食的发生与位置。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                你的公历和农历生日，每19年会重叠一次，这叫#默冬章，原理是早期人类使用了「19年7闰」的方法。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                #沙罗循环 是说每18年零10天左右，地月日三星在太空中的相对位置会重复一次。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>昍</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                后来基督教会为了避免和犹太人扯上关系，强行把复活节定义为比较固定的日期。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>昍</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 热点话题卡片 4 -->
+                <div class="bento-card p-6 rounded-xl">
+                    <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+                        <h4 class="text-xl font-bold text-black flex-1 mb-2 sm:mb-0">
+                            临终关怀的温度：探讨安宁疗护与老年生活质量
+                        </h4>
+                        <span class="text-sm text-gray-600 ml-0 sm:ml-4 whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-md">
+                            <i class="fas fa-clock mr-1.5 text-gray-500"></i>
+                            02:13 - 08:22
+                        </span>
+                    </div>
+
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            Garrido（拉坨大的：哎，我奶奶有青光眼，以前总说看不清东西，我也不是很理解，没当回事。
+                        </p>
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">相关关键词</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">安宁疗护</span>
+                            <span class="tag-item">老年健康</span>
+                            <span class="tag-item">生活质量</span>
+                            <span class="tag-item">青光眼</span>
+                            <span class="tag-item">白内障</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <p class="text-sm font-semibold text-gray-800 mb-2">详细内容</p>
+                        <div class="text-gray-700 text-base leading-relaxed bg-slate-50 p-4 rounded-md prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、话题背景与起因</b><br>
+                                    一则关于不同眼疾所见世界的科普视频，触动了群友 <b>Garrido（拉坨大的）</b>，她分享了自己对于奶奶曾患青光眼却未被家人充分理解的悔意，并由此引出了关于安宁疗护（#安宁疗护）和提升老年人生活质量的深刻讨论。<br><br>
+                                    <b>二、主要观点与讨论详情</b><br>
+                                    <b>Garrido（拉坨大的）</b> 首先分享了一个正向的转变：她的母亲在接触安宁疗护理念后，观念发生了巨大变化，现在会“从不省钱，只要能花钱提升老人生活质量的一律安排上”，为爷爷做假牙、做白内障手术、佩戴助听器，这些举措显著提高了老人的生活质量。这个案例引发了群友的强烈共鸣。<br><br>
+                                    <b>凌零</b> 随后分享了相似的遗憾经历，她的姥姥因白内障长期揉眼，但家人（包括她自己）都未予以足够重视，仅用进口眼药水应付，而忽略了去医院进行一次简单手术就能解决问题的可能性。她的感慨“一个小手术就解决的问题，哎”道出了许多人面对老年人健康问题时的后知后觉与追悔。<br><br>
+                                    <b>三、结论与启发</b><br>
+                                    这场讨论虽然简短，但情感真挚，直指一个普遍的社会现象：<b>年轻一代往往因为认知不足或不够用心，低估了老年常见病（如青光眼、白内障、听力下降等）对长辈生活质量的巨大影响</b>。许多在年轻人看来“还能忍忍”的小毛病，实际上可能正严重剥夺着老年人的生活乐趣与尊严。<br><br>
+                                    群友的分享提醒我们，孝顺不仅是物质上的供养，更是精神上的关怀和对生活质量的积极改善。安宁疗护的核心理念——关注人的尊严与舒适度，不仅适用于生命末期，更应贯穿于老年生活的始终。积极为老人解决看似“微小”的健康问题，如更换一副合适的假牙、做一个及时的白内障手术，是提升他们晚年幸福感的关键所在。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 mb-3">关键结论与金句时刻</p>
+                        <div class="space-y-6">
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <h5 class="text-base font-semibold text-gray-800 mb-2">关键结论</h5>
+                                    <div class="border-l-4 border-[#4D6BFE] pl-4 py-3 bg-blue-50 rounded-r-md">
+                                        <p class="text-black text-base">
+                                            面对老年家人的健康问题，应秉持安宁疗护中“提升生活质量”的核心理念，积极干预，而非被动忍耐。许多看似微小的改善（如治疗白内障、配助听器）能极大地提升长辈的晚年幸福感和尊严。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700 mb-2"><strong>金句时刻</strong></p>
+                                    <div class="space-y-2">
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我妈在接触安宁疗护之后也是从不省钱，只要能花钱提升老人生活质量的一律安排上，给爷爷做假牙做白内障戴助听器，生活质量有了显著提高。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>Garrido（拉坨大的</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                我姥姥白内障一直揉眼睛，我舅舅我妈他们都没当回事...一个小手术就解决的问题，哎。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>凌零</b>
+                                            </p>
+                                        </div>
+                                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-md flex flex-col">
+                                            <p class="text-gray-800 italic text-sm">
+                                                难怪咖喱多那么有爱心和责任心。
+                                            </p>
+                                            <p class="text-gray-600 text-xs mt-1 self-end">
+                                                - <b>u 子</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- === 模块二：火花碰撞时刻・热点话题 结束 === -->
+
+        <!-- === 模块三：解惑一点通・有问必答 开始 === -->
+        <section id="section-qa" class="w-full mb-12 anchor-target">
+            <h2 class="section-title">
+                三、解惑一点通・有问必答
+            </h2>
+            <div class="space-y-8">
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <div class="mb-4">
+                        <h4 class="text-xl font-semibold text-black flex items-center">
+                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+                            如何应对睡眠障碍？群友分享各类助眠药物使用体验
+                        </h4>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            Garrido（拉坨大的：烦死了我本来睡觉好好的，就因为我妈觉得我该换药了，搞得现在一天睡不了几个小时
+                        </p>
+                    </div>
+                    <div class="border-t border-gray-200 pt-4">
+                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+                            解答
+                        </h5>
+                        <div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、问题背景</b><br>
+                                    群友 <b>Garrido（拉坨大的）</b> 因遵母嘱换药导致睡眠质量下降，感到焦虑，由此引发了一场关于各类助眠药物使用体验和副作用的集中讨论。<br><br>
+                                    <b>二、核心原因分析</b><br>
+                                    群友们普遍面临失眠困扰，并尝试过多种药物。讨论揭示了药物选择的复杂性：<br>
+                                    1. <b>个体差异性：</b> 同一种药物对不同人的效果和副作用差异巨大。<br>
+                                    2. <b>副作用困扰：</b> 许多药物伴随着令人不适的副作用，如苦味、嗜睡、情绪钝化等。<br>
+                                    3. <b>药物耐受性：</b> 长期服用同一种药物可能导致药效下降，需要换药，但换药过程本身也可能引发新的睡眠问题。<br><br>
+                                    <b>三、解决方案与建议</b><br>
+                                    群友们根据亲身经历，分享了多种药物的“评测报告”：<br>
+                                    <ul>
+                                        <li><b>曲唑酮：</b><b>吃好喝好路过的卡卡罗特</b> 正在服用，认为其副作用是“情绪太稳定了，而且人有点懒懒的”，有一种“天塌了也无所谓的平淡感”。<b>大学生主播</b> 提醒，该药需长期服用，靠体内积累的浓度起效。</li>
+                                        <li><b>佐匹克隆 / 右佐匹克隆：</b><b>大学生主播</b> 指出，右佐匹克隆是为了改善佐匹克隆的苦味而开发的，但他个人感觉“右佐匹克隆还是苦，苦到第二天下午”。<b>Olivia</b> 也认为佐匹克隆“苦一整天，歹毒的很”。</li>
+                                        <li><b>思诺思（酒石酸唑吡坦）：</b>被多位群友认为是效果较好的选择，但 <b>阿南plus（早睡输出）</b> 提到其著名的副作用——可能导致在半梦半醒状态下“乱买东西”。</li>
+                                        <li><b>米氮平：</b><b>Olivia</b> 分享，虽然它不是安眠药，但她服用六分之一片就能“昏睡一整天”，效果强烈。</li>
+                                        <li><b>莱伯雷声（新药）：</b><b>大学生主播</b> 尝试后认为劲儿不如思诺思，且价格较贵，对他个人效果一般。</li>
+                                    </ul>
+                                    <b>总结：</b> 面对睡眠问题，选择药物需非常谨慎，务必遵医嘱。群友的经验表明，不存在完美的药物，需要在药效与副作用之间权衡。同时，<b>大学生主播</b> 提出一个重要的心理建议：当换药后失眠，应倾向于归因于压力等外部因素，而非认定“药不管用了”，以避免陷入无解的心理困境。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 pt-4 border-t border-gray-200">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">失眠</span>
+                            <span class="tag-item">助眠药物</span>
+                            <span class="tag-item">曲唑酮</span>
+                            <span class="tag-item">佐匹克隆</span>
+                            <span class="tag-item">副作用</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <div class="mb-4">
+                        <h4 class="text-xl font-semibold text-black flex items-center">
+                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+                            新手爸妈必看：新生儿需要两小时喂一次吗？
+                        </h4>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            讨厌的橙子🍊：我想请问有孩子的老师们，新生儿真的是要两小时一喂吗
+                        </p>
+                    </div>
+                    <div class="border-t border-gray-200 pt-4">
+                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+                            解答
+                        </h5>
+                        <div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、问题背景</b><br>
+                                    准妈妈 <b>讨厌的橙子🍊</b> 对“新生儿需两小时一喂”的说法感到疑惑，向群内有经验的父母求证，引发了关于新生儿喂养和睡眠的讨论。<br><br>
+                                    <b>二、核心解答与建议</b><br>
+                                    群内的父母们给出了基本一致的肯定答复，并分享了宝贵的经验：<br>
+                                    <ul>
+                                        <li><b>确认频率：</b><b>SR</b> 明确回答“嗯”，确认了新生儿初期喂养频率高的事实，并提醒新手父母要做好“告别整觉”的准备。</li>
+                                        <li><b>持续时间：</b>关于这种高频喂养会持续多久，群友们表示存在个体差异。<b>桃乐丝</b> 提供了较为乐观的预期：“<b>大概5-6个月就可以开始从半夜睡到天亮了，也不是太可怕。</b>” <b>SR</b> 则补充说这“不一定，分人”，但也听说过“新生儿一觉到天明”的“天使宝宝”案例。<b>阿戒</b> 的同事家宝宝半岁多仍需半夜喂两顿，说明情况各异。</li>
+                                        <li><b>专业建议：</b>“奶爸”<b>高大壮喝了冰露真的永不痛风</b> 自信地表示可以提供专业咨询，并开玩笑说“给你打折”，暗示了他在育儿领域的丰富经验。</li>
+                                    </ul><br>
+                                    <b>三、结论与启发</b><br>
+                                    新生儿阶段确实需要高频率喂养，这对于新手父母的睡眠是巨大挑战。不过，这种情况通常在宝宝半岁左右会有明显改善。每个宝宝都是独特的，父母需要有耐心，并根据自己孩子的具体情况调整。对于备孕或孕期的父母来说，提前了解这些情况，做好心理和生理上的准备至关重要。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 pt-4 border-t border-gray-200">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">育儿</span>
+                            <span class="tag-item">新生儿</span>
+                            <span class="tag-item">喂养</span>
+                            <span class="tag-item">睡眠</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <div class="mb-4">
+                        <h4 class="text-xl font-semibold text-black flex items-center">
+                            <i class="fas fa-question-circle mr-2.5 text-[#4D6BFE] text-lg"></i>
+                            如何从“I人”转变为“E人”以适应职场？
+                        </h4>
+                    </div>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            Garrido（拉坨大的：从I人到E人，职场华丽转身的重要支撑
+                        </p>
+                    </div>
+                    <div class="border-t border-gray-200 pt-4">
+                        <h5 class="text-lg font-semibold text-green-700 flex items-center mb-2">
+                            <i class="fas fa-lightbulb mr-2.5 text-lg text-green-600"></i>
+                            解答
+                        </h5>
+                        <div class="text-gray-700 text-base leading-relaxed prose prose-sm max-w-none">
+                            <div class="expandable-content" data-char-limit="200">
+                                <div class="content-preview">
+                                    <b>一、问题背景</b><br>
+                                    群友 <b>Garrido（拉坨大的）</b> 分享了自己作为一名“I人”（内向者）如何在职场成功“伪装”成“E人”（外向者）并广结善缘的经验，为有同样困扰的职场人提供了实用思路。<br><br>
+                                    <b>二、核心原因分析</b><br>
+                                    <b>Garrido（拉坨大的）</b> 首先回归MBTI的本源，明确I/E的区别在于能量恢复方式的不同（I人独处充电，E人社交充电）。她分析成为“I人”的原因包括：<br>
+                                    1.  <b>先天原因：</b>天生对信息刺激敏感，大脑需要更多时间加工。<br>
+                                    2.  <b>后天原因：</b>因社交受挫等经历，未能有效培养社交能力。<br><br>
+                                    <b>三、解决方案与建议</b><br>
+                                    基于以上分析，她认为后天部分完全可以通过练习改变，并提出了两点核心策略：<br>
+                                    1.  <b>管理能量分配：</b>I人需要有意识地规划自己的时间，在耗费能量进行社交后，必须安排独处时间来“恢复精力”，避免能量耗竭。<br>
+                                    2.  <b>学习社交技能：</b>她强调社交是一门可以学习的技能，并推荐利用小红书等平台学习具体的社交技巧，如“职场社交套路”、“与同事交心的技巧”等。<br><br>
+                                    <b>总结：</b> 她鼓励大家“事在人为”，充分发挥主观能动性。核心观点是，不必强求改变内向的本质，而是通过策略性地管理能量和学习外部技巧，来扮演好职场需要的社交角色。她的分享得到了 <b>齐四亿</b> “让我们一起为i做e！”的热情响应，也获得了众多群友的点赞支持。
+                                </div>
+                                <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                    <span class="expand-text">展开全文</span>
+                                    <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 pt-4 border-t border-gray-200">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tag-item">MBTI</span>
+                            <span class="tag-item">职场社交</span>
+                            <span class="tag-item">I人</span>
+                            <span class="tag-item">E人</span>
+                            <span class="tag-item">个人成长</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- === 模块三：解惑一点通・有问必答 结束 === -->
+
+        <!-- === 模块四：智慧火花匣・每日精选 开始 === -->
+        <section id="section-daily-picks" class="w-full mb-12 anchor-target">
+            <h2 class="section-title">
+                四、智慧火花匣・每日精选
+            </h2>
+            <div class="space-y-8">
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <h4 class="text-xl font-semibold text-black mb-3">
+                        家庭烹饪进阶：如何煎出粉嫩多汁的高级牛排
+                    </h4>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            宇世无争：[链接|如何在家煎出粉嫩多汁、好吃又高级的牛排｜无需烤箱/水浴【解构家常菜】]
+                        </p>
+                    </div>
+                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+                        <div class="expandable-content" data-char-limit="200">
+                            <div class="content-preview">
+                                <b>一、推荐内容</b><br>
+                                群友 <b>宇世无争</b> 分享了一则B站UP主“老饭骨”的视频教程，详细讲解了如何在家中仅用平底锅煎出媲美高级餐厅的牛排。他还附上了自己实践的成果图，其粉嫩的切面和完美的熟度引发了群友的赞叹。<br><br>
+                                <b>二、核心价值与特点</b><br>
+                                <b>非洲吴有日</b> 受到启发后也尝试了新的煎法，反馈“感觉确实好咬了”。这份教程的核心价值在于其高度的可操作性和对细节的精准把控：<br>
+                                <ul>
+                                    <li><b>低温慢煎：</b>教程的核心是采用低温慢煎的方法，以更好地控制熟度，锁住肌红蛋白，使牛排内部保持粉嫩多汁。</li>
+                                    <li><b>无需复杂设备：</b>强调了“无需烤箱/水浴”，仅用一口家常平底锅即可完成，大大降低了实践门槛。</li>
+                                    <li><b>成果展示：</b><b>宇世无争</b> 分享的成品图直观展示了该方法的有效性，牛排切面颜色均匀，从中心到边缘过渡自然，达到了理想的五分熟效果。</li>
+                                </ul><br>
+                                <b>三、适用场景或补充信息</b><br>
+                                该方法适合所有想提升家庭牛排烹饪水平的美食爱好者。<b>宇世无争</b> 补充了选购冻虾的知识，建议选择小规格的厄瓜多尔白对虾，因其肉质更嫩、解冻更快。对于烹饪油烟问题，群友 <b>u 子</b> 提供了戴一次性浴帽或烹饪专用头套的实用技巧。
+                            </div>
+                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                <span class="expand-text">展开全文</span>
+                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tag-item">烹饪技巧</span>
+                        <span class="tag-item">牛排</span>
+                        <span class="tag-item">美食</span>
+                        <span class="tag-item">生活技能</span>
+                    </div>
+                    <div class="flex justify-end">
+                        <a href="https://b23.tv/afka7jA" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-[#4D6BFE] hover:text-blue-700 hover:underline flex items-center">
+                            观看视频教程
+                            <i class="fas fa-external-link-alt ml-1.5 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <h4 class="text-xl font-semibold text-black mb-3">
+                        万物有声：常见鸟类鸣叫声辨识指南
+                    </h4>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            Garrido（拉坨大的：[链接|声音终于对上脸了！生活中常见的20种鸟叫声]
+                        </p>
+                    </div>
+                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+                        <div class="expandable-content" data-char-limit="200">
+                            <div class="content-preview">
+                                <b>一、推荐内容</b><br>
+                                群友 <b>Garrido（拉坨大的）</b> 在深夜分享了一则来自小红书的科普视频，帮助大家“声音对上脸”，认识生活中常见的20种鸟及其叫声。<br><br>
+                                <b>二、核心价值与特点</b><br>
+                                这份科普资源以其趣味性和实用性获得了群友的关注。视频将鸟类的影像和其独特的鸣叫声相结合，解决了“只闻其声，不见其鸟”的日常困惑。<br><br>
+                                <b>AA昍</b> 对此分享了有趣的个人经历，他提到自己“<b>会用手模仿四声杜鹃的声音，有次上山和一只四声杜鹃对号，把我累坏了</b>”，并进一步解释这种技巧叫“#手埙”，是通过双手拢着吹气并调整手势来变调。这种互动让科普内容更加生动和有人情味。<br><br>
+                                <b>三、适用场景或补充信息</b><br>
+                                该视频适合所有对自然和鸟类感兴趣的群友，尤其是在城市中也想辨认身边鸟鸣声的朋友。通过学习，可以增加一项有趣的户外观察技能，提升与自然的连接感。
+                            </div>
+                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                <span class="expand-text">展开全文</span>
+                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tag-item">科普</span>
+                        <span class="tag-item">鸟类</span>
+                        <span class="tag-item">自然</span>
+                        <span class="tag-item">辨识</span>
+                    </div>
+                    <div class="flex justify-end">
+                        <a href="https://www.xiaohongshu.com/discovery/item/67fb0205000000000b0173c7" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-[#4D6BFE] hover:text-blue-700 hover:underline flex items-center">
+                            观看原视频
+                            <i class="fas fa-external-link-alt ml-1.5 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <h4 class="text-xl font-semibold text-black mb-3">
+                        “弱智吧”年度笑话评选：一场高智商的幽默狂欢
+                    </h4>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            醉嘻嘻泳往直前：[链接|21]
+                        </p>
+                    </div>
+                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+                        <div class="expandable-content" data-char-limit="200">
+                            <div class="content-preview">
+                                <b>一、推荐内容</b><br>
+                                群友 <b>醉嘻嘻泳往直前</b> 整理并分享了多达22卷的“弱智吧”年度笑话评选问卷链接，为群友们提供了一个内容丰富、风格独特的笑话库，并直接催生了当天的“Geek幽默盛宴”热点话题。<br><br>
+                                <b>二、核心价值与特点</b><br>
+                                这批问卷的核心价值在于其内容的独创性和高门槛性。不同于普通的网络段子，弱智吧的笑话往往需要观众具备一定的物理、化学、历史、数学或逻辑学知识才能理解其中的梗，是一种典型的“Geek Humor”。例如“人类和机器人约架，约定双方各带100人。次日1个机器人要对战25个人类”，需要理解二进制才能get到笑点。<br><br>
+                                <b>三、适用场景或补充信息</b><br>
+                                这份笑话集非常适合喜欢动脑筋、享受“解谜式快乐”的群友。它不仅是消遣娱乐的材料，也是一种智力挑战和思维体操。对于想了解当代亚文化和网络社区独特幽默感的朋友来说，这是一份宝贵的“一手资料”。<b>AA昍</b> 也对这份合集表示了赞赏，并亲自下场参与创作，足见其高质量。
+                            </div>
+                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                <span class="expand-text">展开全文</span>
+                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tag-item">弱智吧</span>
+                        <span class="tag-item">冷笑话</span>
+                        <span class="tag-item">幽默</span>
+                        <span class="tag-item">网络文化</span>
+                    </div>
+                    <div class="flex justify-end">
+                        <a href="https://wj.qq.com/s2/24870412/7imp/" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-[#4D6BFE] hover:text-blue-700 hover:underline flex items-center">
+                            体验问卷（卷22）
+                            <i class="fas fa-external-link-alt ml-1.5 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="bento-card p-6 rounded-xl border-l-4 border-[#93c5fd]">
+                    <h4 class="text-xl font-semibold text-black mb-3">
+                        世界在你眼前扭曲：罕见病“视雪症”科普
+                    </h4>
+                    <div class="mb-4 bg-purple-50 border border-purple-200 rounded-md p-3">
+                        <p class="text-sm font-medium text-purple-700 mb-1">爬楼关键词</p>
+                        <p class="text-sm text-purple-600 italic">
+                            Garrido（拉坨大的：[链接|不同的眼疾看到的世界是怎么样的]
+                        </p>
+                    </div>
+                    <div class="text-gray-700 text-base mb-4 leading-relaxed prose prose-sm max-w-none">
+                        <div class="expandable-content" data-char-limit="200">
+                            <div class="content-preview">
+                                <b>一、推荐内容</b><br>
+                                群友 <b>Garrido（拉坨大的）</b> 分享了一则模拟不同眼疾患者所见世界的视频，视频中提到的“视雪症”（Visual Snow Syndrome）引起了群友的注意。<b>AA昍</b> 也表示“第一次听说这个病”。<br><br>
+                                <b>二、核心价值与特点</b><br>
+                                该视频的核心价值在于其直观性，通过模拟画面，让健康人群能够切身体会到眼疾患者的日常视觉困扰，从而增进理解与共情。
+                                <ul>
+                                    <li><b>视雪症科普：</b>这种罕见的神经系统疾病，其典型症状是患者视野中会持续出现类似电视雪花点的闪烁视觉干扰。此外，还可能伴有耳鸣、畏光、看到视觉暂留（残影）等症状。</li>
+                                    <li><b>引发共情：</b>视频引发了群内关于长辈眼疾的讨论，如青光眼、白内障等，让大家意识到很多时候我们低估了这些疾病对生活质量的影响。</li>
+                                </ul><br>
+                                <b>三、适用场景或补充信息</b><br>
+                                这份科普资源有助于提升大家对罕见病的认知，并提醒我们更加关注自己和家人的视觉健康。对于身边有视力困扰的亲友，多一份理解和支持，或许比任何物质帮助都更重要。
+                            </div>
+                            <button class="expand-btn text-[#4D6BFE] hover:text-blue-700 text-sm font-medium mt-2 flex items-center" style="display: none;">
+                                <span class="expand-text">展开全文</span>
+                                <i class="fas fa-chevron-down ml-1 expand-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tag-item">健康科普</span>
+                        <span class="tag-item">眼疾</span>
+                        <span class="tag-item">视雪症</span>
+                        <span class="tag-item">罕见病</span>
+                    </div>
+                    <div class="flex justify-end">
+                        <a href="https://www.xiaohongshu.com/discovery/item/678b5d84000000001d01386c" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-[#4D6BFE] hover:text-blue-700 hover:underline flex items-center">
+                            观看原视频
+                            <i class="fas fa-external-link-alt ml-1.5 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- === 模块四：智慧火花匣・每日精选 结束 === -->
+
+        <!-- HTML注释: 新增底部导航，便于阅读完毕后快速切换日期 -->
+        <nav class="w-full mt-12 daily-nav">
+            <div class="bento-card p-4">
+                <div class="flex justify-between items-center">
+                    <button type="button" class="nav-button day-nav-prev">
+                        <i class="fas fa-chevron-left"></i>
+                        上一天
+                    </button>
+
+                    <div class="text-center">
+                        <span class="text-sm text-gray-600">日报导航</span>
+                    </div>
+
+                    <button type="button" class="nav-button day-nav-next">
+                        下一天
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- === 文件底部 开始 === -->
+        <!-- HTML注释: 此模块作为文件底部，包含数据来源、报告生成时间及免责声明。 -->
+        <footer class="w-full mt-16">
+            <div class="bento-card p-8">
+                <div class="text-center text-gray-700 space-y-3">
+                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-base">
+                        <div class="flex items-center">
+                            <i class="fas fa-database mr-2 text-[#4D6BFE]"></i>
+                            <span>微信群聊记录</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-robot mr-2 text-[#4D6BFE]"></i>
+                            <span>2025-11-19 02:00:00</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                        本报告基于群聊数据自动生成，仅供参考。内容可能包含个人观点，不代表群组官方立场。数据处理过程中已尽量匿名化处理敏感信息。
+                    </p>
+                </div>
+            </div>
+        </footer>
+        <!-- === 文件底部 结束 === -->
+    </div>
+
+    <!-- HTML注释: 右下角浮动按钮，提供返回顶部与目录导航 -->
+    <div class="floating-actions" aria-label="页面快捷操作">
+        <div class="directory-wrapper">
+            <button type="button" class="floating-button" id="directory-toggle" aria-expanded="false" aria-controls="directory-panel" aria-label="打开内容导航">
+                <i class="fas fa-list-ul"></i>
+            </button>
+            <div class="directory-panel" id="directory-panel" role="dialog" aria-modal="false" aria-hidden="true">
+                <div class="directory-header">
+                    <span class="directory-title">内容导航</span>
+                    <button type="button" class="directory-close" id="directory-close" aria-label="关闭内容导航">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="directory-list" id="directory-list">
+                    <!-- HTML注释: 目录列表由脚本自动填充，确保多层级锚点保持同步 -->
+                </div>
+            </div>
+        </div>
+        <button type="button" class="floating-button floating-button--hidden" id="scroll-top-btn" aria-label="返回顶部">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+    </div>
+
+    <script>
+        // 定义基础URL常量
+        const BASE_URL = 'https://xinjian-bot.github.io/-';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Bento card hover effect is handled by CSS :hover pseudo-class
+
+            // Number animation effect
+            const numberElements = document.querySelectorAll('.number-display');
+            numberElements.forEach(element => {
+                const finalValueText = element.textContent.replace(/,/g, '');
+                const finalValue = parseInt(finalValueText, 10);
+
+                if (isNaN(finalValue)) return;
+
+                let currentValue = 0;
+                const duration = 1500; // Animation duration in ms
+                const frameRate = 1000 / 60; // 60fps
+                const totalFrames = Math.round(duration / frameRate);
+                const increment = finalValue / totalFrames;
+
+                let currentFrame = 0;
+                const timer = setInterval(() => {
+                    currentFrame++;
+                    currentValue += increment;
+
+                    if (currentFrame >= totalFrames) {
+                        currentValue = finalValue;
+                        clearInterval(timer);
+                    }
+                    // Format number with commas for display
+                    element.textContent = Math.floor(currentValue).toLocaleString('en-US');
+                }, frameRate);
+            });
+
+            // HTML注释: 初始化日报导航功能
+            initDailyNavigation();
+
+            // HTML注释: 初始化展开功能
+            initExpandableContent();
+
+            // HTML注释: 初始化浮动按钮与目录互动
+            initFloatingActions();
+            
+            // 初始化历史汇总链接
+            const historyLink = document.getElementById('history-link');
+            if (historyLink) {
+                historyLink.href = BASE_URL + '/新茧历史日报汇总.html';
+            }
+        });
+
+        // HTML注释: 这个函数实现了日报间的导航功能，包括：
+        // 1. 从当前页面URL或内容中提取日期
+        // 2. 检查前后日期的日报文件是否存在
+        // 3. 设置"上一天"和"下一天"按钮的状态和链接
+        // 4. 实现"下一天"按钮的动态显示逻辑
+        async function initDailyNavigation() {
+            try {
+                // HTML注释: 获取当前页面的日期
+                const currentDate = getCurrentDateFromPage();
+                if (!currentDate) {
+                    console.warn('无法从页面中提取日期信息');
+                    return;
+                }
+
+                // HTML注释: 设置导航按钮
+                await setupNavigationButtons(currentDate);
+
+            } catch (error) {
+                console.error('初始化日报导航时出错:', error);
+            }
+        }
+
+        // HTML注释: 从页面中提取当前日期
+        // HTML注释: 支持多种方式提取日期：优先从页面元素、URL文件名或页面标题
+        function getCurrentDateFromPage() {
+            // HTML注释: 方法1：从报告日期元素中提取（优先级最高）
+            const dateElement = document.getElementById('report-date');
+            if (dateElement) {
+                const dateText = dateElement.textContent;
+                const dateMatch = dateText.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
+                if (dateMatch) {
+                    const year = dateMatch[1];
+                    const month = dateMatch[2].padStart(2, '0');
+                    const day = dateMatch[3].padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                }
+            }
+
+            // HTML注释: 方法2：从URL文件名中提取日期
+            const pathname = window.location.pathname;
+            const filenameMatch = pathname.match(/新茧群日报_(\d{4}-\d{2}-\d{2})\.html/);
+            if (filenameMatch) {
+                return filenameMatch[1];
+            }
+
+            // HTML注释: 方法3：从页面标题中提取日期
+            const titleMatch = document.title.match(/(\d{4}-\d{2}-\d{2})/);
+            if (titleMatch) {
+                return titleMatch[1];
+            }
+
+            return null;
+        }
+
+        // HTML注释: 设置导航按钮的状态和链接
+         // HTML注释: 根据当前日期，检查前后日期的日报文件是否存在
+         async function setupNavigationButtons(currentDate) {
+             const prevButtons = document.querySelectorAll('.day-nav-prev');
+             const nextButtons = document.querySelectorAll('.day-nav-next');
+             const navContainers = document.querySelectorAll('.daily-nav');
+
+             if (!prevButtons.length && !nextButtons.length) {
+                 return;
+             }
+             
+             // HTML注释: 计算前一天和后一天的日期
+             const currentDateObj = new Date(currentDate);
+             const prevDateObj = new Date(currentDateObj);
+             prevDateObj.setDate(prevDateObj.getDate() - 1);
+             const nextDateObj = new Date(currentDateObj);
+             nextDateObj.setDate(nextDateObj.getDate() + 1);
+             
+             const prevDate = formatDate(prevDateObj);
+             const nextDate = formatDate(nextDateObj);
+             
+             // HTML注释: 检查前一天和后一天的日报是否存在
+             const prevExists = await checkReportExists(prevDate);
+             const nextExists = await checkReportExists(nextDate);
+             
+             // HTML注释: 如果前后日期的日报都不存在，隐藏所有导航栏容器
+             if (!prevExists && !nextExists) {
+                 navContainers.forEach(container => {
+                     container.style.display = 'none';
+                 });
+                 return;
+             }
+             
+             // HTML注释: 显示所有导航栏容器
+             navContainers.forEach(container => {
+                 container.style.display = 'block';
+             });
+             
+             // HTML注释: 设置前一天按钮
+             prevButtons.forEach(button => {
+                 if (prevExists) {
+                     button.disabled = false;
+                     button.onclick = () => {
+                         window.location.href = `${BASE_URL}/新茧群日报_${prevDate}.html`;
+                     };
+                 } else {
+                     button.disabled = true;
+                     button.onclick = null;
+                 }
+             });
+
+             // HTML注释: 设置后一天按钮
+             nextButtons.forEach(button => {
+                 if (nextExists) {
+                     button.disabled = false;
+                     button.onclick = () => {
+                         window.location.href = `${BASE_URL}/新茧群日报_${nextDate}.html`;
+                     };
+                 } else {
+                     button.disabled = true;
+                     button.onclick = null;
+                 }
+             });
+         }
+
+        // HTML注释: 检查指定日期的日报文件是否存在
+        async function checkReportExists(date) {
+            try {
+                const response = await fetch(`${BASE_URL}/新茧群日报_${date}.html`, { method: 'HEAD' });
+                return response.ok;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        // HTML注释: 格式化日期为YYYY-MM-DD格式
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // HTML注释: 初始化展开功能
+        function initExpandableContent() {
+            const expandableContents = document.querySelectorAll('.expandable-content');
+            
+            expandableContents.forEach(container => {
+                const charLimit = parseInt(container.getAttribute('data-char-limit')) || 200;
+                const contentPreview = container.querySelector('.content-preview');
+                const expandBtn = container.querySelector('.expand-btn');
+                
+                if (!contentPreview || !expandBtn) return;
+                
+                const fullContent = contentPreview.innerHTML;
+                const fullText = contentPreview.textContent || contentPreview.innerText;
+                
+                // HTML注释: 如果内容长度超过限制，则显示展开按钮
+                if (fullText.length > charLimit) {
+                    // HTML注释: 创建一个临时元素来正确截取HTML内容
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = fullContent;
+                    
+                    // HTML注释: 截取文本内容到指定长度
+                    const truncatedText = fullText.substring(0, charLimit);
+                    
+                    // HTML注释: 使用更简单可靠的方法截取内容
+                    let truncatedContent = '';
+                    let charCount = 0;
+                    
+                    // HTML注释: 逐字符遍历，保持简单的HTML结构
+                    const walker = document.createTreeWalker(
+                        tempDiv,
+                        NodeFilter.SHOW_TEXT,
+                        null,
+                        false
+                    );
+                    
+                    let node;
+                    const textNodes = [];
+                    while (node = walker.nextNode()) {
+                        textNodes.push(node);
+                    }
+                    
+                    // HTML注释: 计算需要保留的文本内容
+                    for (let textNode of textNodes) {
+                        const text = textNode.textContent;
+                        if (charCount + text.length <= charLimit) {
+                            charCount += text.length;
+                        } else {
+                            const remainingChars = charLimit - charCount;
+                            textNode.textContent = text.substring(0, remainingChars) + '...';
+                            charCount = charLimit;
+                            
+                            // HTML注释: 新的、更干净的移除后续所有节点的逻辑
+                            let currentNodeToClearAfter = textNode;
+                            while (currentNodeToClearAfter && currentNodeToClearAfter !== tempDiv) {
+                                let sibling = currentNodeToClearAfter.nextSibling;
+                                while (sibling) {
+                                    const nodeToRemove = sibling;
+                                    sibling = sibling.nextSibling;
+                                    nodeToRemove.remove();
+                                }
+                                currentNodeToClearAfter = currentNodeToClearAfter.parentElement;
+                            }
+                            break; // 完成截断和清理，跳出 textNodes 循环
+                        }
+                    }
+                    
+                    const previewContent = tempDiv.innerHTML;
+                    
+                    contentPreview.innerHTML = previewContent;
+                    contentPreview.classList.add('collapsed');
+                    expandBtn.style.display = 'flex';
+                    
+                    // HTML注释: 绑定展开/收起事件
+                    expandBtn.addEventListener('click', function() {
+                        const isExpanded = expandBtn.classList.contains('expanded');
+                        
+                        if (isExpanded) {
+                            // HTML注释: 收起内容
+                            contentPreview.innerHTML = previewContent;
+                            contentPreview.classList.add('collapsed');
+                            expandBtn.querySelector('.expand-text').textContent = '展开全文';
+                            expandBtn.classList.remove('expanded');
+                        } else {
+                            // HTML注释: 展开内容
+                            contentPreview.innerHTML = fullContent;
+                            contentPreview.classList.remove('collapsed');
+                            expandBtn.querySelector('.expand-text').textContent = '收起';
+                            expandBtn.classList.add('expanded');
+                        }
+                    });
+                } else {
+                    // HTML注释: 内容较短，隐藏展开按钮
+                    expandBtn.style.display = 'none';
+                }
+            });
+        }
+
+        // HTML注释: 构建目录，统一扫描模块及其子卡片生成锚点
+        function buildDirectory(panelElement) {
+            const listElement = panelElement.querySelector('#directory-list');
+            if (!listElement) {
+                return;
+            }
+
+            listElement.innerHTML = '';
+
+            const directoryConfigs = [
+                { id: 'section-overview', icon: 'fa-chart-column' },
+                { id: 'section-hot-topics', icon: 'fa-fire' },
+                { id: 'section-meeting', icon: 'fa-users' },
+                { id: 'section-qa', icon: 'fa-circle-question' },
+                { id: 'section-daily-picks', icon: 'fa-lightbulb' }
+            ];
+
+            directoryConfigs.forEach((config) => {
+                const sectionElement = document.getElementById(config.id);
+                if (!sectionElement) {
+                    return;
+                }
+
+                const sectionTitleElement = sectionElement.querySelector('.section-title');
+                const sectionTitle = sectionTitleElement ? sectionTitleElement.textContent.trim() : config.id;
+
+                const itemWrapper = document.createElement('div');
+                itemWrapper.className = 'directory-item';
+
+                const entryButton = document.createElement('button');
+                entryButton.type = 'button';
+                entryButton.className = 'directory-entry';
+                entryButton.setAttribute('data-target', config.id);
+                entryButton.innerHTML = `<span class="directory-icon"><i class="fas ${config.icon}"></i></span><span class="directory-text">${sectionTitle}</span>`;
+                itemWrapper.appendChild(entryButton);
+
+                const subHeadings = sectionElement.querySelectorAll('.bento-card h4');
+                if (subHeadings.length > 0) {
+                    const sublistElement = document.createElement('div');
+                    sublistElement.className = 'directory-sublist';
+
+                    subHeadings.forEach((heading, index) => {
+                        const cardElement = heading.closest('.bento-card');
+                        if (!cardElement) {
+                            return;
+                        }
+
+                        if (!cardElement.classList.contains('anchor-target')) {
+                            cardElement.classList.add('anchor-target');
+                        }
+
+                        if (!cardElement.id) {
+                            cardElement.id = `${config.id}-item-${index + 1}`;
+                        }
+
+                        const subButton = document.createElement('button');
+                        subButton.type = 'button';
+                        subButton.className = 'directory-subitem';
+                        subButton.setAttribute('data-target', cardElement.id);
+                        subButton.innerHTML = `<span class="directory-text">${heading.textContent.trim()}</span>`;
+                        sublistElement.appendChild(subButton);
+                    });
+
+                    itemWrapper.appendChild(sublistElement);
+                }
+
+                listElement.appendChild(itemWrapper);
+            });
+        }
+
+        // HTML注释: 初始化浮动按钮与目录交互
+        function initFloatingActions() {
+            const scrollTopBtn = document.getElementById('scroll-top-btn');
+            const directoryToggle = document.getElementById('directory-toggle');
+            const directoryPanel = document.getElementById('directory-panel');
+            const directoryClose = document.getElementById('directory-close');
+
+            if (scrollTopBtn) {
+                const toggleScrollButton = () => {
+                    if (window.scrollY > 240) {
+                        scrollTopBtn.classList.remove('floating-button--hidden');
+                    } else {
+                        scrollTopBtn.classList.add('floating-button--hidden');
+                    }
+                };
+
+                toggleScrollButton();
+                window.addEventListener('scroll', toggleScrollButton, { passive: true });
+
+                scrollTopBtn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+
+            if (!directoryPanel) {
+                return;
+            }
+
+            buildDirectory(directoryPanel);
+
+            if (!directoryToggle) {
+                return;
+            }
+
+            const closePanel = () => {
+                directoryPanel.classList.remove('open');
+                directoryToggle.setAttribute('aria-expanded', 'false');
+                directoryPanel.setAttribute('aria-hidden', 'true');
+            };
+
+            const openPanel = () => {
+                directoryPanel.classList.add('open');
+                directoryToggle.setAttribute('aria-expanded', 'true');
+                directoryPanel.setAttribute('aria-hidden', 'false');
+            };
+
+            const togglePanel = () => {
+                if (directoryPanel.classList.contains('open')) {
+                    closePanel();
+                } else {
+                    openPanel();
+                }
+            };
+
+            directoryToggle.addEventListener('click', (event) => {
+                event.stopPropagation();
+                togglePanel();
+            });
+
+            if (directoryClose) {
+                directoryClose.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    closePanel();
+                });
+            }
+
+            const directoryItems = directoryPanel.querySelectorAll('[data-target]');
+            directoryItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const targetId = item.getAttribute('data-target');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                    closePanel();
+                });
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!directoryPanel.contains(event.target) && !directoryToggle.contains(event.target)) {
+                    closePanel();
+                }
+            });
+
+            window.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closePanel();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
