@@ -434,7 +434,7 @@
             </h2>
             <div class="bento-card p-8 bg-gradient-to-br from-[#4D6BFE]/20 via-[#4D6BFE]/10 to-[#4D6BFE]/5 text-center rounded-2xl">
                 <div class="number-display text-[#4D6BFE]">
-                    6203
+                    6426
                 </div>
                 <p class="text-xl font-semibold text-black mt-3">总消息数量</p>
             </div>
@@ -1479,27 +1479,78 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Bento card hover effect is handled by CSS :hover pseudo-class
+
+            // Number animation effect
+            const numberElements = document.querySelectorAll('.number-display');
+            numberElements.forEach(element => {
+                const finalValueText = element.textContent.replace(/,/g, '');
+                const finalValue = parseInt(finalValueText, 10);
+
+                if (isNaN(finalValue)) return;
+
+                let currentValue = 0;
+                const duration = 1500; // Animation duration in ms
+                const frameRate = 1000 / 60; // 60fps
+                const totalFrames = Math.round(duration / frameRate);
+                const increment = finalValue / totalFrames;
+
+                let currentFrame = 0;
+                const timer = setInterval(() => {
+                    currentFrame++;
+                    currentValue += increment;
+
+                    if (currentFrame >= totalFrames) {
+                        currentValue = finalValue;
+                        clearInterval(timer);
+                    }
+                    // Format number with commas for display
+                    element.textContent = Math.floor(currentValue).toLocaleString('en-US');
+                }, frameRate);
+            });
+
+            // HTML注释: 初始化日报导航功能
             initDailyNavigation();
+
+            // HTML注释: 初始化展开功能
             initExpandableContent();
+
+            // HTML注释: 初始化浮动按钮与目录互动
             initFloatingActions();
+            
+            // 初始化历史汇总链接
             const historyLink = document.getElementById('history-link');
             if (historyLink) {
                 historyLink.href = '新茧历史日报汇总.html';
             }
         });
+
+        // HTML注释: 这个函数实现了日报间的导航功能，包括：
+        // 1. 从当前页面URL或内容中提取日期
+        // 2. 检查前后日期的日报文件是否存在
+        // 3. 设置"上一天"和"下一天"按钮的状态和链接
+        // 4. 实现"下一天"按钮的动态显示逻辑
         async function initDailyNavigation() {
             try {
+                // HTML注释: 获取当前页面的日期
                 const currentDate = getCurrentDateFromPage();
                 if (!currentDate) {
                     console.warn('无法从页面中提取日期信息');
                     return;
                 }
+
+                // HTML注释: 设置导航按钮
                 await setupNavigationButtons(currentDate);
+
             } catch (error) {
                 console.error('初始化日报导航时出错:', error);
             }
         }
+
+        // HTML注释: 从页面中提取当前日期
+        // HTML注释: 支持多种方式提取日期：优先从页面元素、URL文件名或页面标题
         function getCurrentDateFromPage() {
+            // HTML注释: 方法1：从报告日期元素中提取（优先级最高）
             const dateElement = document.getElementById('report-date');
             if (dateElement) {
                 const dateText = dateElement.textContent;
@@ -1511,18 +1562,26 @@
                     return `${year}-${month}-${day}`;
                 }
             }
+
+            // HTML注释: 方法2：从URL文件名中提取日期
             const pathname = window.location.pathname;
             const filenameMatch = pathname.match(/新茧群日报_(\d{4}-\d{2}-\d{2})\.html/);
             if (filenameMatch) {
                 return filenameMatch[1];
             }
+
+            // HTML注释: 方法3：从页面标题中提取日期
             const titleMatch = document.title.match(/(\d{4}-\d{2}-\d{2})/);
             if (titleMatch) {
                 return titleMatch[1];
             }
+
             return null;
         }
-        async function setupNavigationButtons(currentDate) {
+
+        // HTML注释: 设置导航按钮的状态和链接
+         // HTML注释: 根据当前日期，检查前后日期的日报文件是否存在
+         async function setupNavigationButtons(currentDate) {
              const prevButtons = document.querySelectorAll('.day-nav-prev');
              const nextButtons = document.querySelectorAll('.day-nav-next');
              const navContainers = document.querySelectorAll('.daily-nav');
@@ -1531,6 +1590,7 @@
                  return;
              }
              
+             // HTML注释: 计算前一天和后一天的日期
              const currentDateObj = new Date(currentDate);
              const prevDateObj = new Date(currentDateObj);
              prevDateObj.setDate(prevDateObj.getDate() - 1);
@@ -1540,9 +1600,11 @@
              const prevDate = formatDate(prevDateObj);
              const nextDate = formatDate(nextDateObj);
              
+             // HTML注释: 检查前一天和后一天的日报是否存在
              const prevExists = await checkReportExists(prevDate);
              const nextExists = await checkReportExists(nextDate);
              
+             // HTML注释: 如果前后日期的日报都不存在，隐藏所有导航栏容器
              if (!prevExists && !nextExists) {
                  navContainers.forEach(container => {
                      container.style.display = 'none';
@@ -1550,10 +1612,12 @@
                  return;
              }
              
+             // HTML注释: 显示所有导航栏容器
              navContainers.forEach(container => {
                  container.style.display = 'block';
              });
              
+             // HTML注释: 设置前一天按钮
              prevButtons.forEach(button => {
                  if (prevExists) {
                      button.disabled = false;
@@ -1566,6 +1630,7 @@
                  }
              });
 
+             // HTML注释: 设置后一天按钮
              nextButtons.forEach(button => {
                  if (nextExists) {
                      button.disabled = false;
@@ -1578,6 +1643,8 @@
                  }
              });
          }
+
+        // HTML注释: 检查指定日期的日报文件是否存在
         async function checkReportExists(date) {
             try {
                 const response = await fetch(`新茧群日报_${date}.html`, { method: 'HEAD' });
@@ -1586,64 +1653,167 @@
                 return false;
             }
         }
+
+        // HTML注释: 格式化日期为YYYY-MM-DD格式
         function formatDate(date) {
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const day = String(date.getDate()).padStart(2, '0');
             return `${year}-${month}-${day}`;
         }
+
+        // HTML注释: 初始化展开功能
         function initExpandableContent() {
             const expandableContents = document.querySelectorAll('.expandable-content');
+            
             expandableContents.forEach(container => {
-                const charLimit = parseInt(container.getAttribute('data-char-limit'), 10) || 200;
+                const charLimit = parseInt(container.getAttribute('data-char-limit')) || 200;
                 const contentPreview = container.querySelector('.content-preview');
                 const expandBtn = container.querySelector('.expand-btn');
+                
                 if (!contentPreview || !expandBtn) return;
-                const fullContentHTML = contentPreview.innerHTML;
+                
+                const fullContent = contentPreview.innerHTML;
                 const fullText = contentPreview.textContent || contentPreview.innerText;
+                
+                // HTML注释: 如果内容长度超过限制，则显示展开按钮
                 if (fullText.length > charLimit) {
+                    // HTML注释: 创建一个临时元素来正确截取HTML内容
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = fullContent;
+                    
+                    // HTML注释: 截取文本内容到指定长度
+                    const truncatedText = fullText.substring(0, charLimit);
+                    
+                    // HTML注释: 使用更简单可靠的方法截取内容
+                    let truncatedContent = '';
+                    let charCount = 0;
+                    
+                    // HTML注释: 逐字符遍历，保持简单的HTML结构
+                    const walker = document.createTreeWalker(
+                        tempDiv,
+                        NodeFilter.SHOW_TEXT,
+                        null,
+                        false
+                    );
+                    
+                    let node;
+                    const textNodes = [];
+                    while (node = walker.nextNode()) {
+                        textNodes.push(node);
+                    }
+                    
+                    // HTML注释: 计算需要保留的文本内容
+                    for (let textNode of textNodes) {
+                        const text = textNode.textContent;
+                        if (charCount + text.length <= charLimit) {
+                            charCount += text.length;
+                        } else {
+                            const remainingChars = charLimit - charCount;
+                            textNode.textContent = text.substring(0, remainingChars) + '...';
+                            charCount = charLimit;
+                            
+                            // HTML注释: 新的、更干净的移除后续所有节点的逻辑
+                            let currentNodeToClearAfter = textNode;
+                            while (currentNodeToClearAfter && currentNodeToClearAfter !== tempDiv) {
+                                let sibling = currentNodeToClearAfter.nextSibling;
+                                while (sibling) {
+                                    const nodeToRemove = sibling;
+                                    sibling = sibling.nextSibling;
+                                    nodeToRemove.remove();
+                                }
+                                currentNodeToClearAfter = currentNodeToClearAfter.parentElement;
+                            }
+                            break; // 完成截断和清理，跳出 textNodes 循环
+                        }
+                    }
+                    
+                    const previewContent = tempDiv.innerHTML;
+                    
+                    contentPreview.innerHTML = previewContent;
                     contentPreview.classList.add('collapsed');
                     expandBtn.style.display = 'flex';
+                    
+                    // HTML注释: 绑定展开/收起事件
                     expandBtn.addEventListener('click', function() {
-                        const isExpanded = this.classList.toggle('expanded');
-                        contentPreview.classList.toggle('collapsed');
-                        this.querySelector('.expand-text').textContent = isExpanded ? '收起' : '展开全文';
+                        const isExpanded = expandBtn.classList.contains('expanded');
+                        
+                        if (isExpanded) {
+                            // HTML注释: 收起内容
+                            contentPreview.innerHTML = previewContent;
+                            contentPreview.classList.add('collapsed');
+                            expandBtn.querySelector('.expand-text').textContent = '展开全文';
+                            expandBtn.classList.remove('expanded');
+                        } else {
+                            // HTML注释: 展开内容
+                            contentPreview.innerHTML = fullContent;
+                            contentPreview.classList.remove('collapsed');
+                            expandBtn.querySelector('.expand-text').textContent = '收起';
+                            expandBtn.classList.add('expanded');
+                        }
                     });
+                } else {
+                    // HTML注释: 内容较短，隐藏展开按钮
+                    expandBtn.style.display = 'none';
                 }
             });
         }
+
+        // HTML注释: 构建目录，统一扫描模块及其子卡片生成锚点
         function buildDirectory(panelElement) {
             const listElement = panelElement.querySelector('#directory-list');
-            if (!listElement) return;
+            if (!listElement) {
+                return;
+            }
+
             listElement.innerHTML = '';
+
             const directoryConfigs = [
                 { id: 'section-overview', icon: 'fa-chart-column' },
                 { id: 'section-hot-topics', icon: 'fa-fire' },
+                { id: 'section-meeting', icon: 'fa-users' },
                 { id: 'section-qa', icon: 'fa-circle-question' },
                 { id: 'section-daily-picks', icon: 'fa-lightbulb' }
             ];
-            directoryConfigs.forEach(config => {
+
+            directoryConfigs.forEach((config) => {
                 const sectionElement = document.getElementById(config.id);
-                if (!sectionElement) return;
+                if (!sectionElement) {
+                    return;
+                }
+
                 const sectionTitleElement = sectionElement.querySelector('.section-title');
                 const sectionTitle = sectionTitleElement ? sectionTitleElement.textContent.trim() : config.id;
+
                 const itemWrapper = document.createElement('div');
                 itemWrapper.className = 'directory-item';
+
                 const entryButton = document.createElement('button');
                 entryButton.type = 'button';
                 entryButton.className = 'directory-entry';
                 entryButton.setAttribute('data-target', config.id);
                 entryButton.innerHTML = `<span class="directory-icon"><i class="fas ${config.icon}"></i></span><span class="directory-text">${sectionTitle}</span>`;
                 itemWrapper.appendChild(entryButton);
+
                 const subHeadings = sectionElement.querySelectorAll('.bento-card h4');
                 if (subHeadings.length > 0) {
                     const sublistElement = document.createElement('div');
                     sublistElement.className = 'directory-sublist';
+
                     subHeadings.forEach((heading, index) => {
                         const cardElement = heading.closest('.bento-card');
-                        if (!cardElement) return;
-                        if (!cardElement.classList.contains('anchor-target')) cardElement.classList.add('anchor-target');
-                        if (!cardElement.id) cardElement.id = `${config.id}-item-${index + 1}`;
+                        if (!cardElement) {
+                            return;
+                        }
+
+                        if (!cardElement.classList.contains('anchor-target')) {
+                            cardElement.classList.add('anchor-target');
+                        }
+
+                        if (!cardElement.id) {
+                            cardElement.id = `${config.id}-item-${index + 1}`;
+                        }
+
                         const subButton = document.createElement('button');
                         subButton.type = 'button';
                         subButton.className = 'directory-subitem';
@@ -1651,47 +1821,103 @@
                         subButton.innerHTML = `<span class="directory-text">${heading.textContent.trim()}</span>`;
                         sublistElement.appendChild(subButton);
                     });
+
                     itemWrapper.appendChild(sublistElement);
                 }
+
                 listElement.appendChild(itemWrapper);
             });
         }
+
+        // HTML注释: 初始化浮动按钮与目录交互
         function initFloatingActions() {
             const scrollTopBtn = document.getElementById('scroll-top-btn');
             const directoryToggle = document.getElementById('directory-toggle');
             const directoryPanel = document.getElementById('directory-panel');
             const directoryClose = document.getElementById('directory-close');
+
             if (scrollTopBtn) {
                 const toggleScrollButton = () => {
-                    window.scrollY > 240 ? scrollTopBtn.classList.remove('floating-button--hidden') : scrollTopBtn.classList.add('floating-button--hidden');
+                    if (window.scrollY > 240) {
+                        scrollTopBtn.classList.remove('floating-button--hidden');
+                    } else {
+                        scrollTopBtn.classList.add('floating-button--hidden');
+                    }
                 };
-                window.addEventListener('scroll', toggleScrollButton, { passive: true });
-                scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
                 toggleScrollButton();
+                window.addEventListener('scroll', toggleScrollButton, { passive: true });
+
+                scrollTopBtn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
             }
-            if (!directoryPanel || !directoryToggle) return;
+
+            if (!directoryPanel) {
+                return;
+            }
+
             buildDirectory(directoryPanel);
+
+            if (!directoryToggle) {
+                return;
+            }
+
             const closePanel = () => {
                 directoryPanel.classList.remove('open');
                 directoryToggle.setAttribute('aria-expanded', 'false');
+                directoryPanel.setAttribute('aria-hidden', 'true');
             };
+
+            const openPanel = () => {
+                directoryPanel.classList.add('open');
+                directoryToggle.setAttribute('aria-expanded', 'true');
+                directoryPanel.setAttribute('aria-hidden', 'false');
+            };
+
             const togglePanel = () => {
-                const isOpen = directoryPanel.classList.toggle('open');
-                directoryToggle.setAttribute('aria-expanded', isOpen);
+                if (directoryPanel.classList.contains('open')) {
+                    closePanel();
+                } else {
+                    openPanel();
+                }
             };
-            directoryToggle.addEventListener('click', e => { e.stopPropagation(); togglePanel(); });
-            if (directoryClose) directoryClose.addEventListener('click', e => { e.stopPropagation(); closePanel(); });
-            directoryPanel.querySelectorAll('[data-target]').forEach(item => {
+
+            directoryToggle.addEventListener('click', (event) => {
+                event.stopPropagation();
+                togglePanel();
+            });
+
+            if (directoryClose) {
+                directoryClose.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    closePanel();
+                });
+            }
+
+            const directoryItems = directoryPanel.querySelectorAll('[data-target]');
+            directoryItems.forEach(item => {
                 item.addEventListener('click', () => {
-                    const targetElement = document.getElementById(item.getAttribute('data-target'));
-                    if (targetElement) targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    const targetId = item.getAttribute('data-target');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
                     closePanel();
                 });
             });
-            document.addEventListener('click', e => {
-                if (!directoryPanel.contains(e.target) && !directoryToggle.contains(e.target)) closePanel();
+
+            document.addEventListener('click', (event) => {
+                if (!directoryPanel.contains(event.target) && !directoryToggle.contains(event.target)) {
+                    closePanel();
+                }
             });
-            window.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+            window.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closePanel();
+                }
+            });
         }
     </script>
     
