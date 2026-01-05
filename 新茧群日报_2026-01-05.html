@@ -434,7 +434,7 @@
             </h2>
             <div class="bento-card p-8 bg-gradient-to-br from-[#4D6BFE]/20 via-[#4D6BFE]/10 to-[#4D6BFE]/5 text-center rounded-2xl">
                 <div class="number-display text-[#4D6BFE]">
-                    4074
+                    5448
                 </div>
                 <p class="text-xl font-semibold text-black mt-3">总消息数量</p>
             </div>
@@ -1440,27 +1440,87 @@
                 
                 if (!contentPreview || !expandBtn) return;
                 
-                const fullContentHTML = contentPreview.innerHTML;
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = fullContentHTML;
-                const fullText = tempDiv.textContent || tempDiv.innerText;
-
+                const fullContent = contentPreview.innerHTML;
+                const fullText = contentPreview.textContent || contentPreview.innerText;
+                
+                // HTML注释: 如果内容长度超过限制，则显示展开按钮
                 if (fullText.length > charLimit) {
-                    expandBtn.style.display = 'flex';
+                    // HTML注释: 创建一个临时元素来正确截取HTML内容
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = fullContent;
+                    
+                    // HTML注释: 截取文本内容到指定长度
+                    const truncatedText = fullText.substring(0, charLimit);
+                    
+                    // HTML注释: 使用更简单可靠的方法截取内容
+                    let truncatedContent = '';
+                    let charCount = 0;
+                    
+                    // HTML注释: 逐字符遍历，保持简单的HTML结构
+                    const walker = document.createTreeWalker(
+                        tempDiv,
+                        NodeFilter.SHOW_TEXT,
+                        null,
+                        false
+                    );
+                    
+                    let node;
+                    const textNodes = [];
+                    while (node = walker.nextNode()) {
+                        textNodes.push(node);
+                    }
+                    
+                    // HTML注释: 计算需要保留的文本内容
+                    for (let textNode of textNodes) {
+                        const text = textNode.textContent;
+                        if (charCount + text.length <= charLimit) {
+                            charCount += text.length;
+                        } else {
+                            const remainingChars = charLimit - charCount;
+                            textNode.textContent = text.substring(0, remainingChars) + '...';
+                            charCount = charLimit;
+                            
+                            // HTML注释: 新的、更干净的移除后续所有节点的逻辑
+                            let currentNodeToClearAfter = textNode;
+                            while (currentNodeToClearAfter && currentNodeToClearAfter !== tempDiv) {
+                                let sibling = currentNodeToClearAfter.nextSibling;
+                                while (sibling) {
+                                    const nodeToRemove = sibling;
+                                    sibling = sibling.nextSibling;
+                                    nodeToRemove.remove();
+                                }
+                                currentNodeToClearAfter = currentNodeToClearAfter.parentElement;
+                            }
+                            break; // 完成截断和清理，跳出 textNodes 循环
+                        }
+                    }
+                    
+                    const previewContent = tempDiv.innerHTML;
+                    
+                    contentPreview.innerHTML = previewContent;
                     contentPreview.classList.add('collapsed');
-
+                    expandBtn.style.display = 'flex';
+                    
+                    // HTML注释: 绑定展开/收起事件
                     expandBtn.addEventListener('click', function() {
-                        const isExpanded = this.classList.toggle('expanded');
-                        contentPreview.classList.toggle('collapsed');
-                        const buttonText = this.querySelector('.expand-text');
+                        const isExpanded = expandBtn.classList.contains('expanded');
                         
                         if (isExpanded) {
-                            buttonText.textContent = '收起';
+                            // HTML注释: 收起内容
+                            contentPreview.innerHTML = previewContent;
+                            contentPreview.classList.add('collapsed');
+                            expandBtn.querySelector('.expand-text').textContent = '展开全文';
+                            expandBtn.classList.remove('expanded');
                         } else {
-                            buttonText.textContent = '展开全文';
+                            // HTML注释: 展开内容
+                            contentPreview.innerHTML = fullContent;
+                            contentPreview.classList.remove('collapsed');
+                            expandBtn.querySelector('.expand-text').textContent = '收起';
+                            expandBtn.classList.add('expanded');
                         }
                     });
                 } else {
+                    // HTML注释: 内容较短，隐藏展开按钮
                     expandBtn.style.display = 'none';
                 }
             });
@@ -1478,6 +1538,7 @@
             const directoryConfigs = [
                 { id: 'section-overview', icon: 'fa-chart-column' },
                 { id: 'section-hot-topics', icon: 'fa-fire' },
+                { id: 'section-meeting', icon: 'fa-users' },
                 { id: 'section-qa', icon: 'fa-circle-question' },
                 { id: 'section-daily-picks', icon: 'fa-lightbulb' }
             ];
